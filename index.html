@@ -84,11 +84,23 @@
     .discipline-number { font-family:Impact,sans-serif; color:var(--red); font-size:30px; }
     .discipline h3 { margin:0; font-size:16px; letter-spacing:.6px; text-transform:uppercase; }
     .discipline p { color:#aaa; font-size:14px; margin:0; line-height:1.55; }
-    footer { padding:35px 4.2vw 19px; display:grid; grid-template-columns:1fr auto; gap:20px; background:var(--paper); color:var(--ink); }
+    footer { padding:42px 4.2vw 24px; display:grid; grid-template-columns:minmax(230px,.8fr) minmax(430px,1.5fr) minmax(190px,.7fr); gap:clamp(28px,4vw,70px); background:var(--paper); color:var(--ink); }
     footer strong { display:block; font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; font-size:clamp(38px,6vw,78px); line-height:.8; letter-spacing:1px; text-transform:uppercase; }
     footer p { margin:12px 0 0; font-size:12px; letter-spacing:1px; }
+    .footer-contact { align-self:end; }
+    .footer-label { display:block; margin-bottom:13px; color:#555; font-size:10px; font-weight:bold; letter-spacing:1.5px; text-transform:uppercase; }
+    .contact-list { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .contact-item { min-width:0; min-height:76px; display:grid; grid-template-columns:28px 1fr; gap:10px; align-content:start; border-top:1px solid #969692; padding-top:10px; color:inherit; transition:color .2s,border-color .2s; }
+    a.contact-item:hover, .contact-detail:hover { color:var(--red); }
+    a.contact-item:hover { border-color:var(--red); }
+    .contact-icon { width:26px; height:26px; display:grid; place-items:center; }
+    .contact-icon img { width:22px; height:22px; object-fit:contain; }
+    .contact-copy { min-width:0; display:block; }
+    .contact-copy b { display:block; font-size:11px; letter-spacing:.8px; text-transform:uppercase; }
+    .contact-copy span, .contact-detail { display:block; overflow-wrap:anywhere; color:#4e4e4b; font-size:11px; line-height:1.45; }
+    .contact-detail { margin-top:3px; text-decoration:underline; text-decoration-color:#aaa; text-underline-offset:3px; transition:color .2s; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
-    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero { min-height:735px; padding-top:58px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about, .machine, .school { grid-template-columns:1fr; } .about { gap:30px; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .school { gap:25px; } .school-logo { width:156px; } .program-head { display:block; } .program-note { margin-top:22px; } .discipline { grid-template-columns:47px 1fr; gap:13px; } .discipline p { grid-column:2; } footer { padding:31px 6vw 18px; grid-template-columns:1fr; } .footer-meta { text-align:left; } }
+    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero { min-height:735px; padding-top:58px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about, .machine, .school { grid-template-columns:1fr; } .about { gap:30px; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .school { gap:25px; } .school-logo { width:156px; } .program-head { display:block; } .program-note { margin-top:22px; } .discipline { grid-template-columns:47px 1fr; gap:13px; } .discipline p { grid-column:2; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
   </style>
 </head>
 <body>
@@ -143,7 +155,27 @@
       <div class="discipline"><div class="discipline-number">03</div><h3>Strategy & Collaboration</h3><p>在有限時間與資源中協調分工，為每次起跑建立最好的準備。</p></div>
     </section>
   </main>
-  <footer><div><strong>Dance with<br>the dragon.</strong><p>DRAGON DANCE / F1 IN SCHOOLS</p></div><div class="footer-meta">Bo Ai Hospital The Board of Directors'<br>Association of the Last Years Leung Sing Tak College<br>Hong Kong</div></footer>
+  <footer>
+    <div><strong>Dance with<br>the dragon.</strong><p>DRAGON DANCE / F1 IN SCHOOLS</p></div>
+    <section class="footer-contact" aria-label="聯絡我們">
+      <span class="footer-label">Contact</span>
+      <div class="contact-list">
+        <a class="contact-item" href="mailto:dragondance@lstc.edu.hk" aria-label="Email Dragon Dance">
+          <span class="contact-icon"><img src="assets/contact-email.svg" alt="" /></span>
+          <span class="contact-copy"><b>Email</b><span>dragondance@lstc.edu.hk</span></span>
+        </a>
+        <div class="contact-item">
+          <span class="contact-icon"><img src="assets/contact-whatsapp.svg" alt="" /></span>
+          <span class="contact-copy"><b>WhatsApp</b><a class="contact-detail" href="https://wa.me/85291639154" target="_blank" rel="noopener">Project Manager · 91639154</a><a class="contact-detail" href="https://wa.me/85260116515" target="_blank" rel="noopener">Sponsorship &amp; Marketing · 60116515</a></span>
+        </div>
+        <a class="contact-item" href="https://www.instagram.com/team_dragon_dance?igsh=MWppemVhZGswdHpvNQ==" target="_blank" rel="noopener" aria-label="Instagram Team Dragon Dance">
+          <span class="contact-icon"><img src="assets/contact-instagram.svg" alt="" /></span>
+          <span class="contact-copy"><b>Instagram</b><span>@team_dragon_dance</span></span>
+        </a>
+      </div>
+    </section>
+    <div class="footer-meta">Bo Ai Hospital The Board of Directors'<br>Association of the Last Years Leung Sing Tak College<br>Hong Kong</div>
+  </footer>
   <script>
     (() => {
       const hero = document.querySelector('.hero');
