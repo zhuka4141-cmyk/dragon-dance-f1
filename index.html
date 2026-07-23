@@ -41,11 +41,10 @@
     .dragon-mist { position:absolute; width:120%; height:15%; border-radius:50%; background:linear-gradient(90deg,transparent,rgba(225,232,227,.5) 42%,rgba(225,232,227,.28) 62%,transparent); filter:blur(18px); opacity:.34; mix-blend-mode:screen; animation:mist-drift 8s linear infinite; }
     .dragon-mist-one { left:-72%; bottom:23%; animation-delay:-1.5s; }
     .dragon-mist-two { left:-50%; bottom:39%; width:108%; background:linear-gradient(90deg,transparent,rgba(171,194,188,.42) 43%,rgba(213,223,217,.22) 65%,transparent); animation-duration:11s; animation-delay:-6s; }
-    .dragon-mist-three { left:-66%; bottom:9%; width:136%; background:linear-gradient(90deg,transparent,rgba(240,242,237,.36) 44%,rgba(223,230,223,.2) 66%,transparent); animation-duration:14s; animation-delay:-9s; }
+    .dragon-mist-three { left:-66%; bottom:9%; z-index:2; width:136%; background:linear-gradient(90deg,transparent,rgba(240,242,237,.36) 44%,rgba(223,230,223,.2) 66%,transparent); animation-duration:14s; animation-delay:-9s; }
     @keyframes mist-drift { 0% { opacity:.12; transform:translate3d(-10%,14%,0) scale(.9); } 38% { opacity:.62; } 70% { opacity:.3; } 100% { opacity:.08; transform:translate3d(132%,-20%,0) scale(1.17); } }
-    .dragon { position:relative; z-index:1; width:100%; height:100%; object-fit:contain; filter:grayscale(1) contrast(1.35) invert(1) drop-shadow(0 0 16px rgba(255,255,255,.22)); opacity:.96; transform-origin:55% 52%; animation:dragon-float 6.5s ease-in-out infinite; user-select:none; -webkit-user-drag:none; }
-    @keyframes dragon-float { 0%,100% { transform:translate3d(0,0,0) rotate(0deg); } 50% { transform:translate3d(-1.1%, -1.5%, 0) rotate(-.35deg); } }
-    @media (prefers-reduced-motion:reduce) { .dragon-mist { animation:none; opacity:.32; } .dragon { animation:none; } }
+    .dragon { position:relative; z-index:1; width:100%; height:100%; object-fit:contain; filter:grayscale(1) contrast(1.35) invert(1) drop-shadow(0 0 16px rgba(255,255,255,.22)); opacity:.96; user-select:none; -webkit-user-drag:none; }
+    @media (prefers-reduced-motion:reduce) { .dragon-mist { animation:none; opacity:.32; } }
     .hero-footer { position:absolute; left:4.2vw; right:4.2vw; bottom:20px; display:flex; justify-content:space-between; border-top:1px solid #353535; padding-top:12px; font-size:10px; letter-spacing:1.4px; color:#aaa; text-transform:uppercase; }
     .scroll-indicator { color:var(--paper); }
     section { padding:100px 4.2vw; }
@@ -106,8 +105,8 @@
         <div class="dragon-halo"></div>
         <div class="dragon-mist dragon-mist-one"></div>
         <div class="dragon-mist dragon-mist-two"></div>
-        <div class="dragon-mist dragon-mist-three"></div>
         <img class="dragon" id="dragon" src="assets/dragon-mark.png" alt="Dragon Dance 龍圖案" />
+        <div class="dragon-mist dragon-mist-three"></div>
       </div>
       <div class="hero-footer"><span>F1 in Schools / STEM Racing</span><span>Precision. Teamwork. Momentum.</span><a class="scroll-indicator" href="#about">Scroll to explore ↓</a></div>
     </section>
