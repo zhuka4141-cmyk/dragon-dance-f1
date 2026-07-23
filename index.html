@@ -352,7 +352,7 @@
 
       function beginSwipe(event) {
         if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
-        swipeStart = { id:event.pointerId, x:event.clientX, y:event.clientY, axis:null, moved:false };
+        swipeStart = { id:event.pointerId, x:event.clientX, y:event.clientY, axis:null, moved:false, scrollY:window.scrollY };
         heroPages.classList.add('is-dragging');
       }
 
@@ -365,6 +365,7 @@
           swipeStart.axis = Math.abs(deltaX) > Math.abs(deltaY) * 1.1 ? 'horizontal' : 'vertical';
         }
         if (swipeStart.axis !== 'horizontal') return;
+        if (event.cancelable) event.preventDefault();
         const atBoundary = (pageIndex === 0 && deltaX > 0) || (pageIndex === heroSlides.length - 1 && deltaX < 0);
         renderTrack(deltaX * (atBoundary ? .22 : 1));
         swipeStart.moved = true;
@@ -377,6 +378,7 @@
         const deltaY = event.clientY - gesture.y;
         swipeStart = null;
         heroPages.classList.remove('is-dragging');
+        if (gesture.axis === 'horizontal' && window.scrollY !== gesture.scrollY) window.scrollTo(0, gesture.scrollY);
         if (gesture.axis !== 'horizontal') {
           renderTrack();
           return;
@@ -393,8 +395,10 @@
 
       function cancelSwipe() {
         if (!swipeStart) return;
+        const gesture = swipeStart;
         swipeStart = null;
         heroPages.classList.remove('is-dragging');
+        if (gesture.axis === 'horizontal' && window.scrollY !== gesture.scrollY) window.scrollTo(0, gesture.scrollY);
         renderTrack();
       }
 
@@ -480,7 +484,7 @@
       window.addEventListener('pointerdown', disperseFog, { passive:true });
       window.addEventListener('pointermove', disperseFog, { passive:true });
       document.addEventListener('pointerdown', beginSwipe, { passive:true });
-      document.addEventListener('pointermove', moveSwipe, { passive:true });
+      document.addEventListener('pointermove', moveSwipe, { passive:false });
       document.addEventListener('pointerup', finishSwipe, { passive:true });
       document.addEventListener('pointercancel', cancelSwipe, { passive:true });
       document.addEventListener('click', event => {
