@@ -87,7 +87,11 @@
     .fact:not(:last-child) + .fact { padding-left:14px; }
     .fact b { display:block; font-size:10px; letter-spacing:1.3px; color:#555; margin-bottom:7px; text-transform:uppercase; }
     .fact span { font-size:14px; font-weight:bold; }
-    .machine { padding:0; display:grid; grid-template-columns:1.12fr .88fr; min-height:640px; background:#111; }
+    .feature-stack { padding:0; display:grid; overflow:hidden; background:#111; }
+    .feature-page { grid-area:1 / 1; min-width:0; min-height:640px; opacity:0; visibility:hidden; pointer-events:none; transform:translateY(18px); filter:blur(7px); transition:opacity .46s ease,transform .56s cubic-bezier(.22,.8,.24,1),filter .46s ease,visibility 0s linear .5s; }
+    .feature-page.is-active { z-index:1; opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0); filter:blur(0); transition-delay:0s; }
+    @media (prefers-reduced-motion:reduce) { .feature-page { transition:none; transform:none; filter:none; } }
+    .machine { padding:0; display:grid; grid-template-columns:1.12fr .88fr; background:#111; }
     .car-photo { position:relative; overflow:hidden; min-height:480px; }
     .car-photo img { width:100%; height:100%; object-fit:cover; filter:grayscale(1) contrast(1.15); opacity:.86; transition:filter .35s,transform .5s; }
     .car-photo:hover img { filter:grayscale(.15) contrast(1.1); transform:scale(1.025); }
@@ -98,6 +102,24 @@
     .specs { border-top:1px solid #444; margin-top:35px; }
     .spec { display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #444; font-size:11px; letter-spacing:1px; text-transform:uppercase; }
     .spec span:last-child { color:#e4e4df; font-weight:bold; }
+    .team-showcase, .sponsor-showcase { display:grid; grid-template-columns:minmax(240px,.72fr) minmax(0,1.28fr); gap:clamp(48px,8vw,130px); padding:clamp(62px,8vw,108px) 4.2vw; }
+    .team-showcase { background:#111; color:var(--paper); }
+    .sponsor-showcase { background:#deded9; color:var(--ink); }
+    .feature-copy { align-self:start; }
+    .feature-copy h2 { margin:17px 0 25px; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(48px,6.3vw,92px); font-weight:400; line-height:.86; letter-spacing:1px; text-transform:uppercase; }
+    .feature-copy p { max-width:430px; margin:0; color:#bdbdb8; font-size:15px; line-height:1.65; }
+    .sponsor-showcase .feature-copy p { color:#555; }
+    .role-list { align-self:stretch; border-top:1px solid #484848; }
+    .role-item { display:grid; grid-template-columns:42px minmax(0,1fr); gap:18px; padding:17px 0; border-bottom:1px solid #484848; }
+    .role-item > span { padding-top:2px; color:var(--red); font-size:10px; font-weight:bold; letter-spacing:1.4px; }
+    .role-item strong { display:block; margin-bottom:5px; font-size:13px; letter-spacing:.7px; text-transform:uppercase; }
+    .role-item p { margin:0; color:#aaa; font-size:12px; line-height:1.5; }
+    .partner-grid { align-self:stretch; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:1px solid #8e8e89; border-left:1px solid #8e8e89; }
+    .partner-item { min-height:155px; padding:22px; border-right:1px solid #8e8e89; border-bottom:1px solid #8e8e89; }
+    .partner-item span { display:block; margin-bottom:34px; color:var(--red); font-size:10px; font-weight:bold; letter-spacing:1.4px; text-transform:uppercase; }
+    .partner-item strong { display:block; margin-bottom:7px; font-size:15px; letter-spacing:.5px; text-transform:uppercase; }
+    .partner-item p { margin:0; color:#555; font-size:12px; line-height:1.5; }
+    .partner-email { display:inline-block; margin-top:28px; border-bottom:1px solid currentColor; padding-bottom:4px; font-size:12px; font-weight:bold; letter-spacing:.8px; text-transform:uppercase; }
     footer { padding:42px 4.2vw 24px; display:grid; grid-template-columns:minmax(230px,.8fr) minmax(430px,1.5fr) minmax(190px,.7fr); gap:clamp(28px,4vw,70px); background:var(--paper); color:var(--ink); }
     footer strong { display:block; font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; font-size:clamp(38px,6vw,78px); line-height:.8; letter-spacing:1px; text-transform:uppercase; }
     footer p { margin:12px 0 0; font-size:12px; letter-spacing:1px; }
@@ -114,14 +136,14 @@
     .contact-copy span, .contact-detail { display:block; overflow-wrap:anywhere; color:#4e4e4b; font-size:11px; line-height:1.45; }
     .contact-detail { margin-top:3px; text-decoration:underline; text-decoration-color:#aaa; text-underline-offset:3px; transition:color .2s; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
-    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-arrow { width:42px; height:66px; } .pager-next { right:2vw; } .pager-prev { left:2vw; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
+    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-arrow { width:42px; height:66px; } .pager-next { right:2vw; } .pager-prev { left:2vw; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
   </style>
 </head>
 <body>
   <div class="topline"></div>
   <nav>
     <a class="wordmark" href="#top">Dragon Dance<span>F1 in Schools</span></a>
-    <div class="navlinks"><a href="#about">隊伍</a><a href="#machine">賽車</a></div>
+    <div class="navlinks"><a href="#about" id="navPrimary">隊伍</a><a href="#machine" id="navSecondary">賽車</a></div>
     <div class="eyebrow">HK / 2026</div>
   </nav>
   <main id="top">
@@ -163,30 +185,60 @@
           </div>
         </article>
         <article class="about-page" aria-label="第 2 頁內容">
-          <div><div class="section-label">02 / In Motion</div></div>
+          <div><div class="section-label">02 / The Crew</div></div>
           <div>
-            <h2>Work<br>in Progress</h2>
-            <p>真正的速度來自反覆調整。從第一個草圖到每一次測試，我們記錄問題、修正細節，讓下一版比上一版更接近目標。</p>
-            <div class="fact-row"><div class="fact"><b>Focus</b><span>Development</span></div><div class="fact"><b>Method</b><span>Test &amp; Learn</span></div><div class="fact"><b>Momentum</b><span>Always Forward</span></div></div>
+            <h2>Meet<br>The Crew</h2>
+            <p>Dragon Dance 由不同專長的隊員組成。從專案管理、工程設計到品牌與贊助，每一個角色都在同一個節奏中協作，讓想法真正站上賽道。</p>
+            <div class="fact-row"><div class="fact"><b>Direction</b><span>One Team</span></div><div class="fact"><b>Method</b><span>Shared Ownership</span></div><div class="fact"><b>Energy</b><span>Full Commitment</span></div></div>
           </div>
         </article>
         <article class="about-page" aria-label="第 3 頁內容">
-          <div><div class="section-label">03 / One Team</div></div>
+          <div><div class="section-label">03 / Our Partners</div></div>
           <div>
-            <h2>Built<br>Together</h2>
-            <p>工程、視覺、策略與溝通在同一個節奏中前進。每個人把自己的專長帶到團隊裡，讓 Dragon Dance 不只是一輛賽車，而是一個共同完成的作品。</p>
-            <div class="fact-row"><div class="fact"><b>Strength</b><span>Collaboration</span></div><div class="fact"><b>Standard</b><span>Precision</span></div><div class="fact"><b>Next</b><span>Race Day</span></div></div>
+            <h2>Driven<br>By Support</h2>
+            <p>每一份支持都讓 Dragon Dance 走得更遠。我們期待與重視創新、教育與青年發展的夥伴合作，把工程實踐與品牌故事一起帶到更大的舞台。</p>
+            <div class="fact-row"><div class="fact"><b>Partnership</b><span>Open</span></div><div class="fact"><b>Reach</b><span>Hong Kong</span></div><div class="fact"><b>Contact</b><span>Email Us</span></div></div>
           </div>
         </article>
       </div>
     </section>
 
-    <section class="machine" id="machine">
-      <div class="car-photo"><img src="assets/race-car.jpg" alt="Dragon Dance 賽車在 F1 in Schools 賽道上" /></div>
-      <div class="machine-copy">
-        <div><div class="eyebrow">02 / The Machine</div><h2>Engineered<br>to launch.</h2><p>每一個翼面、每一段車身輪廓，都在追求更乾淨的氣流、更少的阻力，以及一個明確的終點。</p></div>
-        <div class="specs"><div class="spec"><span>Chassis</span><span>Precision Crafted</span></div><div class="spec"><span>Focus</span><span>Aerodynamics</span></div><div class="spec"><span>Race Mode</span><span>Full Attack</span></div></div>
-      </div>
+    <section class="feature-stack" id="machine" aria-live="polite">
+      <article class="feature-page machine is-active" aria-label="第 1 頁延伸內容">
+        <div class="car-photo"><img src="assets/race-car.jpg" alt="Dragon Dance 賽車在 F1 in Schools 賽道上" /></div>
+        <div class="machine-copy">
+          <div><div class="eyebrow">02 / The Machine</div><h2>Engineered<br>to launch.</h2><p>每一個翼面、每一段車身輪廓，都在追求更乾淨的氣流、更少的阻力，以及一個明確的終點。</p></div>
+          <div class="specs"><div class="spec"><span>Chassis</span><span>Precision Crafted</span></div><div class="spec"><span>Focus</span><span>Aerodynamics</span></div><div class="spec"><span>Race Mode</span><span>Full Attack</span></div></div>
+        </div>
+      </article>
+      <article class="feature-page team-showcase" aria-label="第 2 頁隊員分工">
+        <div class="feature-copy">
+          <div class="eyebrow">Roles / Responsibilities</div>
+          <h2>One Crew.<br>Many<br>Skills.</h2>
+          <p>每個角色負責不同環節，從時間管理到賽車與品牌，彼此交接、互相補位。</p>
+        </div>
+        <div class="role-list">
+          <div class="role-item"><span>01</span><div><strong>Project Manager</strong><p>協調進度、分工與比賽準備。</p></div></div>
+          <div class="role-item"><span>02</span><div><strong>Design &amp; Engineering</strong><p>負責賽車設計、建模與測試。</p></div></div>
+          <div class="role-item"><span>03</span><div><strong>Manufacturing</strong><p>把數位模型轉化為可上賽道的實體。</p></div></div>
+          <div class="role-item"><span>04</span><div><strong>Sponsorship &amp; Marketing</strong><p>建立合作關係與商業計劃。</p></div></div>
+          <div class="role-item"><span>05</span><div><strong>Brand &amp; Media</strong><p>統一視覺、內容與對外溝通。</p></div></div>
+        </div>
+      </article>
+      <article class="feature-page sponsor-showcase" aria-label="第 3 頁贊助合作">
+        <div class="feature-copy">
+          <div class="eyebrow">Sponsorship / 2026</div>
+          <h2>Partner<br>With Us.</h2>
+          <p>合作夥伴可透過技術、材料、資源與品牌支持參與這段旅程，與我們一起把創意推上賽道。</p>
+          <a class="partner-email" href="mailto:dragondance@lstc.edu.hk">dragondance@lstc.edu.hk</a>
+        </div>
+        <div class="partner-grid">
+          <div class="partner-item"><span>01 / Title</span><strong>Title Partner</strong><p>核心品牌曝光與長期合作。</p></div>
+          <div class="partner-item"><span>02 / Technical</span><strong>Engineering Partner</strong><p>技術、材料與製造支援。</p></div>
+          <div class="partner-item"><span>03 / Race</span><strong>Race Partner</strong><p>參賽、交通與活動支援。</p></div>
+          <div class="partner-item"><span>04 / Community</span><strong>Community Partner</strong><p>教育與社群合作。</p></div>
+        </div>
+      </article>
     </section>
 
   </main>
@@ -219,8 +271,16 @@
       const heroPages = document.getElementById('heroPages');
       const heroSlides = Array.from(heroPages.children);
       const aboutPages = Array.from(document.querySelectorAll('.about-page'));
+      const featurePages = Array.from(document.querySelectorAll('.feature-page'));
+      const navPrimary = document.getElementById('navPrimary');
+      const navSecondary = document.getElementById('navSecondary');
       const pagerPrev = document.getElementById('pagerPrev');
       const pagerNext = document.getElementById('pagerNext');
+      const navLabels = [
+        { primary:'隊伍', secondary:'賽車' },
+        { primary:'隊員', secondary:'分工' },
+        { primary:'贊助', secondary:'合作' }
+      ];
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const wisps = [
         { x:.02, y:.18, radius:110, stretch:2.8, speed:7, wave:.42, alpha:.13 },
@@ -263,6 +323,13 @@
           panel.classList.toggle('is-active', active);
           panel.setAttribute('aria-hidden', String(!active));
         });
+        featurePages.forEach((panel, index) => {
+          const active = index === pageIndex;
+          panel.classList.toggle('is-active', active);
+          panel.setAttribute('aria-hidden', String(!active));
+        });
+        navPrimary.textContent = navLabels[pageIndex].primary;
+        navSecondary.textContent = navLabels[pageIndex].secondary;
       }
 
       function beginSwipe(event) {
