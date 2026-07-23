@@ -71,10 +71,6 @@
     .specs { border-top:1px solid #444; margin-top:35px; }
     .spec { display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #444; font-size:11px; letter-spacing:1px; text-transform:uppercase; }
     .spec span:last-child { color:#e4e4df; font-weight:bold; }
-    .school { display:grid; grid-template-columns:340px 1fr; gap:clamp(40px,8vw,130px); align-items:center; border-bottom:1px solid var(--line); }
-    .school-logo { width:210px; background:white; padding:14px; }
-    .school h2 { font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; font-size:clamp(45px,6vw,88px); line-height:.88; margin:18px 0 25px; text-transform:uppercase; letter-spacing:1px; }
-    .school p { max-width:610px; color:#c4c4bf; line-height:1.7; font-size:16px; }
     .program { background:#141414; }
     .program-head { display:flex; justify-content:space-between; align-items:end; margin-bottom:45px; }
     .program h2 { font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(48px,7vw,94px); font-weight:400; margin:10px 0 0; line-height:.85; text-transform:uppercase; letter-spacing:1px; }
@@ -100,14 +96,14 @@
     .contact-copy span, .contact-detail { display:block; overflow-wrap:anywhere; color:#4e4e4b; font-size:11px; line-height:1.45; }
     .contact-detail { margin-top:3px; text-decoration:underline; text-decoration-color:#aaa; text-underline-offset:3px; transition:color .2s; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
-    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero { min-height:735px; padding-top:58px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about, .machine, .school { grid-template-columns:1fr; } .about { gap:30px; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .school { gap:25px; } .school-logo { width:156px; } .program-head { display:block; } .program-note { margin-top:22px; } .discipline { grid-template-columns:47px 1fr; gap:13px; } .discipline p { grid-column:2; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
+    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero { min-height:735px; padding-top:58px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about, .machine { grid-template-columns:1fr; } .about { gap:30px; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .program-head { display:block; } .program-note { margin-top:22px; } .discipline { grid-template-columns:47px 1fr; gap:13px; } .discipline p { grid-column:2; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
   </style>
 </head>
 <body>
   <div class="topline"></div>
   <nav>
     <a class="wordmark" href="#top">Dragon Dance<span>F1 in Schools</span></a>
-    <div class="navlinks"><a href="#about">隊伍</a><a href="#machine">賽車</a><a href="#school">學校</a><a href="#program">項目</a></div>
+    <div class="navlinks"><a href="#about">隊伍</a><a href="#machine">賽車</a><a href="#program">項目</a></div>
     <div class="eyebrow">HK / 2026</div>
   </nav>
   <main id="top">
@@ -143,13 +139,8 @@
       </div>
     </section>
 
-    <section class="school" id="school">
-      <div><img class="school-logo" src="assets/school-mark.jpg" alt="博愛醫院歷屆總理聯誼會梁省德中學校徽" /></div>
-      <div><div class="eyebrow">03 / Our School</div><h2>梁省德<br>中學</h2><p>博愛醫院歷屆總理聯誼會梁省德中學支持學生以實踐回應好奇心。Dragon Dance 在校園中集結，讓想法經過測試、迭代，最後真正站上賽道。</p></div>
-    </section>
-
     <section class="program" id="program">
-      <div class="program-head"><div><div class="eyebrow">04 / Race Ready</div><h2>Beyond the<br>Track.</h2></div><p class="program-note">F1 in Schools 不只是一場速度賽，更是一個把 STEM、品牌、商業與協作推到極限的舞台。</p></div>
+      <div class="program-head"><div><div class="eyebrow">03 / Race Ready</div><h2>Beyond the<br>Track.</h2></div><p class="program-note">F1 in Schools 不只是一場速度賽，更是一個把 STEM、品牌、商業與協作推到極限的舞台。</p></div>
       <div class="discipline"><div class="discipline-number">01</div><h3>Design & Engineering</h3><p>從概念、建模到反覆測試，讓速度有扎實的科學依據。</p></div>
       <div class="discipline"><div class="discipline-number">02</div><h3>Brand & Media</h3><p>將 Dragon Dance 的個性轉化為鮮明、統一而有力量的視覺語言。</p></div>
       <div class="discipline"><div class="discipline-number">03</div><h3>Strategy & Collaboration</h3><p>在有限時間與資源中協調分工，為每次起跑建立最好的準備。</p></div>
