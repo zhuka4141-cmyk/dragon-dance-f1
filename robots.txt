@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://dragon-dance-f1.vercel.app/sitemap.xml
