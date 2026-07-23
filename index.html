@@ -73,7 +73,11 @@
     .hero-footer { position:absolute; z-index:3; left:4.2vw; right:4.2vw; bottom:20px; display:flex; justify-content:space-between; border-top:1px solid #353535; padding-top:12px; font-size:10px; letter-spacing:1.4px; color:#aaa; text-transform:uppercase; }
     .scroll-indicator { color:var(--paper); }
     section { padding:100px 4.2vw; }
-    .about { background:var(--paper); color:var(--ink); display:grid; grid-template-columns:1fr 1.7fr; gap:clamp(35px,9vw,150px); }
+    .about { padding:0; background:var(--paper); color:var(--ink); overflow:hidden; }
+    .about-pages { display:grid; }
+    .about-page { grid-area:1 / 1; min-width:0; display:grid; grid-template-columns:1fr 1.7fr; gap:clamp(35px,9vw,150px); padding:100px 4.2vw; opacity:0; visibility:hidden; pointer-events:none; transform:translateY(18px); filter:blur(7px); transition:opacity .46s ease,transform .56s cubic-bezier(.22,.8,.24,1),filter .46s ease,visibility 0s linear .5s; }
+    .about-page.is-active { z-index:1; opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0); filter:blur(0); transition-delay:0s; }
+    @media (prefers-reduced-motion:reduce) { .about-page { transition:none; transform:none; filter:none; } }
     .section-label { font-size:12px; letter-spacing:1.6px; text-transform:uppercase; font-weight:bold; }
     .about h2 { font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(43px,7vw,98px); line-height:.86; font-weight:400; text-transform:uppercase; margin:0 0 36px; letter-spacing:1px; }
     .about p { max-width:610px; font-size:19px; line-height:1.6; margin:0 0 38px; }
@@ -110,7 +114,7 @@
     .contact-copy span, .contact-detail { display:block; overflow-wrap:anywhere; color:#4e4e4b; font-size:11px; line-height:1.45; }
     .contact-detail { margin-top:3px; text-decoration:underline; text-decoration-color:#aaa; text-underline-offset:3px; transition:color .2s; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
-    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-arrow { width:42px; height:66px; } .pager-next { right:2vw; } .pager-prev { left:2vw; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about, .machine { grid-template-columns:1fr; } .about { gap:30px; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
+    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-arrow { width:42px; height:66px; } .pager-next { right:2vw; } .pager-prev { left:2vw; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
   </style>
 </head>
 <body>
@@ -149,11 +153,31 @@
     </section>
 
     <section class="about" id="about">
-      <div><div class="section-label">01 / The Team</div></div>
-      <div>
-        <h2>Dragon<br>Dance</h2>
-        <p>Dragon Dance 是一隊來自博愛醫院歷屆總理聯誼會梁省德中學的 F1 in Schools 車隊。我們把工程思維、視覺設計與賽事策略放在同一條起跑線，打造一支有速度、也有態度的隊伍。</p>
-        <div class="fact-row"><div class="fact"><b>Base</b><span>Hong Kong</span></div><div class="fact"><b>Program</b><span>F1 in Schools</span></div><div class="fact"><b>Identity</b><span>龍舞疾行</span></div></div>
+      <div class="about-pages" id="aboutPages" aria-live="polite">
+        <article class="about-page is-active" aria-label="第 1 頁內容">
+          <div><div class="section-label">01 / The Team</div></div>
+          <div>
+            <h2>Dragon<br>Dance</h2>
+            <p>Dragon Dance 是一隊來自博愛醫院歷屆總理聯誼會梁省德中學的 F1 in Schools 車隊。我們把工程思維、視覺設計與賽事策略放在同一條起跑線，打造一支有速度、也有態度的隊伍。</p>
+            <div class="fact-row"><div class="fact"><b>Base</b><span>Hong Kong</span></div><div class="fact"><b>Program</b><span>F1 in Schools</span></div><div class="fact"><b>Identity</b><span>龍舞疾行</span></div></div>
+          </div>
+        </article>
+        <article class="about-page" aria-label="第 2 頁內容">
+          <div><div class="section-label">02 / In Motion</div></div>
+          <div>
+            <h2>Work<br>in Progress</h2>
+            <p>真正的速度來自反覆調整。從第一個草圖到每一次測試，我們記錄問題、修正細節，讓下一版比上一版更接近目標。</p>
+            <div class="fact-row"><div class="fact"><b>Focus</b><span>Development</span></div><div class="fact"><b>Method</b><span>Test &amp; Learn</span></div><div class="fact"><b>Momentum</b><span>Always Forward</span></div></div>
+          </div>
+        </article>
+        <article class="about-page" aria-label="第 3 頁內容">
+          <div><div class="section-label">03 / One Team</div></div>
+          <div>
+            <h2>Built<br>Together</h2>
+            <p>工程、視覺、策略與溝通在同一個節奏中前進。每個人把自己的專長帶到團隊裡，讓 Dragon Dance 不只是一輛賽車，而是一個共同完成的作品。</p>
+            <div class="fact-row"><div class="fact"><b>Strength</b><span>Collaboration</span></div><div class="fact"><b>Standard</b><span>Precision</span></div><div class="fact"><b>Next</b><span>Race Day</span></div></div>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -194,6 +218,7 @@
       const context = canvas.getContext('2d');
       const heroPages = document.getElementById('heroPages');
       const heroSlides = Array.from(heroPages.children);
+      const aboutPages = Array.from(document.querySelectorAll('.about-page'));
       const pagerPrev = document.getElementById('pagerPrev');
       const pagerNext = document.getElementById('pagerNext');
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -233,6 +258,11 @@
         pagerPrev.hidden = pageIndex === 0;
         pagerNext.hidden = pageIndex === heroSlides.length - 1;
         heroSlides.forEach((slide, index) => slide.setAttribute('aria-hidden', String(index !== pageIndex)));
+        aboutPages.forEach((panel, index) => {
+          const active = index === pageIndex;
+          panel.classList.toggle('is-active', active);
+          panel.setAttribute('aria-hidden', String(!active));
+        });
       }
 
       function beginSwipe(event) {
