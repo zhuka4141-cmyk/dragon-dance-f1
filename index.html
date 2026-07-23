@@ -37,18 +37,19 @@
     .photo-page:before { content:""; position:absolute; inset:-28px; background:var(--page-photo) center/cover no-repeat; filter:blur(22px) brightness(.48) saturate(.7); opacity:.56; transform:scale(1.08); }
     .photo-page img { position:relative; z-index:1; width:100%; height:100%; display:block; object-fit:contain; filter:contrast(1.03) saturate(.9); }
     .photo-page:after { content:""; position:absolute; z-index:2; inset:0; pointer-events:none; background:linear-gradient(90deg,rgba(8,8,8,.28),transparent 48%,rgba(8,8,8,.1)), linear-gradient(0deg,rgba(8,8,8,.22),transparent 42%); }
-    .pager-arrow { position:absolute; top:50%; z-index:5; width:70px; min-height:78px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:11px; padding:0; border:0; background:transparent; color:var(--paper); cursor:pointer; opacity:.58; transform:translateY(-50%); transition:opacity linear .25s; }
+    .pager-hint { position:absolute; top:18px; left:50%; z-index:4; transform:translateX(-50%); color:#a8a8a4; font-size:10px; font-weight:700; letter-spacing:1.8px; line-height:1; text-transform:uppercase; white-space:nowrap; opacity:.72; pointer-events:none; }
+    .pager-arrow { position:absolute; top:50%; z-index:5; width:92px; min-height:108px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:13px; padding:0; border:0; background:transparent; color:var(--paper); cursor:pointer; opacity:.58; transform:translateY(-50%); transition:opacity linear .25s; }
     .pager-arrow:hover, .pager-arrow:focus-visible { opacity:.95; outline:0; }
     .pager-arrow[hidden] { display:none; }
     .pager-next { right:2.2vw; }
     .pager-prev { left:2.2vw; }
-    .pager-line { position:relative; width:29px; height:1px; display:block; animation:pager-line-fade 2.5s linear infinite; }
+    .pager-line { position:relative; width:40px; height:2px; display:block; animation:pager-line-fade 2.5s linear infinite; }
     .pager-next .pager-line { background:linear-gradient(90deg,transparent,rgba(242,242,239,.96)); animation-name:pager-line-fade,pager-nudge-right; }
     .pager-prev .pager-line { background:linear-gradient(90deg,rgba(242,242,239,.96),transparent); animation-name:pager-line-fade,pager-nudge-left; }
-    .pager-line:after { content:""; position:absolute; top:50%; width:8px; height:8px; border-top:1px solid currentColor; border-right:1px solid currentColor; }
+    .pager-line:after { content:""; position:absolute; top:50%; width:11px; height:11px; border-top:1px solid currentColor; border-right:1px solid currentColor; }
     .pager-next .pager-line:after { right:0; transform:translateY(-50%) rotate(45deg); }
     .pager-prev .pager-line:after { left:0; transform:translateY(-50%) rotate(-135deg); }
-    .pager-label { color:currentColor; font-size:10px; font-weight:700; letter-spacing:1.4px; line-height:1; text-transform:uppercase; white-space:nowrap; text-shadow:0 0 10px rgba(8,8,8,.65); }
+    .pager-label { color:currentColor; font-size:11px; font-weight:700; letter-spacing:1.4px; line-height:1; text-transform:uppercase; white-space:nowrap; text-shadow:0 0 10px rgba(8,8,8,.65); }
     @keyframes pager-line-fade { 0%,100% { opacity:.1; } 50% { opacity:.92; } }
     @keyframes pager-nudge-right { 0%,100% { transform:translateX(0); } 50% { transform:translateX(4px); } }
     @keyframes pager-nudge-left { 0%,100% { transform:translateX(0); } 50% { transform:translateX(-4px); } }
@@ -140,7 +141,7 @@
     .contact-copy span, .contact-detail { display:block; overflow-wrap:anywhere; color:#4e4e4b; font-size:11px; line-height:1.45; }
     .contact-detail { margin-top:3px; text-decoration:underline; text-decoration-color:#aaa; text-underline-offset:3px; transition:color .2s; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
-    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-arrow { width:42px; height:66px; } .pager-next { right:2vw; } .pager-prev { left:2vw; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
+    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:66px; min-height:88px; gap:10px; } .pager-line { width:33px; height:2px; } .pager-line:after { width:9px; height:9px; } .pager-label { font-size:10px; } .pager-next { right:2vw; } .pager-prev { left:2vw; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
   </style>
 </head>
 <body>
@@ -152,6 +153,7 @@
   </nav>
   <main id="top">
     <section class="hero" id="heroPager" aria-label="Dragon Dance 首頁圖片分頁" tabindex="0">
+      <div class="pager-hint" aria-hidden="true">Swipe to change page · 滑動更換頁面</div>
       <div class="hero-pages" id="heroPages">
         <article class="hero-page hero-page-intro" aria-label="第 1 頁">
           <canvas class="fog-field" id="fogField" aria-hidden="true"></canvas>
