@@ -278,6 +278,7 @@
       const canvas = document.getElementById('fogField');
       const context = canvas.getContext('2d');
       const heroPages = document.getElementById('heroPages');
+      const about = document.getElementById('about');
       const heroSlides = Array.from(heroPages.children);
       const aboutPages = Array.from(document.querySelectorAll('.about-page'));
       const featurePages = Array.from(document.querySelectorAll('.feature-page'));
@@ -317,6 +318,7 @@
       let pageIndex = 0;
       let swipeStart = null;
       let suppressClickUntil = 0;
+      let autoScrollTimer = 0;
 
       function renderTrack(offset = 0) {
         if (!offset) {
@@ -352,8 +354,25 @@
         navSecondary.textContent = navLabels[pageIndex].secondary;
       }
 
+      function cancelAutoScroll() {
+        if (!autoScrollTimer) return;
+        window.clearTimeout(autoScrollTimer);
+        autoScrollTimer = 0;
+      }
+
+      function scheduleAboutScroll() {
+        cancelAutoScroll();
+        const startScrollY = window.scrollY;
+        autoScrollTimer = window.setTimeout(() => {
+          autoScrollTimer = 0;
+          if (Math.abs(window.scrollY - startScrollY) > 18) return;
+          about.scrollIntoView({ behavior:reduceMotion ? 'auto' : 'smooth', block:'start' });
+        }, 500);
+      }
+
       function beginSwipe(event) {
         if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
+        cancelAutoScroll();
         swipeStart = { id:event.pointerId, x:event.clientX, y:event.clientY, axis:null, moved:false, scrollY:window.scrollY };
         heroPages.classList.add('is-dragging');
       }
@@ -390,6 +409,7 @@
         const changedPage = Math.abs(deltaX) >= threshold && Math.abs(deltaX) > Math.abs(deltaY) * 1.1;
         if (changedPage) {
           setPage(pageIndex + (deltaX < 0 ? 1 : -1));
+          scheduleAboutScroll();
         } else {
           renderTrack();
         }
@@ -489,6 +509,7 @@
       document.addEventListener('pointermove', moveSwipe, { passive:false });
       document.addEventListener('pointerup', finishSwipe, { passive:true });
       document.addEventListener('pointercancel', cancelSwipe, { passive:true });
+      window.addEventListener('wheel', cancelAutoScroll, { passive:true });
       document.addEventListener('click', event => {
         if (performance.now() >= suppressClickUntil) return;
         suppressClickUntil = 0;
