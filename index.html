@@ -38,7 +38,13 @@
     .cta:hover { background:var(--paper); color:var(--ink); }
     .dragon-stage { position:absolute; right:1vw; top:66px; width:min(46vw,620px); height:545px; pointer-events:none; z-index:-0; }
     .dragon-halo { position:absolute; inset:8% 2%; border:1px solid #383838; border-radius:50%; transform:rotate(-21deg); }
-    .dragon { width:100%; height:100%; object-fit:contain; filter:grayscale(1) contrast(1.35) invert(1) drop-shadow(0 0 16px rgba(255,255,255,.22)); opacity:.96; transform-origin:55% 52%; user-select:none; -webkit-user-drag:none; }
+    .dragon-mist { position:absolute; width:76%; height:20%; border-radius:50%; background:rgba(218,224,219,.16); filter:blur(22px); opacity:0; mix-blend-mode:screen; animation:mist-drift 11s ease-in-out infinite; }
+    .dragon-mist-one { left:-18%; bottom:21%; animation-delay:-3s; }
+    .dragon-mist-two { right:-16%; bottom:36%; width:69%; background:rgba(177,193,189,.12); animation-duration:14s; animation-delay:-8s; }
+    .dragon-mist-three { left:7%; bottom:8%; width:88%; background:rgba(235,238,233,.11); animation-duration:17s; animation-delay:-12s; }
+    @keyframes mist-drift { 0%,100% { opacity:0; transform:translate3d(-12%,10%,0) scale(.82); } 32% { opacity:.82; } 62% { opacity:.38; } 78% { opacity:.66; transform:translate3d(26%,-18%,0) scale(1.18); } }
+    .dragon { position:relative; z-index:1; width:100%; height:100%; object-fit:contain; filter:grayscale(1) contrast(1.35) invert(1) drop-shadow(0 0 16px rgba(255,255,255,.22)); opacity:.96; transform-origin:55% 52%; user-select:none; -webkit-user-drag:none; }
+    @media (prefers-reduced-motion:reduce) { .dragon-mist { animation:none; opacity:.32; } }
     .hero-footer { position:absolute; left:4.2vw; right:4.2vw; bottom:20px; display:flex; justify-content:space-between; border-top:1px solid #353535; padding-top:12px; font-size:10px; letter-spacing:1.4px; color:#aaa; text-transform:uppercase; }
     .scroll-indicator { color:var(--paper); }
     section { padding:100px 4.2vw; }
@@ -97,6 +103,9 @@
       <p class="hero-copy">我們是 Dragon Dance。以速度為骨、創意為鱗，從設計桌走向賽道，為每一個千分之一秒全力衝刺。</p>
       <div class="dragon-stage" id="dragonStage" aria-label="可互動的龍圖案">
         <div class="dragon-halo"></div>
+        <div class="dragon-mist dragon-mist-one"></div>
+        <div class="dragon-mist dragon-mist-two"></div>
+        <div class="dragon-mist dragon-mist-three"></div>
         <img class="dragon" id="dragon" src="assets/dragon-mark.png" alt="Dragon Dance 龍圖案" />
       </div>
       <div class="hero-footer"><span>F1 in Schools / STEM Racing</span><span>Precision. Teamwork. Momentum.</span><a class="scroll-indicator" href="#about">Scroll to explore ↓</a></div>
