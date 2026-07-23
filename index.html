@@ -17,6 +17,7 @@
   <style>
     :root { --ink:#080808; --paper:#f2f2ef; --line:#2a2a2a; --muted:#9d9d99; --red:#e01823; }
     * { box-sizing:border-box; }
+    html, body { touch-action:pan-y; }
     html { scroll-behavior:smooth; }
     body { margin:0; background:var(--ink); color:var(--paper); font-family:Arial,"Microsoft JhengHei","PingFang TC",sans-serif; overflow-x:hidden; }
     a { color:inherit; text-decoration:none; }
@@ -28,7 +29,8 @@
     .navlinks a:hover { color:var(--red); }
     .hero { position:relative; min-height:670px; padding:0; border-bottom:1px solid var(--line); isolation:isolate; overflow:hidden; }
     .hero:before { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(8,8,8,.16),#080808 61%), repeating-linear-gradient(90deg,transparent 0 12.45%,rgba(255,255,255,.055) 12.5% 12.6%); z-index:-1; }
-    .hero-pages { display:flex; min-height:670px; transform:translateX(0); transition:transform .68s linear; touch-action:pan-y; will-change:transform; }
+    .hero-pages { display:flex; min-height:670px; transform:translateX(0); transition:transform .56s cubic-bezier(.22,.8,.24,1); touch-action:pan-y; will-change:transform; }
+    .hero-pages.is-dragging { transition:none; cursor:grabbing; }
     .hero-page { position:relative; flex:0 0 100%; min-height:670px; overflow:hidden; }
     .hero-page-intro { padding:clamp(54px,8vw,118px) 4.2vw 45px; }
     .photo-page { display:grid; place-items:center; background:#090909; user-select:none; }
@@ -213,10 +215,20 @@
       let lastSample = { time:0, x:-1000, y:-1000 };
       let pageIndex = 0;
       let swipeStart = null;
+      let suppressClickUntil = 0;
+
+      function renderTrack(offset = 0) {
+        if (!offset) {
+          heroPages.style.transform = `translate3d(-${pageIndex * 100}%,0,0)`;
+          return;
+        }
+        const adjustment = offset > 0 ? ` + ${offset}px` : ` - ${Math.abs(offset)}px`;
+        heroPages.style.transform = `translate3d(calc(-${pageIndex * 100}%${adjustment}),0,0)`;
+      }
 
       function setPage(nextIndex) {
         pageIndex = Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
-        heroPages.style.transform = `translateX(-${pageIndex * 100}%)`;
+        renderTrack();
         heroPages.dataset.page = String(pageIndex + 1);
         pagerPrev.hidden = pageIndex === 0;
         pagerNext.hidden = pageIndex === heroSlides.length - 1;
@@ -224,17 +236,51 @@
       }
 
       function beginSwipe(event) {
-        if (event.pointerType === 'mouse' && event.button !== 0) return;
-        swipeStart = { id:event.pointerId, x:event.clientX, y:event.clientY };
+        if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
+        swipeStart = { id:event.pointerId, x:event.clientX, y:event.clientY, axis:null, moved:false };
+        heroPages.classList.add('is-dragging');
       }
 
-      function endSwipe(event) {
+      function moveSwipe(event) {
         if (!swipeStart || swipeStart.id !== event.pointerId) return;
         const deltaX = event.clientX - swipeStart.x;
         const deltaY = event.clientY - swipeStart.y;
+        if (!swipeStart.axis) {
+          if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < 8) return;
+          swipeStart.axis = Math.abs(deltaX) > Math.abs(deltaY) * 1.1 ? 'horizontal' : 'vertical';
+        }
+        if (swipeStart.axis !== 'horizontal') return;
+        const atBoundary = (pageIndex === 0 && deltaX > 0) || (pageIndex === heroSlides.length - 1 && deltaX < 0);
+        renderTrack(deltaX * (atBoundary ? .22 : 1));
+        swipeStart.moved = true;
+      }
+
+      function finishSwipe(event) {
+        if (!swipeStart || swipeStart.id !== event.pointerId) return;
+        const gesture = swipeStart;
+        const deltaX = event.clientX - gesture.x;
+        const deltaY = event.clientY - gesture.y;
         swipeStart = null;
-        if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
-        setPage(pageIndex + (deltaX < 0 ? 1 : -1));
+        heroPages.classList.remove('is-dragging');
+        if (gesture.axis !== 'horizontal') {
+          renderTrack();
+          return;
+        }
+        if (gesture.moved) suppressClickUntil = performance.now() + 350;
+        const threshold = Math.min(56, Math.max(30, hero.clientWidth * .1));
+        const changedPage = Math.abs(deltaX) >= threshold && Math.abs(deltaX) > Math.abs(deltaY) * 1.1;
+        if (changedPage) {
+          setPage(pageIndex + (deltaX < 0 ? 1 : -1));
+        } else {
+          renderTrack();
+        }
+      }
+
+      function cancelSwipe() {
+        if (!swipeStart) return;
+        swipeStart = null;
+        heroPages.classList.remove('is-dragging');
+        renderTrack();
       }
 
       function resizeFog() {
@@ -318,9 +364,16 @@
       window.addEventListener('resize', resizeFog, { passive:true });
       window.addEventListener('pointerdown', disperseFog, { passive:true });
       window.addEventListener('pointermove', disperseFog, { passive:true });
-      heroPages.addEventListener('pointerdown', beginSwipe, { passive:true });
-      heroPages.addEventListener('pointerup', endSwipe, { passive:true });
-      heroPages.addEventListener('pointercancel', () => { swipeStart = null; }, { passive:true });
+      document.addEventListener('pointerdown', beginSwipe, { passive:true });
+      document.addEventListener('pointermove', moveSwipe, { passive:true });
+      document.addEventListener('pointerup', finishSwipe, { passive:true });
+      document.addEventListener('pointercancel', cancelSwipe, { passive:true });
+      document.addEventListener('click', event => {
+        if (performance.now() >= suppressClickUntil) return;
+        suppressClickUntil = 0;
+        event.preventDefault();
+        event.stopPropagation();
+      }, true);
       pagerPrev.addEventListener('click', () => setPage(pageIndex - 1));
       pagerNext.addEventListener('click', () => setPage(pageIndex + 1));
       hero.addEventListener('keydown', event => {
