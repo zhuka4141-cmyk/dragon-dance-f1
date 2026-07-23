@@ -36,18 +36,11 @@
     .cta { display:inline-flex; align-items:center; gap:16px; border:1px solid #eee; padding:14px 18px; font-size:11px; letter-spacing:1.5px; font-weight:bold; text-transform:uppercase; transition:.2s; }
     .cta:after { content:"↘"; font-size:18px; line-height:0; color:var(--red); }
     .cta:hover { background:var(--paper); color:var(--ink); }
-    .dragon-stage { position:absolute; right:-6vw; top:21px; width:min(59vw,815px); height:640px; pointer-events:auto; z-index:-0; }
+    .dragon-stage { position:absolute; right:1vw; top:66px; width:min(46vw,620px); height:545px; pointer-events:auto; z-index:-0; }
     .dragon-halo { position:absolute; inset:8% 2%; border:1px solid #383838; border-radius:50%; transform:rotate(-21deg); }
-    .dragon { width:100%; height:100%; object-fit:contain; filter:grayscale(1) contrast(1.45) invert(1) drop-shadow(0 0 18px rgba(255,255,255,.18)); mix-blend-mode:screen; opacity:.95; transform-origin:55% 52%; transition:transform .18s cubic-bezier(.2,.9,.25,1); will-change:transform; user-select:none; -webkit-user-drag:none; touch-action:none; cursor:grab; }
-    .dragon-stage:after { content:"TOUCH THE DRAGON"; position:absolute; right:12%; bottom:9%; border:1px solid #363636; padding:7px 10px; font-size:9px; letter-spacing:1.5px; color:#aaa; background:#080808; }
-    .dragon-stage.swing .dragon { animation:swing .9s cubic-bezier(.18,.8,.2,1); }
-    @keyframes swing {
-      0% { transform:rotate(0) translate(0,0) scale(1); }
-      18% { transform:rotate(7deg) translate(12px,-8px) scale(1.03); }
-      42% { transform:rotate(-6deg) translate(-14px,7px) scale(1.01); }
-      68% { transform:rotate(3deg) translate(6px,-3px) scale(1.02); }
-      100% { transform:rotate(0) translate(0,0) scale(1); }
-    }
+    .dragon { --dragon-x:0px; --dragon-y:0px; --dragon-tilt:0deg; width:100%; height:100%; object-fit:contain; filter:grayscale(1) contrast(1.35) invert(1) drop-shadow(0 0 16px rgba(255,255,255,.22)); opacity:.96; transform:translate(var(--dragon-x),var(--dragon-y)) rotate(var(--dragon-tilt)); transform-origin:55% 52%; transition:transform .28s cubic-bezier(.2,.9,.25,1); will-change:transform; user-select:none; -webkit-user-drag:none; touch-action:none; cursor:grab; }
+    .dragon.dragging { transition:none; cursor:grabbing; }
+    .dragon-stage:after { content:"TAP OR DRAG THE DRAGON"; position:absolute; right:8%; bottom:9%; border:1px solid #363636; padding:7px 10px; font-size:9px; letter-spacing:1.5px; color:#aaa; background:#080808; }
     .hero-footer { position:absolute; left:4.2vw; right:4.2vw; bottom:20px; display:flex; justify-content:space-between; border-top:1px solid #353535; padding-top:12px; font-size:10px; letter-spacing:1.4px; color:#aaa; text-transform:uppercase; }
     .scroll-indicator { color:var(--paper); }
     section { padding:100px 4.2vw; }
@@ -89,7 +82,7 @@
     footer strong { display:block; font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; font-size:clamp(38px,6vw,78px); line-height:.8; letter-spacing:1px; text-transform:uppercase; }
     footer p { margin:12px 0 0; font-size:12px; letter-spacing:1px; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
-    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero { min-height:735px; padding-top:58px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:255px; right:-21vw; width:125vw; height:440px; opacity:.67; } .dragon-stage:after { right:18%; bottom:3%; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about, .machine, .school { grid-template-columns:1fr; } .about { gap:30px; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .school { gap:25px; } .school-logo { width:156px; } .program-head { display:block; } .program-note { margin-top:22px; } .discipline { grid-template-columns:47px 1fr; gap:13px; } .discipline p { grid-column:2; } footer { padding:31px 6vw 18px; grid-template-columns:1fr; } .footer-meta { text-align:left; } }
+    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero { min-height:735px; padding-top:58px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about, .machine, .school { grid-template-columns:1fr; } .about { gap:30px; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .school { gap:25px; } .school-logo { width:156px; } .program-head { display:block; } .program-note { margin-top:22px; } .discipline { grid-template-columns:47px 1fr; gap:13px; } .discipline p { grid-column:2; } footer { padding:31px 6vw 18px; grid-template-columns:1fr; } .footer-meta { text-align:left; } }
   </style>
 </head>
 <body>
@@ -145,35 +138,43 @@
   <script>
     const stage = document.getElementById('dragonStage');
     const dragon = document.getElementById('dragon');
-    function sway(event) {
-      const box = stage.getBoundingClientRect();
-      const x = (event.clientX - box.left) / box.width - .5;
-      const y = (event.clientY - box.top) / box.height - .5;
-      dragon.style.transform = `rotate(${x * 8}deg) translate(${x * 19}px, ${y * 11}px)`;
+    const stops = [-46, 0, 46];
+    let stopIndex = 1;
+    let pointerStart = null;
+
+    function setDragonPosition(x, y = 0) {
+      dragon.style.setProperty('--dragon-x', `${x}px`);
+      dragon.style.setProperty('--dragon-y', `${y}px`);
+      dragon.style.setProperty('--dragon-tilt', `${x * .08}deg`);
     }
-    let swinging = false;
-    stage.addEventListener('pointermove', (event) => {
-      if (swinging) return;
-      sway(event);
-    });
-    stage.addEventListener('pointerleave', () => {
-      if (swinging) return;
-      dragon.style.transform = '';
-    });
-    function triggerSwing() {
-      swinging = true;
-      dragon.style.transform = '';
-      stage.classList.remove('swing');
-      void stage.offsetWidth;
-      stage.classList.add('swing');
-    }
+
     stage.addEventListener('pointerdown', (event) => {
-      event.preventDefault();
-      triggerSwing();
+      pointerStart = { id:event.pointerId, x:event.clientX, y:event.clientY, base:stops[stopIndex] };
+      stage.setPointerCapture(event.pointerId);
+      dragon.classList.add('dragging');
     });
-    stage.addEventListener('animationend', () => {
-      stage.classList.remove('swing');
-      swinging = false;
+
+    stage.addEventListener('pointermove', (event) => {
+      if (!pointerStart || event.pointerId !== pointerStart.id) return;
+      const x = Math.max(-92, Math.min(92, pointerStart.base + event.clientX - pointerStart.x));
+      const y = Math.max(-34, Math.min(34, event.clientY - pointerStart.y));
+      setDragonPosition(x, y);
+    });
+
+    stage.addEventListener('pointerup', (event) => {
+      if (!pointerStart || event.pointerId !== pointerStart.id) return;
+      const distance = Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y);
+      if (distance < 10) stopIndex = (stopIndex + 1) % stops.length;
+      else stopIndex = stops.reduce((best, stop, index) => Math.abs(stop - (pointerStart.base + event.clientX - pointerStart.x)) < Math.abs(stops[best] - (pointerStart.base + event.clientX - pointerStart.x)) ? index : best, 0);
+      setDragonPosition(stops[stopIndex]);
+      dragon.classList.remove('dragging');
+      pointerStart = null;
+    });
+
+    stage.addEventListener('pointercancel', () => {
+      setDragonPosition(stops[stopIndex]);
+      dragon.classList.remove('dragging');
+      pointerStart = null;
     });
   </script>
 </body>
