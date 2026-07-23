@@ -369,11 +369,17 @@
         autoScrollTimer = 0;
       }
 
+      function isPortraitPhone() {
+        return window.matchMedia('(orientation: portrait)').matches && Math.min(window.innerWidth, window.innerHeight) <= 600;
+      }
+
       function scheduleAboutScroll() {
         cancelAutoScroll();
+        if (!isPortraitPhone()) return;
         const startScrollY = window.scrollY;
         autoScrollTimer = window.setTimeout(() => {
           autoScrollTimer = 0;
+          if (!isPortraitPhone()) return;
           if (Math.abs(window.scrollY - startScrollY) > 18) return;
           about.scrollIntoView({ behavior:reduceMotion ? 'auto' : 'smooth', block:'start' });
         }, 500);
