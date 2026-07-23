@@ -28,15 +28,17 @@
     .navlinks a:hover { color:var(--red); }
     .hero { position:relative; min-height:670px; padding:clamp(54px,8vw,118px) 4.2vw 45px; border-bottom:1px solid var(--line); isolation:isolate; overflow:hidden; }
     .hero:before { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(8,8,8,.16),#080808 61%), repeating-linear-gradient(90deg,transparent 0 12.45%,rgba(255,255,255,.055) 12.5% 12.6%); z-index:-1; }
+    .fog-field { position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; touch-action:auto; opacity:.78; filter:blur(7px) saturate(.7); mix-blend-mode:screen; }
     .hero-kicker, .eyebrow { color:var(--red); font-size:11px; letter-spacing:2.2px; font-weight:700; text-transform:uppercase; }
-    .hero-kicker { max-width:min(72vw,760px); line-height:1.55; letter-spacing:1.4px; }
+    .hero-kicker { position:relative; z-index:2; max-width:min(72vw,760px); line-height:1.55; letter-spacing:1.4px; }
     h1 { font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:1px; font-size:clamp(76px,13vw,190px); line-height:.78; margin:21px 0 25px; max-width:950px; }
+    .hero h1 { position:relative; z-index:2; }
     h1 i { color:var(--red); font-style:normal; }
-    .hero-copy { max-width:435px; font-size:16px; line-height:1.65; color:#cececa; margin:0 0 32px; }
+    .hero-copy { position:relative; z-index:2; max-width:435px; font-size:16px; line-height:1.65; color:#cececa; margin:0 0 32px; }
     .cta { display:inline-flex; align-items:center; gap:16px; border:1px solid #eee; padding:14px 18px; font-size:11px; letter-spacing:1.5px; font-weight:bold; text-transform:uppercase; transition:.2s; }
     .cta:after { content:"↘"; font-size:18px; line-height:0; color:var(--red); }
     .cta:hover { background:var(--paper); color:var(--ink); }
-    .dragon-stage { position:absolute; right:1vw; top:66px; width:min(46vw,620px); height:545px; pointer-events:none; z-index:-0; }
+    .dragon-stage { position:absolute; right:1vw; top:66px; width:min(46vw,620px); height:545px; pointer-events:none; z-index:1; }
     .dragon-halo { position:absolute; inset:8% 2%; border:1px solid #383838; border-radius:50%; transform:rotate(-21deg); }
     .dragon-mist { position:absolute; width:120%; height:15%; border-radius:50%; background:linear-gradient(90deg,transparent,rgba(225,232,227,.34) 42%,rgba(225,232,227,.18) 62%,transparent); filter:blur(21px); opacity:.23; mix-blend-mode:screen; animation:mist-drift 8s linear infinite; }
     .dragon-mist-one { left:-72%; bottom:23%; animation-delay:-1.5s; }
@@ -45,7 +47,7 @@
     @keyframes mist-drift { 0% { opacity:.04; transform:translate3d(-10%,14%,0) scale(.9); } 38% { opacity:.4; } 70% { opacity:.16; } 100% { opacity:.03; transform:translate3d(132%,-20%,0) scale(1.17); } }
     .dragon { position:relative; z-index:1; width:100%; height:100%; object-fit:contain; filter:grayscale(1) contrast(1.35) invert(1) drop-shadow(0 0 16px rgba(255,255,255,.22)); opacity:.96; user-select:none; -webkit-user-drag:none; }
     @media (prefers-reduced-motion:reduce) { .dragon-mist { animation:none; opacity:.32; } }
-    .hero-footer { position:absolute; left:4.2vw; right:4.2vw; bottom:20px; display:flex; justify-content:space-between; border-top:1px solid #353535; padding-top:12px; font-size:10px; letter-spacing:1.4px; color:#aaa; text-transform:uppercase; }
+    .hero-footer { position:absolute; z-index:3; left:4.2vw; right:4.2vw; bottom:20px; display:flex; justify-content:space-between; border-top:1px solid #353535; padding-top:12px; font-size:10px; letter-spacing:1.4px; color:#aaa; text-transform:uppercase; }
     .scroll-indicator { color:var(--paper); }
     section { padding:100px 4.2vw; }
     .about { background:var(--paper); color:var(--ink); display:grid; grid-template-columns:1fr 1.7fr; gap:clamp(35px,9vw,150px); }
@@ -98,6 +100,7 @@
   </nav>
   <main id="top">
     <section class="hero" aria-label="Dragon Dance 首頁">
+      <canvas class="fog-field" id="fogField" aria-hidden="true"></canvas>
       <div class="hero-kicker">博愛醫院歷屆總理聯誼會梁省德中學 · F1 in Schools</div>
       <h1>Born to<br><i>Move.</i></h1>
       <p class="hero-copy">我們是 Dragon Dance。以速度為骨、創意為鱗，從設計桌走向賽道，為每一個千分之一秒全力衝刺。</p>
@@ -141,5 +144,118 @@
     </section>
   </main>
   <footer><div><strong>Dance with<br>the dragon.</strong><p>DRAGON DANCE / F1 IN SCHOOLS</p></div><div class="footer-meta">Bo Ai Hospital The Board of Directors'<br>Association of the Last Years Leung Sing Tak College<br>Hong Kong</div></footer>
+  <script>
+    (() => {
+      const hero = document.querySelector('.hero');
+      const canvas = document.getElementById('fogField');
+      const context = canvas.getContext('2d');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const wisps = [
+        { x:.02, y:.18, radius:110, stretch:2.8, speed:7, wave:.42, alpha:.13 },
+        { x:.28, y:.34, radius:145, stretch:3.2, speed:10, wave:.31, alpha:.11 },
+        { x:.58, y:.2, radius:125, stretch:2.5, speed:8, wave:.38, alpha:.12 },
+        { x:.78, y:.48, radius:170, stretch:3.4, speed:6, wave:.27, alpha:.1 },
+        { x:.12, y:.66, radius:155, stretch:3.1, speed:9, wave:.33, alpha:.12 },
+        { x:.45, y:.78, radius:135, stretch:2.7, speed:11, wave:.4, alpha:.1 },
+        { x:.72, y:.82, radius:180, stretch:3.5, speed:5, wave:.25, alpha:.09 }
+      ];
+      let width = 0;
+      let height = 0;
+      let frame = 0;
+      let visible = true;
+      let clearPoints = [];
+      let lastDraw = 0;
+      let lastSample = { time:0, x:-1000, y:-1000 };
+
+      function resizeFog() {
+        width = hero.clientWidth;
+        height = hero.clientHeight;
+        const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+        canvas.width = Math.round(width * ratio);
+        canvas.height = Math.round(height * ratio);
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+
+      function drawWisp(wisp, index, seconds) {
+        const travel = width * 1.55;
+        const drift = reduceMotion ? 0 : seconds * wisp.speed;
+        const x = ((wisp.x * travel + drift) % travel) - width * .22;
+        const y = wisp.y * height + (reduceMotion ? 0 : Math.sin(seconds * wisp.wave + index) * 15);
+        const gradient = context.createRadialGradient(x, y, 0, x, y, wisp.radius);
+        gradient.addColorStop(0, `rgba(214,224,219,${wisp.alpha})`);
+        gradient.addColorStop(.48, `rgba(191,205,201,${wisp.alpha * .58})`);
+        gradient.addColorStop(1, 'rgba(170,188,184,0)');
+        context.save();
+        context.translate(x, y);
+        context.scale(wisp.stretch, 1);
+        context.translate(-x, -y);
+        context.fillStyle = gradient;
+        context.beginPath();
+        context.arc(x, y, wisp.radius, 0, Math.PI * 2);
+        context.fill();
+        context.restore();
+      }
+
+      function clearFog(now) {
+        clearPoints = clearPoints.filter(point => now - point.created < 1150);
+        context.globalCompositeOperation = 'destination-out';
+        clearPoints.forEach(point => {
+          const progress = Math.min((now - point.created) / 1150, 1);
+          const radius = point.radius + progress * 38;
+          const strength = .94 * (1 - progress);
+          const gradient = context.createRadialGradient(point.x, point.y, radius * .18, point.x, point.y, radius);
+          gradient.addColorStop(0, `rgba(0,0,0,${strength})`);
+          gradient.addColorStop(.58, `rgba(0,0,0,${strength * .72})`);
+          gradient.addColorStop(1, 'rgba(0,0,0,0)');
+          context.fillStyle = gradient;
+          context.beginPath();
+          context.arc(point.x, point.y, radius, 0, Math.PI * 2);
+          context.fill();
+        });
+        context.globalCompositeOperation = 'source-over';
+      }
+
+      function drawFog(now) {
+        if (!visible) return;
+        if (now - lastDraw < 32) {
+          frame = requestAnimationFrame(drawFog);
+          return;
+        }
+        lastDraw = now;
+        context.clearRect(0, 0, width, height);
+        const seconds = now / 1000;
+        wisps.forEach((wisp, index) => drawWisp(wisp, index, seconds));
+        clearFog(now);
+        frame = requestAnimationFrame(drawFog);
+      }
+
+      function disperseFog(event) {
+        const bounds = hero.getBoundingClientRect();
+        const x = event.clientX - bounds.left;
+        const y = event.clientY - bounds.top;
+        if (x < 0 || y < 0 || x > bounds.width || y > bounds.height) return;
+        const now = performance.now();
+        const distance = Math.hypot(x - lastSample.x, y - lastSample.y);
+        if (event.type === 'pointermove' && now - lastSample.time < 34 && distance < 22) return;
+        clearPoints.push({ x, y, radius:event.pointerType === 'touch' ? 104 : 82, created:now });
+        if (clearPoints.length > 28) clearPoints.shift();
+        lastSample = { time:now, x, y };
+      }
+
+      resizeFog();
+      window.addEventListener('resize', resizeFog, { passive:true });
+      window.addEventListener('pointerdown', disperseFog, { passive:true });
+      window.addEventListener('pointermove', disperseFog, { passive:true });
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(entries => {
+          visible = entries[0].isIntersecting;
+          cancelAnimationFrame(frame);
+          if (visible) frame = requestAnimationFrame(drawFog);
+        }, { threshold:.01 }).observe(hero);
+      } else {
+        frame = requestAnimationFrame(drawFog);
+      }
+    })();
+  </script>
 </body>
 </html>
