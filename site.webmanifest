@@ -1,8 +1,10 @@
 {
   "name": "Dragon Dance | F1 in Schools",
   "short_name": "Dragon Dance",
+  "description": "Dragon Dance, the F1 in Schools team at AD&FD POHL Leung Sing Tak College (LSTC), Hong Kong.",
   "lang": "zh-Hant",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#080808",
   "theme_color": "#080808"
