@@ -86,11 +86,11 @@
     .title-page-partners:before { background:linear-gradient(90deg,rgba(255,255,255,.18),transparent 62%), repeating-linear-gradient(90deg,transparent 0 12.45%,rgba(8,8,8,.055) 12.5% 12.6%); }
     .title-page-partners p { color:#555; }
     .pager-hint { position:absolute; top:18px; left:50%; z-index:4; transform:translateX(-50%); color:#a8a8a4; font-size:10px; font-weight:700; letter-spacing:1.8px; line-height:1; text-transform:uppercase; white-space:nowrap; opacity:.72; pointer-events:none; }
-    .pager-arrow { position:absolute; top:50%; z-index:5; width:92px; min-height:108px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:13px; padding:0; border:0; background:transparent; color:var(--paper); cursor:pointer; opacity:.58; transform:translateY(-50%); transition:opacity linear .25s; }
+    .pager-arrow { position:fixed; top:50%; z-index:30; width:92px; min-height:108px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:13px; padding:0; border:0; background:transparent; color:var(--paper); cursor:pointer; opacity:.58; transform:translateY(-50%); transition:opacity linear .25s; touch-action:manipulation; }
     .pager-arrow:hover, .pager-arrow:focus-visible { opacity:.95; outline:0; }
     .pager-arrow[hidden] { display:none; }
-    .pager-next { right:2.2vw; }
-    .pager-prev { left:2.2vw; }
+    .pager-next { right:max(2.2vw, env(safe-area-inset-right)); }
+    .pager-prev { left:max(2.2vw, env(safe-area-inset-left)); }
     .pager-line { position:relative; width:40px; height:2px; display:block; animation:pager-line-fade 2.5s linear infinite; }
     .pager-next .pager-line { background:linear-gradient(90deg,transparent,rgba(242,242,239,.96)); animation-name:pager-line-fade,pager-nudge-right; }
     .pager-prev .pager-line { background:linear-gradient(90deg,rgba(242,242,239,.96),transparent); animation-name:pager-line-fade,pager-nudge-left; }
@@ -188,7 +188,7 @@
     .contact-copy span, .contact-detail { display:block; overflow-wrap:anywhere; color:#4e4e4b; font-size:11px; line-height:1.45; }
     .contact-detail { margin-top:3px; text-decoration:underline; text-decoration-color:#aaa; text-underline-offset:3px; transition:color .2s; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
-    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:66px; min-height:88px; gap:10px; } .pager-line { width:33px; height:2px; } .pager-line:after { width:9px; height:9px; } .pager-label { font-size:10px; } .pager-next { right:2vw; } .pager-prev { left:2vw; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
+    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:66px; min-height:88px; gap:10px; } .pager-line { width:33px; height:2px; } .pager-line:after { width:9px; height:9px; } .pager-label { font-size:10px; } .pager-next { right:max(2vw, env(safe-area-inset-right)); } .pager-prev { left:max(2vw, env(safe-area-inset-left)); } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
   </style>
 </head>
 <body>
@@ -329,7 +329,6 @@
       const canvas = document.getElementById('fogField');
       const context = canvas.getContext('2d');
       const heroPages = document.getElementById('heroPages');
-      const about = document.getElementById('about');
       const heroSlides = Array.from(heroPages.children);
       const aboutPages = Array.from(document.querySelectorAll('.about-page'));
       const featurePages = Array.from(document.querySelectorAll('.feature-page'));
@@ -369,7 +368,6 @@
       let pageIndex = 0;
       let swipeStart = null;
       let suppressClickUntil = 0;
-      let autoScrollTimer = 0;
 
       function renderTrack(offset = 0) {
         if (!offset) {
@@ -405,31 +403,8 @@
         navSecondary.textContent = navLabels[pageIndex].secondary;
       }
 
-      function cancelAutoScroll() {
-        if (!autoScrollTimer) return;
-        window.clearTimeout(autoScrollTimer);
-        autoScrollTimer = 0;
-      }
-
-      function isPortraitPhone() {
-        return window.matchMedia('(orientation: portrait)').matches && Math.min(window.innerWidth, window.innerHeight) <= 600;
-      }
-
-      function scheduleAboutScroll() {
-        cancelAutoScroll();
-        if (!isPortraitPhone()) return;
-        const startScrollY = window.scrollY;
-        autoScrollTimer = window.setTimeout(() => {
-          autoScrollTimer = 0;
-          if (!isPortraitPhone()) return;
-          if (Math.abs(window.scrollY - startScrollY) > 18) return;
-          about.scrollIntoView({ behavior:reduceMotion ? 'auto' : 'smooth', block:'start' });
-        }, 500);
-      }
-
       function beginSwipe(event) {
         if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
-        cancelAutoScroll();
         swipeStart = { id:event.pointerId, x:event.clientX, y:event.clientY, axis:null, moved:false, scrollY:window.scrollY };
         heroPages.classList.add('is-dragging');
       }
@@ -466,7 +441,6 @@
         const changedPage = Math.abs(deltaX) >= threshold && Math.abs(deltaX) > Math.abs(deltaY) * 1.1;
         if (changedPage) {
           setPage(pageIndex + (deltaX < 0 ? 1 : -1));
-          scheduleAboutScroll();
         } else {
           renderTrack();
         }
@@ -566,7 +540,6 @@
       document.addEventListener('pointermove', moveSwipe, { passive:false });
       document.addEventListener('pointerup', finishSwipe, { passive:true });
       document.addEventListener('pointercancel', cancelSwipe, { passive:true });
-      window.addEventListener('wheel', cancelAutoScroll, { passive:true });
       document.addEventListener('click', event => {
         if (performance.now() >= suppressClickUntil) return;
         suppressClickUntil = 0;
