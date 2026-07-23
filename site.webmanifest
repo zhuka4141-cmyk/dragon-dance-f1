@@ -1,0 +1,9 @@
+{
+  "name": "Dragon Dance | F1 in Schools",
+  "short_name": "Dragon Dance",
+  "lang": "zh-Hant",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#080808"
+}
