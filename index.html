@@ -268,6 +268,25 @@
     .racing-context h2 { margin:10px 0 0; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(30px,4vw,56px); font-weight:400; line-height:.9; letter-spacing:1px; text-transform:uppercase; }
     .racing-context h2 em { color:var(--red); font-style:normal; }
     .racing-context p { max-width:620px; margin:0; color:#393936; font-size:15px; line-height:1.65; }
+    .latest-updates { padding:clamp(68px,8vw,110px) 4.2vw; background:#151515; color:var(--paper); }
+    .updates-preview-header { display:flex; align-items:end; justify-content:space-between; gap:32px; margin-bottom:42px; }
+    .updates-preview-header h2 { margin:13px 0 0; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(50px,7vw,104px); font-weight:400; line-height:.82; letter-spacing:1px; text-transform:uppercase; }
+    .updates-preview-link { display:inline-flex; align-items:center; min-height:42px; border-bottom:1px solid rgba(242,242,239,.55); color:var(--paper); font-size:11px; font-weight:bold; letter-spacing:1.2px; text-transform:uppercase; transition:color .2s,border-color .2s; }
+    .updates-preview-link:hover, .updates-preview-link:focus-visible { color:var(--red); border-color:var(--red); outline:0; }
+    .updates-preview-feed { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .update-preview-card { min-width:0; display:flex; flex-direction:column; border-top:1px solid #555; background:#202020; color:var(--paper); transition:background .25s,transform .25s; }
+    .update-preview-card:hover { background:#282828; transform:translateY(-4px); }
+    .update-preview-card.is-featured { grid-column:span 2; display:grid; grid-template-columns:minmax(0,1.12fr) minmax(240px,.88fr); }
+    .update-preview-media { display:block; min-height:0; aspect-ratio:4 / 3; overflow:hidden; background:#292929; }
+    .update-preview-card.is-featured .update-preview-media { height:100%; aspect-ratio:auto; min-height:300px; }
+    .update-preview-media img { width:100%; height:100%; object-fit:cover; filter:grayscale(.15) contrast(1.04); transition:filter .35s,transform .55s; }
+    .update-preview-card:hover .update-preview-media img { filter:grayscale(0) contrast(1.04); transform:scale(1.03); }
+    .update-preview-copy { display:flex; min-width:0; flex:1; flex-direction:column; align-items:flex-start; padding:23px 24px 26px; }
+    .update-preview-date { color:var(--red); font-size:10px; font-weight:bold; letter-spacing:1.4px; text-transform:uppercase; }
+    .update-preview-heading { display:block; margin:15px 0 13px; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(27px,2.9vw,45px); font-weight:400; line-height:.9; letter-spacing:1px; text-transform:uppercase; }
+    .update-preview-summary { display:block; color:#c8c8c4; font-size:14px; line-height:1.6; }
+    .update-preview-more { margin-top:24px; color:var(--paper); font-size:10px; font-weight:bold; letter-spacing:1.1px; text-transform:uppercase; }
+    .updates-preview-status { grid-column:1 / -1; padding:30px 0; border-top:1px solid #555; color:#bdbdb8; font-size:14px; }
     @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:52px; min-height:72px; gap:7px; border:0; border-radius:0; background:transparent; box-shadow:none; color:#fff; opacity:.58; mix-blend-mode:difference; backdrop-filter:none; } .pager-arrow:active { opacity:1; } .pager-line { width:25px; height:1px; } .pager-line:after { width:8px; height:8px; border-width:1px; } .pager-label { font-size:8px; letter-spacing:1px; } .pager-next { right:0; } .pager-prev { left:0; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .proposal-cta { margin-left:78px; } .member-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:26px; } .member-card-copy { padding:9px 10px 11px; } .member-card-role { font-size:8px; letter-spacing:.9px; } .member-card strong { font-size:11px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item, .school-contact { min-height:0; grid-column:span 1; } .footer-meta { text-align:left; } }
     @media (max-width:800px) {
       .nav-tools { min-width:auto; gap:10px; }
@@ -280,6 +299,11 @@
       .contact-modal { padding:16px; }
       .contact-dialog { padding:30px 24px; }
       .contact-dialog h2 { font-size:clamp(36px,12vw,52px); }
+      .updates-preview-header { align-items:start; flex-direction:column; gap:22px; margin-bottom:30px; }
+      .updates-preview-feed { grid-template-columns:1fr; gap:12px; }
+      .update-preview-card.is-featured { grid-column:auto; grid-template-columns:1fr; }
+      .update-preview-card.is-featured .update-preview-media { min-height:0; height:auto; aspect-ratio:16 / 10; }
+      .update-preview-copy { padding:20px; }
     }
   </style>
 </head>
@@ -420,6 +444,14 @@
       </article>
     </section>
 
+    <section class="latest-updates" id="updates" aria-labelledby="updatesPreviewTitle">
+      <div class="updates-preview-header">
+        <div><div class="eyebrow" data-i18n="updatesLabel">Latest / Updates</div><h2 id="updatesPreviewTitle" data-i18n-html="updatesTitle">On The<br>Move.</h2></div>
+        <a class="updates-preview-link" href="updates.html" data-i18n="viewAllUpdates">View all updates ↗</a>
+      </div>
+      <div class="updates-preview-feed" id="homeUpdates" aria-live="polite"><div class="updates-preview-status" data-i18n="updatesLoading">Loading latest updates...</div></div>
+    </section>
+
   </main>
   <section class="racing-context" aria-labelledby="racing-context-title">
     <div>
@@ -491,6 +523,7 @@
       const partnershipModal = document.getElementById('partnershipModal');
       const partnershipBackdrop = document.getElementById('partnershipBackdrop');
       const partnershipClose = document.getElementById('partnershipClose');
+      const homeUpdates = document.getElementById('homeUpdates');
       const pagerLabels = {
         en: [
           { prev:'', next:'Crew' },
@@ -525,12 +558,18 @@
       let suppressClickUntil = 0;
       let language = 'en';
       let languageAnimationTimer = 0;
+      let updates = [];
       const textElements = Array.from(document.querySelectorAll('[data-i18n]'));
       const htmlElements = Array.from(document.querySelectorAll('[data-i18n-html]'));
       const englishText = Object.fromEntries(textElements.map(element => [element.dataset.i18n, element.textContent]));
       const englishHtml = Object.fromEntries(htmlElements.map(element => [element.dataset.i18nHtml, element.innerHTML]));
       const chineseText = {
         pagerHint:'滑動更換頁面',
+        updatesLabel:'最新 / 動態',
+        viewAllUpdates:'查看全部動態 ↗',
+        updatesLoading:'正在載入最新動態...',
+        updatesEmpty:'暫時未有動態，請稍後再回來看看。',
+        readUpdate:'查看動態 ↗',
         heroKicker:'博愛醫院歷屆總理聯誼會梁省德中學 · STEM Racing',
         heroCopy:'我們是 Dragon Dance。以速度為骨、創意為鱗，從設計桌走向賽道，為每一個千分之一秒全力衝刺。',
         f1StemLabel:'F1 Dragon Dance / STEM Racing',
@@ -613,6 +652,7 @@
         schoolWebsite:'學校網站'
       };
       const chineseHtml = {
+        updatesTitle:'持續<br>前進。',
         heroTitle:'為速度<br><i>而生。</i>',
         crewTitle:'認識<br>隊員',
         partnersTitle:'支持<br>驅動。',
@@ -624,6 +664,84 @@
         footerTitle:'與龍<br>共舞。',
         footerMeta:'博愛醫院歷屆總理聯誼會梁省德中學<br>香港'
       };
+
+      function updateText(post, field) {
+        const value = post[field];
+        if (typeof value === 'string') return value;
+        return value?.[language] || value?.en || '';
+      }
+
+      function updateDate(value) {
+        const date = new Date(`${value}T12:00:00`);
+        if (Number.isNaN(date.getTime())) return value || '';
+        return new Intl.DateTimeFormat(language === 'zh' ? 'zh-HK' : 'en-GB', {
+          day:'2-digit', month:'short', year:'numeric'
+        }).format(date);
+      }
+
+      function renderHomeUpdates() {
+        if (!homeUpdates) return;
+        homeUpdates.replaceChildren();
+        const posts = updates.slice(0, 3);
+        if (!posts.length) {
+          const status = document.createElement('p');
+          status.className = 'updates-preview-status';
+          status.textContent = language === 'zh' ? '暫時未有動態，請稍後再回來看看。' : 'No updates have been published yet. Check back soon.';
+          homeUpdates.append(status);
+          return;
+        }
+        posts.forEach((post, index) => {
+          const card = document.createElement('a');
+          card.className = `update-preview-card${index === 0 ? ' is-featured' : ''}`;
+          card.href = `updates.html#${encodeURIComponent(post.id || '')}`;
+          const title = updateText(post, 'title');
+          card.setAttribute('aria-label', `${language === 'zh' ? '查看動態：' : 'Read update: '}${title}`);
+
+          if (post.cover) {
+            const media = document.createElement('span');
+            media.className = 'update-preview-media';
+            const image = document.createElement('img');
+            image.src = post.cover;
+            image.alt = updateText(post, 'alt') || title;
+            image.loading = index === 0 ? 'eager' : 'lazy';
+            media.append(image);
+            card.append(media);
+          }
+
+          const copy = document.createElement('span');
+          copy.className = 'update-preview-copy';
+          const date = document.createElement('span');
+          date.className = 'update-preview-date';
+          date.textContent = updateDate(post.published);
+          const heading = document.createElement('span');
+          heading.className = 'update-preview-heading';
+          const headingText = document.createElement('span');
+          headingText.textContent = title;
+          heading.append(headingText);
+          const summary = document.createElement('span');
+          summary.className = 'update-preview-summary';
+          summary.textContent = updateText(post, 'excerpt');
+          const more = document.createElement('span');
+          more.className = 'update-preview-more';
+          more.textContent = language === 'zh' ? '查看動態 ↗' : 'Read update ↗';
+          copy.append(date, heading, summary, more);
+          card.append(copy);
+          homeUpdates.append(card);
+        });
+      }
+
+      function loadUpdates() {
+        fetch('content/updates.json', { cache:'no-store' })
+          .then(response => response.ok ? response.json() : Promise.reject(new Error('Updates unavailable')))
+          .then(data => {
+            updates = Array.isArray(data.posts) ? data.posts.slice().sort((a, b) => String(b.published).localeCompare(String(a.published))) : [];
+            renderHomeUpdates();
+          })
+          .catch(() => {
+            updates = [];
+            renderHomeUpdates();
+          });
+      }
 
       function openPartnershipModal() {
         partnershipModal.classList.add('is-open');
@@ -690,6 +808,7 @@
         langChinese.setAttribute('aria-pressed', String(chinese));
         try { window.localStorage.setItem('dragon-dance-language', language); } catch (_) {}
         setPage(pageIndex);
+        renderHomeUpdates();
         if (languageChanged && animate && !reduceMotion) {
           document.body.classList.remove('is-language-switching');
           void document.body.offsetWidth;
@@ -873,6 +992,7 @@
       let savedLanguage = 'en';
       try { savedLanguage = window.localStorage.getItem('dragon-dance-language') || 'en'; } catch (_) {}
       applyLanguage(savedLanguage === 'zh' ? 'zh' : 'en', false);
+      loadUpdates();
       resizeFog();
       window.addEventListener('resize', resizeFog, { passive:true });
       window.addEventListener('pointerdown', disperseFog, { passive:true });
