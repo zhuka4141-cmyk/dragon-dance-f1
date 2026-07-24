@@ -8,9 +8,15 @@
   "display": "standalone",
   "icons": [
     {
-      "src": "/assets/dragon-search-icon.jpg",
-      "sizes": "640x640",
-      "type": "image/jpeg",
+      "src": "/assets/dragon-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/dragon-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ],
