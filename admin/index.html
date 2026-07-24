@@ -4,9 +4,422 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#080808" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
   <title>Dragon Dance Updates Admin</title>
+  <style>
+    :root { --ink:#080808; --paper:#f2f2ef; --line:#42423f; --muted:#a5a5a0; --red:#e01823; --panel:#191919; }
+    * { box-sizing:border-box; }
+    body { min-height:100vh; margin:0; background:var(--ink); color:var(--paper); font-family:"Noto Sans TC","Microsoft JhengHei","PingFang TC",sans-serif; }
+    button, input, textarea { font:inherit; }
+    button { cursor:pointer; }
+    .topline { height:6px; background:repeating-linear-gradient(90deg,var(--paper) 0 20px,var(--ink) 20px 40px); }
+    header { min-height:74px; display:flex; align-items:center; justify-content:space-between; gap:24px; padding:0 4.2vw; border-bottom:1px solid var(--line); }
+    .wordmark { color:var(--paper); font-family:Impact,"Arial Narrow",sans-serif; font-size:27px; letter-spacing:1px; line-height:.75; text-decoration:none; text-transform:uppercase; }
+    .wordmark span { display:block; margin-left:2px; color:var(--red); font-size:11px; letter-spacing:3px; }
+    .site-link { color:#d3d3ce; font-size:11px; font-weight:700; letter-spacing:1.2px; text-decoration:none; text-transform:uppercase; }
+    .site-link:hover, .site-link:focus-visible { color:var(--red); outline:0; }
+    main { width:min(1180px,91.6vw); margin:0 auto; padding:clamp(48px,7vw,92px) 0 80px; }
+    .kicker { color:var(--red); font-size:11px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase; }
+    h1, h2, h3 { font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; letter-spacing:1px; text-transform:uppercase; }
+    h1 { margin:13px 0 0; font-size:clamp(52px,8vw,100px); line-height:.82; }
+    h2 { margin:0; font-size:clamp(34px,4.2vw,55px); line-height:.86; }
+    h3 { margin:0; font-size:27px; line-height:.9; }
+    .lede { max-width:620px; margin:24px 0 0; color:#c9c9c4; font-size:16px; line-height:1.65; }
+    .auth-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:48px; }
+    .auth-panel, .editor-panel, .posts-panel { border-top:2px solid var(--paper); background:var(--panel); padding:28px; }
+    .auth-panel h2 { margin-bottom:12px; }
+    .auth-panel p { min-height:45px; margin:0 0 24px; color:#bdbdb8; font-size:14px; line-height:1.6; }
+    form { display:grid; gap:13px; }
+    label { display:grid; gap:7px; color:#d6d6d1; font-size:12px; font-weight:700; letter-spacing:.5px; }
+    input, textarea { width:100%; border:1px solid #62625e; border-radius:0; background:#101010; color:var(--paper); padding:12px 13px; outline:0; transition:border-color .2s,background .2s; }
+    textarea { min-height:118px; resize:vertical; line-height:1.55; }
+    input:focus, textarea:focus { border-color:var(--red); background:#151515; }
+    input[type="file"] { padding:9px; color:#c9c9c4; }
+    .button { min-height:44px; border:1px solid var(--paper); border-radius:0; background:var(--paper); color:var(--ink); font-size:11px; font-weight:900; letter-spacing:1px; text-transform:uppercase; transition:background .2s,color .2s,border-color .2s; }
+    .button:hover, .button:focus-visible { border-color:var(--red); background:var(--red); color:var(--paper); outline:0; }
+    .button.secondary { background:transparent; color:var(--paper); }
+    .button.danger { border-color:#7b272b; background:transparent; color:#ffb1b4; }
+    .button.danger:hover, .button.danger:focus-visible { border-color:var(--red); background:var(--red); color:var(--paper); }
+    .status { min-height:24px; margin:18px 0 0; color:#c9c9c4; font-size:13px; line-height:1.5; }
+    .status.error { color:#ff9ca1; }
+    .status.success { color:#b9ebc5; }
+    [hidden] { display:none !important; }
+    .admin-shell { display:grid; gap:48px; }
+    .admin-bar { display:flex; align-items:end; justify-content:space-between; gap:20px; padding-bottom:22px; border-bottom:1px solid var(--line); }
+    .admin-bar p { margin:10px 0 0; color:#bdbdb8; font-size:13px; }
+    .admin-content { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(290px,.9fr); gap:18px; align-items:start; }
+    .editor-panel, .posts-panel { border-top-color:var(--red); }
+    .editor-panel > p, .posts-panel > p { margin:13px 0 26px; color:#bdbdb8; font-size:13px; line-height:1.6; }
+    .field-columns { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; }
+    .form-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:5px; }
+    .form-actions .button { padding:0 16px; }
+    .cover-preview { width:100%; margin-top:3px; aspect-ratio:16 / 9; overflow:hidden; background:#111; }
+    .cover-preview img { width:100%; height:100%; object-fit:cover; }
+    .posts-list { display:grid; gap:0; }
+    .admin-post { display:grid; grid-template-columns:96px minmax(0,1fr); gap:14px; padding:15px 0; border-top:1px solid #4c4c48; }
+    .admin-post-image { width:96px; aspect-ratio:1; overflow:hidden; background:#292929; }
+    .admin-post-image img { width:100%; height:100%; object-fit:cover; }
+    .admin-post-date { color:var(--red); font-size:10px; font-weight:700; letter-spacing:1px; }
+    .admin-post h3 { margin:8px 0 8px; font-size:23px; }
+    .admin-post p { margin:0; color:#bababa; font-size:12px; line-height:1.5; }
+    .post-actions { display:flex; gap:10px; margin-top:13px; }
+    .text-button { padding:0; border:0; background:transparent; color:var(--paper); font-size:11px; font-weight:700; letter-spacing:.8px; text-decoration:underline; text-underline-offset:4px; }
+    .text-button:hover, .text-button:focus-visible { color:var(--red); outline:0; }
+    .empty-posts { padding:23px 0; border-top:1px solid #4c4c48; color:#bdbdb8; font-size:13px; }
+    @media (max-width:800px) { header { min-height:63px; } main { width:88vw; padding:54px 0 64px; } .auth-grid, .admin-content, .field-columns { grid-template-columns:1fr; } .auth-panel, .editor-panel, .posts-panel { padding:22px; } .admin-bar { align-items:start; flex-direction:column; } .admin-bar .button { width:100%; } }
+  </style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@3.5.0/dist/decap-cms.js"></script>
+  <div class="topline"></div>
+  <header>
+    <a class="wordmark" href="../index.html">Dragon Dance<span>STEM Racing</span></a>
+    <a class="site-link" href="../updates.html">查看公开动态 ↗</a>
+  </header>
+  <main>
+    <section id="authView">
+      <span class="kicker">Dragon Dance / Updates Admin</span>
+      <h1>管理<br>动态。</h1>
+      <p class="lede">登录后可上传图片、撰写中英文内容并直接发布。公开网站会即时读取已发布的动态。</p>
+      <div class="auth-grid">
+        <section class="auth-panel">
+          <h2>登录</h2>
+          <p>使用 Dragon Dance 管理邮箱与密码登录。</p>
+          <form id="signInForm">
+            <label>电邮<input id="signInEmail" type="email" autocomplete="email" required /></label>
+            <label>密码<input id="signInPassword" type="password" autocomplete="current-password" required /></label>
+            <button class="button" type="submit">登录后台</button>
+          </form>
+        </section>
+        <section class="auth-panel">
+          <h2>建立帐号</h2>
+          <p>首次使用请以管理电邮建立帐号；完成验证电邮后，即可登录发布。</p>
+          <form id="signUpForm">
+            <label>电邮<input id="signUpEmail" type="email" autocomplete="email" required /></label>
+            <label>新密码<input id="signUpPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
+            <button class="button secondary" type="submit">建立管理帐号</button>
+          </form>
+        </section>
+      </div>
+      <p class="status" id="authStatus" role="status"></p>
+    </section>
+
+    <section class="admin-shell" id="editorView" hidden>
+      <div class="admin-bar">
+        <div><span class="kicker">Signed in</span><h2>最新<br>动态。</h2><p id="editorEmail"></p></div>
+        <button class="button secondary" id="signOutButton" type="button">登出</button>
+      </div>
+      <div class="admin-content">
+        <section class="editor-panel">
+          <span class="kicker" id="formMode">New update</span>
+          <h2 id="formTitle">发布<br>新动态。</h2>
+          <p>中英文内容会分别显示在网站的语言切换版本。发布后会立即出现在首页和完整动态页。</p>
+          <form id="updateForm">
+            <div class="field-columns">
+              <label>发布日期<input id="publishedAt" type="date" required /></label>
+              <label>网址识别名称<input id="slug" type="text" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="race-day-2026" required /></label>
+            </div>
+            <label>封面图片<input id="coverFile" type="file" accept="image/jpeg,image/png,image/webp" /></label>
+            <div class="cover-preview" id="coverPreview" hidden><img id="coverPreviewImage" alt="" /></div>
+            <div class="field-columns">
+              <label>图片描述（English）<input id="coverAltEn" type="text" /></label>
+              <label>图片描述（中文）<input id="coverAltZh" type="text" /></label>
+            </div>
+            <label>标题（English）<input id="titleEn" type="text" required /></label>
+            <label>标题（中文）<input id="titleZh" type="text" required /></label>
+            <label>摘要（English）<textarea id="excerptEn" required></textarea></label>
+            <label>摘要（中文）<textarea id="excerptZh" required></textarea></label>
+            <label>内文（English）<textarea id="bodyEn" required></textarea></label>
+            <label>内文（中文）<textarea id="bodyZh" required></textarea></label>
+            <div class="form-actions">
+              <button class="button" id="publishButton" type="submit">发布动态</button>
+              <button class="button secondary" id="resetButton" type="button">清除内容</button>
+            </div>
+          </form>
+          <p class="status" id="editorStatus" role="status"></p>
+        </section>
+        <section class="posts-panel">
+          <span class="kicker">Published</span>
+          <h2>所有<br>动态。</h2>
+          <p>点击编辑可修改已发布内容；删除后会从网站移除。</p>
+          <div class="posts-list" id="postsList"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../supabase-config.js"></script>
+  <script>
+    (() => {
+      const administratorEmail = 'dragondance@lstc.edu.hk';
+      const client = window.supabase.createClient(
+        window.DRAGON_DANCE_SUPABASE.url,
+        window.DRAGON_DANCE_SUPABASE.publishableKey
+      );
+      const authView = document.getElementById('authView');
+      const editorView = document.getElementById('editorView');
+      const authStatus = document.getElementById('authStatus');
+      const editorStatus = document.getElementById('editorStatus');
+      const postsList = document.getElementById('postsList');
+      const updateForm = document.getElementById('updateForm');
+      const fields = {
+        publishedAt:document.getElementById('publishedAt'),
+        slug:document.getElementById('slug'),
+        coverFile:document.getElementById('coverFile'),
+        coverAltEn:document.getElementById('coverAltEn'),
+        coverAltZh:document.getElementById('coverAltZh'),
+        titleEn:document.getElementById('titleEn'),
+        titleZh:document.getElementById('titleZh'),
+        excerptEn:document.getElementById('excerptEn'),
+        excerptZh:document.getElementById('excerptZh'),
+        bodyEn:document.getElementById('bodyEn'),
+        bodyZh:document.getElementById('bodyZh')
+      };
+      let currentUser = null;
+      let editingId = null;
+      let existingCoverUrl = '';
+      let publishedPosts = [];
+
+      function setStatus(element, message, type = '') {
+        element.textContent = message;
+        element.className = `status${type ? ` ${type}` : ''}`;
+      }
+
+      function assetUrl(url) {
+        if (!url || /^https?:\/\//i.test(url)) return url;
+        return `../${url.replace(/^\//, '')}`;
+      }
+
+      function setCoverPreview(url) {
+        const preview = document.getElementById('coverPreview');
+        const image = document.getElementById('coverPreviewImage');
+        if (!url) {
+          preview.hidden = true;
+          image.removeAttribute('src');
+          return;
+        }
+        image.src = assetUrl(url);
+        preview.hidden = false;
+      }
+
+      function slugify(value) {
+        return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 72);
+      }
+
+      function resetForm() {
+        editingId = null;
+        existingCoverUrl = '';
+        updateForm.reset();
+        fields.publishedAt.value = new Date().toISOString().slice(0, 10);
+        document.getElementById('formMode').textContent = 'New update';
+        document.getElementById('formTitle').innerHTML = '发布<br>新动态。';
+        document.getElementById('publishButton').textContent = '发布动态';
+        setCoverPreview('');
+        setStatus(editorStatus, '');
+      }
+
+      function renderPosts() {
+        postsList.replaceChildren();
+        if (!publishedPosts.length) {
+          const empty = document.createElement('p');
+          empty.className = 'empty-posts';
+          empty.textContent = '尚未发布任何动态。';
+          postsList.append(empty);
+          return;
+        }
+        publishedPosts.forEach(post => {
+          const article = document.createElement('article');
+          article.className = 'admin-post';
+          const imageBox = document.createElement('div');
+          imageBox.className = 'admin-post-image';
+          if (post.cover_url) {
+            const image = document.createElement('img');
+            image.src = assetUrl(post.cover_url);
+            image.alt = post.cover_alt_zh || post.title_zh || post.title_en;
+            imageBox.append(image);
+          }
+          const copy = document.createElement('div');
+          const date = document.createElement('span');
+          date.className = 'admin-post-date';
+          date.textContent = post.published_at;
+          const title = document.createElement('h3');
+          title.textContent = post.title_zh || post.title_en;
+          const excerpt = document.createElement('p');
+          excerpt.textContent = post.excerpt_zh || post.excerpt_en;
+          const actions = document.createElement('div');
+          actions.className = 'post-actions';
+          const edit = document.createElement('button');
+          edit.className = 'text-button';
+          edit.type = 'button';
+          edit.textContent = '编辑';
+          edit.addEventListener('click', () => editPost(post));
+          const remove = document.createElement('button');
+          remove.className = 'text-button';
+          remove.type = 'button';
+          remove.textContent = '删除';
+          remove.addEventListener('click', () => deletePost(post));
+          actions.append(edit, remove);
+          copy.append(date, title, excerpt, actions);
+          article.append(imageBox, copy);
+          postsList.append(article);
+        });
+      }
+
+      async function loadPosts() {
+        const { data, error } = await client.from('updates').select('*').order('published_at', { ascending:false });
+        if (error) {
+          setStatus(editorStatus, error.message, 'error');
+          return;
+        }
+        publishedPosts = data || [];
+        renderPosts();
+      }
+
+      function editPost(post) {
+        editingId = post.id;
+        existingCoverUrl = post.cover_url || '';
+        fields.publishedAt.value = post.published_at || '';
+        fields.slug.value = post.slug || '';
+        fields.coverAltEn.value = post.cover_alt_en || '';
+        fields.coverAltZh.value = post.cover_alt_zh || '';
+        fields.titleEn.value = post.title_en || '';
+        fields.titleZh.value = post.title_zh || '';
+        fields.excerptEn.value = post.excerpt_en || '';
+        fields.excerptZh.value = post.excerpt_zh || '';
+        fields.bodyEn.value = post.body_en || '';
+        fields.bodyZh.value = post.body_zh || '';
+        document.getElementById('formMode').textContent = 'Edit update';
+        document.getElementById('formTitle').innerHTML = '编辑<br>动态。';
+        document.getElementById('publishButton').textContent = '储存更新';
+        setCoverPreview(existingCoverUrl);
+        setStatus(editorStatus, '正在编辑已发布动态。');
+        window.scrollTo({ top:0, behavior:'smooth' });
+      }
+
+      async function deletePost(post) {
+        if (!window.confirm(`确定删除「${post.title_zh || post.title_en}」？`)) return;
+        const { error } = await client.from('updates').delete().eq('id', post.id);
+        if (error) {
+          setStatus(editorStatus, error.message, 'error');
+          return;
+        }
+        if (editingId === post.id) resetForm();
+        setStatus(editorStatus, '动态已删除。', 'success');
+        await loadPosts();
+      }
+
+      async function uploadCover(file) {
+        const extension = file.name.split('.').pop().toLowerCase();
+        const fileName = `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+        const path = `${currentUser.id}/${fileName}`;
+        const { error } = await client.storage.from('updates').upload(path, file, {
+          contentType:file.type,
+          upsert:false
+        });
+        if (error) throw error;
+        return client.storage.from('updates').getPublicUrl(path).data.publicUrl;
+      }
+
+      async function savePost(event) {
+        event.preventDefault();
+        const submit = document.getElementById('publishButton');
+        submit.disabled = true;
+        setStatus(editorStatus, '正在发布...');
+        try {
+          let coverUrl = existingCoverUrl;
+          const file = fields.coverFile.files[0];
+          if (file) coverUrl = await uploadCover(file);
+          const payload = {
+            slug:fields.slug.value.trim(),
+            published_at:fields.publishedAt.value,
+            title_en:fields.titleEn.value.trim(),
+            title_zh:fields.titleZh.value.trim(),
+            excerpt_en:fields.excerptEn.value.trim(),
+            excerpt_zh:fields.excerptZh.value.trim(),
+            body_en:fields.bodyEn.value.trim(),
+            body_zh:fields.bodyZh.value.trim(),
+            cover_url:coverUrl || null,
+            cover_alt_en:fields.coverAltEn.value.trim(),
+            cover_alt_zh:fields.coverAltZh.value.trim(),
+            is_published:true,
+            updated_at:new Date().toISOString()
+          };
+          const request = editingId
+            ? client.from('updates').update(payload).eq('id', editingId)
+            : client.from('updates').insert(payload);
+          const { error } = await request;
+          if (error) throw error;
+          resetForm();
+          setStatus(editorStatus, '已发布。首页与完整动态页会立即更新。', 'success');
+          await loadPosts();
+        } catch (error) {
+          setStatus(editorStatus, error.message || '发布失败，请再试一次。', 'error');
+        } finally {
+          submit.disabled = false;
+        }
+      }
+
+      async function setSession(session) {
+        currentUser = session?.user || null;
+        const signedInEmail = currentUser?.email?.toLowerCase();
+        if (currentUser && signedInEmail !== administratorEmail) {
+          await client.auth.signOut();
+          currentUser = null;
+          setStatus(authStatus, '此帐号没有发布权限。请使用 Dragon Dance 管理电邮登录。', 'error');
+        }
+        authView.hidden = Boolean(currentUser);
+        editorView.hidden = !currentUser;
+        if (!currentUser) return;
+        document.getElementById('editorEmail').textContent = currentUser.email;
+        resetForm();
+        await loadPosts();
+      }
+
+      document.getElementById('signInForm').addEventListener('submit', async event => {
+        event.preventDefault();
+        setStatus(authStatus, '正在登录...');
+        const { error } = await client.auth.signInWithPassword({
+          email:document.getElementById('signInEmail').value.trim(),
+          password:document.getElementById('signInPassword').value
+        });
+        if (error) setStatus(authStatus, error.message, 'error');
+      });
+
+      document.getElementById('signUpForm').addEventListener('submit', async event => {
+        event.preventDefault();
+        const email = document.getElementById('signUpEmail').value.trim().toLowerCase();
+        if (email !== administratorEmail) {
+          setStatus(authStatus, '只可使用 Dragon Dance 管理电邮建立帐号。', 'error');
+          return;
+        }
+        setStatus(authStatus, '正在建立帐号...');
+        const { error } = await client.auth.signUp({
+          email,
+          password:document.getElementById('signUpPassword').value,
+          options:{ emailRedirectTo:`${window.location.origin}/admin/` }
+        });
+        setStatus(
+          authStatus,
+          error ? error.message : '验证电邮已寄出。完成验证后可回来登录。',
+          error ? 'error' : 'success'
+        );
+      });
+
+      fields.titleEn.addEventListener('input', () => {
+        if (!editingId && !fields.slug.value) fields.slug.value = slugify(fields.titleEn.value);
+      });
+      fields.coverFile.addEventListener('change', () => {
+        const file = fields.coverFile.files[0];
+        if (file) setCoverPreview(URL.createObjectURL(file));
+      });
+      updateForm.addEventListener('submit', savePost);
+      document.getElementById('resetButton').addEventListener('click', resetForm);
+      document.getElementById('signOutButton').addEventListener('click', () => client.auth.signOut());
+      client.auth.onAuthStateChange((_event, session) => { void setSession(session); });
+      client.auth.getSession().then(({ data }) => setSession(data.session));
+    })();
+  </script>
 </body>
 </html>
