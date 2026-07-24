@@ -122,11 +122,9 @@
         <section class="editor-panel">
           <span class="kicker" id="formMode">New update</span>
           <h2 id="formTitle">发布<br>新动态。</h2>
-          <p>中英文内容会分别显示在网站的语言切换版本。发布后会立即出现在首页和完整动态页。</p>
+          <p>中英文内容会分别显示在网站的语言切换版本。发布日期会自动记录为发布当天；发布后会立即出现在首页和完整动态页。</p>
           <form id="updateForm">
-            <div class="field-columns">
-              <label>发布日期<input id="publishedAt" type="date" required /></label>
-            </div>
+            <input id="publishedAt" type="hidden" />
             <input id="slug" type="hidden" />
             <label>图片（可多选；首张会作首页封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple /></label>
             <div class="image-preview-grid" id="imagePreviewGrid" hidden></div>
