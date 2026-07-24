@@ -230,7 +230,7 @@
     .contact-modal { position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:24px; visibility:hidden; opacity:0; pointer-events:none; transition:opacity .24s ease,visibility 0s linear .24s; }
     .contact-modal.is-open { visibility:visible; opacity:1; pointer-events:auto; transition-delay:0s; }
     .modal-backdrop { position:absolute; inset:0; border:0; background:rgba(8,8,8,.72); cursor:default; }
-    .contact-dialog { position:relative; width:min(100%,470px); padding:clamp(28px,5vw,44px); border:1px solid rgba(8,8,8,.35); border-radius:4px; background:var(--paper); color:var(--ink); box-shadow:0 24px 70px rgba(0,0,0,.46); opacity:0; transform:translateY(14px) scale(.98); transition:opacity .28s ease,transform .34s cubic-bezier(.22,.8,.24,1); }
+    .contact-dialog { position:relative; width:min(100%,470px); padding:clamp(28px,5vw,44px); border:1px solid rgba(8,8,8,.35); border-radius:18px; background:var(--paper); color:var(--ink); box-shadow:0 24px 70px rgba(0,0,0,.46); opacity:0; transform:translateY(14px) scale(.98); transition:opacity .28s ease,transform .34s cubic-bezier(.22,.8,.24,1); }
     .contact-modal.is-open .contact-dialog { opacity:1; transform:translateY(0) scale(1); }
     .modal-close { position:absolute; top:12px; right:14px; width:34px; height:34px; border:0; background:transparent; color:#555; font-size:29px; font-weight:300; line-height:1; cursor:pointer; transition:color .2s,transform .2s; }
     .modal-close:hover, .modal-close:focus-visible { color:var(--red); outline:0; transform:rotate(90deg); }
