@@ -59,8 +59,8 @@
     .field-columns { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; }
     .form-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:5px; }
     .form-actions .button { padding:0 16px; }
-    .cover-preview { width:100%; margin-top:3px; aspect-ratio:16 / 9; overflow:hidden; background:#111; }
-    .cover-preview img { width:100%; height:100%; object-fit:cover; }
+    .image-preview-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:3px; }
+    .image-preview-grid img { width:100%; aspect-ratio:1; object-fit:cover; background:#111; }
     .posts-list { display:grid; gap:0; }
     .admin-post { display:grid; grid-template-columns:96px minmax(0,1fr); gap:14px; padding:15px 0; border-top:1px solid #4c4c48; }
     .admin-post-image { width:96px; aspect-ratio:1; overflow:hidden; background:#292929; }
@@ -126,16 +126,10 @@
               <label>发布日期<input id="publishedAt" type="date" required /></label>
             </div>
             <input id="slug" type="hidden" />
-            <label>封面图片<input id="coverFile" type="file" accept="image/jpeg,image/png,image/webp" /></label>
-            <div class="cover-preview" id="coverPreview" hidden><img id="coverPreviewImage" alt="" /></div>
-            <div class="field-columns">
-              <label>图片描述（English）<input id="coverAltEn" type="text" /></label>
-              <label>图片描述（中文）<input id="coverAltZh" type="text" /></label>
-            </div>
+            <label>图片（可多选；首张会作首页封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple /></label>
+            <div class="image-preview-grid" id="imagePreviewGrid" hidden></div>
             <label>标题（English）<input id="titleEn" type="text" required /></label>
             <label>标题（中文）<input id="titleZh" type="text" required /></label>
-            <label>摘要（English）<textarea id="excerptEn" required></textarea></label>
-            <label>摘要（中文）<textarea id="excerptZh" required></textarea></label>
             <label>内文（English）<textarea id="bodyEn" required></textarea></label>
             <label>内文（中文）<textarea id="bodyZh" required></textarea></label>
             <div class="form-actions">
@@ -173,19 +167,15 @@
       const fields = {
         publishedAt:document.getElementById('publishedAt'),
         slug:document.getElementById('slug'),
-        coverFile:document.getElementById('coverFile'),
-        coverAltEn:document.getElementById('coverAltEn'),
-        coverAltZh:document.getElementById('coverAltZh'),
+        imageFiles:document.getElementById('imageFiles'),
         titleEn:document.getElementById('titleEn'),
         titleZh:document.getElementById('titleZh'),
-        excerptEn:document.getElementById('excerptEn'),
-        excerptZh:document.getElementById('excerptZh'),
         bodyEn:document.getElementById('bodyEn'),
         bodyZh:document.getElementById('bodyZh')
       };
       let currentUser = null;
       let editingId = null;
-      let existingCoverUrl = '';
+      let existingImageUrls = [];
       let publishedPosts = [];
 
       function setStatus(element, message, type = '') {
@@ -198,16 +188,22 @@
         return `../${url.replace(/^\//, '')}`;
       }
 
-      function setCoverPreview(url) {
-        const preview = document.getElementById('coverPreview');
-        const image = document.getElementById('coverPreviewImage');
-        if (!url) {
-          preview.hidden = true;
-          image.removeAttribute('src');
-          return;
-        }
-        image.src = assetUrl(url);
-        preview.hidden = false;
+      function normaliseImageUrls(post) {
+        const urls = Array.isArray(post.image_urls) ? post.image_urls.filter(Boolean) : [];
+        if (!urls.length && post.cover_url) urls.push(post.cover_url);
+        return [...new Set(urls)];
+      }
+
+      function setImagePreview(urls) {
+        const preview = document.getElementById('imagePreviewGrid');
+        preview.replaceChildren();
+        urls.forEach((url, index) => {
+          const image = document.createElement('img');
+          image.src = assetUrl(url);
+          image.alt = index === 0 ? 'Cover image preview' : 'Update image preview';
+          preview.append(image);
+        });
+        preview.hidden = !urls.length;
       }
 
       function slugify(value) {
@@ -238,13 +234,13 @@
 
       function resetForm() {
         editingId = null;
-        existingCoverUrl = '';
+        existingImageUrls = [];
         updateForm.reset();
         fields.publishedAt.value = new Date().toISOString().slice(0, 10);
         document.getElementById('formMode').textContent = 'New update';
         document.getElementById('formTitle').innerHTML = '发布<br>新动态。';
         document.getElementById('publishButton').textContent = '发布动态';
-        setCoverPreview('');
+        setImagePreview([]);
         setStatus(editorStatus, '');
       }
 
@@ -275,7 +271,7 @@
           const title = document.createElement('h3');
           title.textContent = post.title_zh || post.title_en;
           const excerpt = document.createElement('p');
-          excerpt.textContent = post.excerpt_zh || post.excerpt_en;
+          excerpt.textContent = post.body_zh || post.body_en;
           const actions = document.createElement('div');
           actions.className = 'post-actions';
           const edit = document.createElement('button');
@@ -307,21 +303,17 @@
 
       function editPost(post) {
         editingId = post.id;
-        existingCoverUrl = post.cover_url || '';
+        existingImageUrls = normaliseImageUrls(post);
         fields.publishedAt.value = post.published_at || '';
         fields.slug.value = post.slug || '';
-        fields.coverAltEn.value = post.cover_alt_en || '';
-        fields.coverAltZh.value = post.cover_alt_zh || '';
         fields.titleEn.value = post.title_en || '';
         fields.titleZh.value = post.title_zh || '';
-        fields.excerptEn.value = post.excerpt_en || '';
-        fields.excerptZh.value = post.excerpt_zh || '';
         fields.bodyEn.value = post.body_en || '';
         fields.bodyZh.value = post.body_zh || '';
         document.getElementById('formMode').textContent = 'Edit update';
         document.getElementById('formTitle').innerHTML = '编辑<br>动态。';
         document.getElementById('publishButton').textContent = '储存更新';
-        setCoverPreview(existingCoverUrl);
+        setImagePreview(existingImageUrls);
         setStatus(editorStatus, '正在编辑已发布动态。');
         window.scrollTo({ top:0, behavior:'smooth' });
       }
@@ -338,7 +330,7 @@
         await loadPosts();
       }
 
-      async function uploadCover(file) {
+      async function uploadImage(file) {
         const extension = file.name.split('.').pop().toLowerCase();
         const fileName = `${Date.now()}-${crypto.randomUUID()}.${extension}`;
         const path = `${currentUser.id}/${fileName}`;
@@ -356,22 +348,25 @@
         submit.disabled = true;
         setStatus(editorStatus, '正在发布...');
         try {
-          let coverUrl = existingCoverUrl;
-          const file = fields.coverFile.files[0];
-          if (file) coverUrl = await uploadCover(file);
+          const files = Array.from(fields.imageFiles.files);
+          if (files.length > 8) throw new Error('每则动态最多可上传 8 张图片。');
+          const uploadedUrls = await Promise.all(files.map(uploadImage));
+          const imageUrls = [...existingImageUrls, ...uploadedUrls].slice(0, 8);
+          const coverUrl = imageUrls[0] || null;
           const slug = await resolveSlug();
           const payload = {
             slug,
             published_at:fields.publishedAt.value,
             title_en:fields.titleEn.value.trim(),
             title_zh:fields.titleZh.value.trim(),
-            excerpt_en:fields.excerptEn.value.trim(),
-            excerpt_zh:fields.excerptZh.value.trim(),
+            excerpt_en:fields.bodyEn.value.trim(),
+            excerpt_zh:fields.bodyZh.value.trim(),
             body_en:fields.bodyEn.value.trim(),
             body_zh:fields.bodyZh.value.trim(),
             cover_url:coverUrl || null,
-            cover_alt_en:fields.coverAltEn.value.trim(),
-            cover_alt_zh:fields.coverAltZh.value.trim(),
+            image_urls:imageUrls,
+            cover_alt_en:fields.titleEn.value.trim(),
+            cover_alt_zh:fields.titleZh.value.trim(),
             is_published:true,
             updated_at:new Date().toISOString()
           };
@@ -453,9 +448,9 @@
       fields.titleEn.addEventListener('input', () => {
         if (!editingId && !fields.slug.value) fields.slug.value = slugify(fields.titleEn.value);
       });
-      fields.coverFile.addEventListener('change', () => {
-        const file = fields.coverFile.files[0];
-        if (file) setCoverPreview(URL.createObjectURL(file));
+      fields.imageFiles.addEventListener('change', () => {
+        const pendingUrls = Array.from(fields.imageFiles.files).map(file => URL.createObjectURL(file));
+        setImagePreview([...existingImageUrls, ...pendingUrls].slice(0, 8));
       });
       updateForm.addEventListener('submit', savePost);
       document.getElementById('resetButton').addEventListener('click', resetForm);

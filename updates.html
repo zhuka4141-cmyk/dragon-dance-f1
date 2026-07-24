@@ -46,9 +46,10 @@
     .update-entry:hover .update-media img { filter:grayscale(0) contrast(1.05); transform:scale(1.025); }
     .update-date { display:block; margin-bottom:18px; color:var(--red); font-size:10px; font-weight:bold; letter-spacing:1.5px; text-transform:uppercase; }
     .update-entry h2 { max-width:780px; margin:0; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(40px,5vw,78px); font-weight:400; line-height:.85; letter-spacing:1px; text-transform:uppercase; }
-    .update-excerpt { max-width:670px; margin:22px 0 0; color:#2d2d2a; font-size:18px; line-height:1.55; }
     .update-body { max-width:670px; margin-top:28px; }
     .update-body p { margin:0 0 16px; color:#51514d; font-size:15px; line-height:1.7; }
+    .update-gallery { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; max-width:670px; margin-top:28px; }
+    .update-gallery img { width:100%; aspect-ratio:4 / 3; object-fit:cover; background:#d6d6d1; }
     .updates-status { padding:46px 0; border-top:1px solid #999; color:#555; font-size:16px; }
     footer { display:flex; align-items:end; justify-content:space-between; gap:25px; padding:34px 4.2vw 24px; background:var(--paper); color:var(--ink); border-top:1px solid #a4a4a0; }
     footer strong { font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(30px,4vw,52px); font-weight:400; line-height:.8; letter-spacing:1px; text-transform:uppercase; }
@@ -93,13 +94,14 @@
       let updates = [];
 
       function mapUpdate(row) {
+        const images = Array.isArray(row.image_urls) ? row.image_urls.filter(Boolean) : [];
+        if (!images.length && row.cover_url) images.push(row.cover_url);
         return {
           id:row.slug,
           published:row.published_at,
-          cover:row.cover_url,
-          alt:{ en:row.cover_alt_en, zh:row.cover_alt_zh },
+          cover:images[0] || row.cover_url,
+          images:[...new Set(images)],
           title:{ en:row.title_en, zh:row.title_zh },
-          excerpt:{ en:row.excerpt_en, zh:row.excerpt_zh },
           body:{ en:row.body_en, zh:row.body_zh }
         };
       }
@@ -135,7 +137,7 @@
             media.className = 'update-media';
             const image = document.createElement('img');
             image.src = post.cover;
-            image.alt = postText(post, 'alt') || postText(post, 'title');
+            image.alt = postText(post, 'title');
             image.loading = 'lazy';
             media.append(image);
             entry.append(media);
@@ -147,9 +149,6 @@
           date.textContent = formatDate(post.published);
           const title = document.createElement('h2');
           title.textContent = postText(post, 'title');
-          const excerpt = document.createElement('p');
-          excerpt.className = 'update-excerpt';
-          excerpt.textContent = postText(post, 'excerpt');
           const body = document.createElement('div');
           body.className = 'update-body';
           postText(post, 'body').split(/\n\s*\n/).filter(Boolean).forEach(paragraph => {
@@ -157,7 +156,21 @@
             line.textContent = paragraph;
             body.append(line);
           });
-          copy.append(date, title, excerpt, body);
+          const galleryImages = post.images.slice(1);
+          if (galleryImages.length) {
+            const gallery = document.createElement('div');
+            gallery.className = 'update-gallery';
+            galleryImages.forEach((url, index) => {
+              const image = document.createElement('img');
+              image.src = url;
+              image.alt = `${postText(post, 'title')} ${index + 2}`;
+              image.loading = 'lazy';
+              gallery.append(image);
+            });
+            copy.append(date, title, body, gallery);
+          } else {
+            copy.append(date, title, body);
+          }
           entry.append(copy);
           updatesList.append(entry);
         });
@@ -182,7 +195,7 @@
       applyLanguage(language);
       updatesDatabase
         .from('updates')
-        .select('slug,published_at,title_en,title_zh,excerpt_en,excerpt_zh,body_en,body_zh,cover_url,cover_alt_en,cover_alt_zh')
+        .select('slug,published_at,title_en,title_zh,body_en,body_zh,cover_url,image_urls')
         .eq('is_published', true)
         .order('published_at', { ascending:false })
         .then(({ data, error }) => { updates = error ? [] : data.map(mapUpdate); renderUpdates(); })

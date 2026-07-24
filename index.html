@@ -705,7 +705,7 @@
             media.className = 'update-preview-media';
             const image = document.createElement('img');
             image.src = post.cover;
-            image.alt = updateText(post, 'alt') || title;
+            image.alt = title;
             image.loading = index === 0 ? 'eager' : 'lazy';
             media.append(image);
             card.append(media);
@@ -721,26 +721,23 @@
           const headingText = document.createElement('span');
           headingText.textContent = title;
           heading.append(headingText);
-          const summary = document.createElement('span');
-          summary.className = 'update-preview-summary';
-          summary.textContent = updateText(post, 'excerpt');
           const more = document.createElement('span');
           more.className = 'update-preview-more';
           more.textContent = language === 'zh' ? '查看動態 ↗' : 'Read update ↗';
-          copy.append(date, heading, summary, more);
+          copy.append(date, heading, more);
           card.append(copy);
           homeUpdates.append(card);
         });
       }
 
       function mapUpdate(row) {
+        const images = Array.isArray(row.image_urls) ? row.image_urls.filter(Boolean) : [];
+        if (!images.length && row.cover_url) images.push(row.cover_url);
         return {
           id:row.slug,
           published:row.published_at,
-          cover:row.cover_url,
-          alt:{ en:row.cover_alt_en, zh:row.cover_alt_zh },
+          cover:images[0] || row.cover_url,
           title:{ en:row.title_en, zh:row.title_zh },
-          excerpt:{ en:row.excerpt_en, zh:row.excerpt_zh },
           body:{ en:row.body_en, zh:row.body_zh }
         };
       }
@@ -749,7 +746,7 @@
         try {
           const { data, error } = await updatesDatabase
             .from('updates')
-            .select('slug,published_at,title_en,title_zh,excerpt_en,excerpt_zh,body_en,body_zh,cover_url,cover_alt_en,cover_alt_zh')
+            .select('slug,published_at,title_en,title_zh,body_en,body_zh,cover_url,image_urls')
             .eq('is_published', true)
             .order('published_at', { ascending:false });
           updates = error ? [] : data.map(mapUpdate);
