@@ -28,7 +28,7 @@
     h2 { margin:0; font-size:clamp(34px,4.2vw,55px); line-height:.86; }
     h3 { margin:0; font-size:27px; line-height:.9; }
     .lede { max-width:620px; margin:24px 0 0; color:#c9c9c4; font-size:16px; line-height:1.65; }
-    .auth-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:48px; }
+    .auth-grid { display:grid; grid-template-columns:minmax(0,560px); gap:18px; margin-top:48px; }
     .auth-panel, .editor-panel, .posts-panel { border-top:2px solid var(--paper); background:var(--panel); padding:28px; }
     .auth-panel h2 { margin-bottom:12px; }
     .auth-panel p { min-height:45px; margin:0 0 24px; color:#bdbdb8; font-size:14px; line-height:1.6; }
@@ -50,6 +50,9 @@
     .admin-shell { display:grid; gap:48px; }
     .admin-bar { display:flex; align-items:end; justify-content:space-between; gap:20px; padding-bottom:22px; border-bottom:1px solid var(--line); }
     .admin-bar p { margin:10px 0 0; color:#bdbdb8; font-size:13px; }
+    .admin-actions { display:flex; flex-wrap:wrap; gap:10px; }
+    .password-panel { display:grid; gap:13px; max-width:560px; padding:24px 28px; border-top:2px solid var(--paper); background:var(--panel); }
+    .password-panel p { margin:0; color:#bdbdb8; font-size:13px; line-height:1.6; }
     .admin-content { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(290px,.9fr); gap:18px; align-items:start; }
     .editor-panel, .posts-panel { border-top-color:var(--red); }
     .editor-panel > p, .posts-panel > p { margin:13px 0 26px; color:#bdbdb8; font-size:13px; line-height:1.6; }
@@ -69,7 +72,7 @@
     .text-button { padding:0; border:0; background:transparent; color:var(--paper); font-size:11px; font-weight:700; letter-spacing:.8px; text-decoration:underline; text-underline-offset:4px; }
     .text-button:hover, .text-button:focus-visible { color:var(--red); outline:0; }
     .empty-posts { padding:23px 0; border-top:1px solid #4c4c48; color:#bdbdb8; font-size:13px; }
-    @media (max-width:800px) { header { min-height:63px; } main { width:88vw; padding:54px 0 64px; } .auth-grid, .admin-content, .field-columns { grid-template-columns:1fr; } .auth-panel, .editor-panel, .posts-panel { padding:22px; } .admin-bar { align-items:start; flex-direction:column; } .admin-bar .button { width:100%; } }
+    @media (max-width:800px) { header { min-height:63px; } main { width:88vw; padding:54px 0 64px; } .auth-grid, .admin-content, .field-columns { grid-template-columns:1fr; } .auth-panel, .editor-panel, .posts-panel, .password-panel { padding:22px; } .admin-bar { align-items:start; flex-direction:column; } .admin-actions { width:100%; } .admin-actions .button { flex:1; } }
   </style>
 </head>
 <body>
@@ -92,15 +95,7 @@
             <label>密码<input id="signInPassword" type="password" autocomplete="current-password" required /></label>
             <button class="button" type="submit">登录后台</button>
           </form>
-        </section>
-        <section class="auth-panel">
-          <h2>建立帐号</h2>
-          <p>首次使用请以管理电邮建立帐号；完成验证电邮后，即可登录发布。</p>
-          <form id="signUpForm">
-            <label>电邮<input id="signUpEmail" type="email" autocomplete="email" required /></label>
-            <label>新密码<input id="signUpPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
-            <button class="button secondary" type="submit">建立管理帐号</button>
-          </form>
+          <button class="text-button" id="resetPasswordButton" type="button">忘记密码？寄送重设电邮</button>
         </section>
       </div>
       <p class="status" id="authStatus" role="status"></p>
@@ -109,8 +104,18 @@
     <section class="admin-shell" id="editorView" hidden>
       <div class="admin-bar">
         <div><span class="kicker">Signed in</span><h2>最新<br>动态。</h2><p id="editorEmail"></p></div>
-        <button class="button secondary" id="signOutButton" type="button">登出</button>
+        <div class="admin-actions">
+          <button class="button secondary" id="passwordSetupButton" type="button">设置密码</button>
+          <button class="button secondary" id="signOutButton" type="button">登出</button>
+        </div>
       </div>
+      <form class="password-panel" id="passwordForm" hidden>
+        <span class="kicker">Account security</span>
+        <p>请设定一个至少 8 个字元的独有密码；密码不会显示给任何人。</p>
+        <label>新密码<input id="newPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
+        <label>确认新密码<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
+        <div class="form-actions"><button class="button" type="submit">储存密码</button></div>
+      </form>
       <div class="admin-content">
         <section class="editor-panel">
           <span class="kicker" id="formMode">New update</span>
@@ -164,6 +169,7 @@
       const editorStatus = document.getElementById('editorStatus');
       const postsList = document.getElementById('postsList');
       const updateForm = document.getElementById('updateForm');
+      const passwordForm = document.getElementById('passwordForm');
       const fields = {
         publishedAt:document.getElementById('publishedAt'),
         slug:document.getElementById('slug'),
@@ -206,6 +212,11 @@
 
       function slugify(value) {
         return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 72);
+      }
+
+      function showPasswordPanel() {
+        passwordForm.hidden = false;
+        document.getElementById('newPassword').focus();
       }
 
       function resetForm() {
@@ -387,24 +398,38 @@
         if (error) setStatus(authStatus, error.message, 'error');
       });
 
-      document.getElementById('signUpForm').addEventListener('submit', async event => {
-        event.preventDefault();
-        const email = document.getElementById('signUpEmail').value.trim().toLowerCase();
+      document.getElementById('resetPasswordButton').addEventListener('click', async () => {
+        const email = document.getElementById('signInEmail').value.trim().toLowerCase();
         if (email !== administratorEmail) {
-          setStatus(authStatus, '只可使用 Dragon Dance 管理电邮建立帐号。', 'error');
+          setStatus(authStatus, '请输入 Dragon Dance 管理电邮，再重设密码。', 'error');
           return;
         }
-        setStatus(authStatus, '正在建立帐号...');
-        const { error } = await client.auth.signUp({
-          email,
-          password:document.getElementById('signUpPassword').value,
-          options:{ emailRedirectTo:`${window.location.origin}/admin/` }
+        const { error } = await client.auth.resetPasswordForEmail(email, {
+          redirectTo:`${window.location.origin}/admin/`
         });
         setStatus(
           authStatus,
-          error ? error.message : '验证电邮已寄出。完成验证后可回来登录。',
+          error ? error.message : '重设密码电邮已寄出，请到邮箱继续。',
           error ? 'error' : 'success'
         );
+      });
+
+      passwordForm.addEventListener('submit', async event => {
+        event.preventDefault();
+        const password = document.getElementById('newPassword').value;
+        const confirmation = document.getElementById('confirmPassword').value;
+        if (password !== confirmation) {
+          setStatus(editorStatus, '两次输入的密码不一致。', 'error');
+          return;
+        }
+        const { error } = await client.auth.updateUser({ password });
+        if (error) {
+          setStatus(editorStatus, error.message, 'error');
+          return;
+        }
+        passwordForm.reset();
+        passwordForm.hidden = true;
+        setStatus(editorStatus, '密码已更新。', 'success');
       });
 
       fields.titleEn.addEventListener('input', () => {
@@ -416,8 +441,13 @@
       });
       updateForm.addEventListener('submit', savePost);
       document.getElementById('resetButton').addEventListener('click', resetForm);
+      document.getElementById('passwordSetupButton').addEventListener('click', showPasswordPanel);
       document.getElementById('signOutButton').addEventListener('click', () => client.auth.signOut());
-      client.auth.onAuthStateChange((_event, session) => { void setSession(session); });
+      client.auth.onAuthStateChange((event, session) => {
+        void setSession(session).then(() => {
+          if (event === 'PASSWORD_RECOVERY' && session) showPasswordPanel();
+        });
+      });
       client.auth.getSession().then(({ data }) => setSession(data.session));
     })();
   </script>
