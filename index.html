@@ -176,9 +176,17 @@
     .partner-item span { display:block; margin-bottom:34px; color:var(--red); font-size:10px; font-weight:bold; letter-spacing:1.4px; text-transform:uppercase; }
     .partner-item strong { display:block; margin-bottom:7px; font-size:15px; letter-spacing:.5px; text-transform:uppercase; }
     .partner-item p { margin:0; color:#555; font-size:12px; line-height:1.5; }
-    .partner-actions { display:flex; flex-wrap:wrap; align-items:center; gap:18px; margin-top:28px; }
-    .pdf-link { display:inline-flex; align-items:center; border:1px solid var(--red); border-bottom-width:2px; padding:9px 12px 8px; background:rgba(255,255,255,.28); color:var(--red); font-size:12px; font-weight:bold; letter-spacing:.8px; text-transform:uppercase; transition:background .2s,color .2s,border-color .2s; }
-    .pdf-link:hover { background:var(--red); color:#fff; border-color:var(--red); }
+    .proposal-cta { margin-top:30px; padding:20px 0 2px; border-top:2px solid var(--ink); }
+    .proposal-cta-label { display:block; margin-bottom:7px; color:var(--red); font-size:10px; font-weight:bold; letter-spacing:1.4px; text-transform:uppercase; }
+    .proposal-cta strong { display:block; max-width:350px; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(24px,2.5vw,36px); font-weight:400; line-height:.95; letter-spacing:1px; text-transform:uppercase; }
+    .proposal-cta p { margin:11px 0 0; max-width:390px; color:#444; font-size:12px; line-height:1.55; }
+    .partner-actions { display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-top:18px; }
+    .proposal-link { display:inline-flex; min-height:42px; align-items:center; justify-content:center; padding:0 15px; background:var(--ink); color:var(--paper); font-size:11px; font-weight:bold; letter-spacing:1px; text-transform:uppercase; transition:background .2s,color .2s; }
+    .proposal-link:hover { background:var(--red); color:#fff; }
+    .proposal-contact { color:var(--ink); font-size:11px; font-weight:bold; letter-spacing:.8px; text-decoration:underline; text-decoration-color:var(--red); text-decoration-thickness:2px; text-underline-offset:5px; text-transform:uppercase; transition:color .2s; }
+    .proposal-contact:hover { color:var(--red); }
+    .pdf-download { display:inline-block; margin-top:13px; color:#555; font-size:10px; font-weight:bold; letter-spacing:1px; text-decoration:underline; text-underline-offset:4px; text-transform:uppercase; transition:color .2s; }
+    .pdf-download:hover { color:var(--red); }
     footer { padding:42px 4.2vw 24px; display:grid; grid-template-columns:minmax(230px,.8fr) minmax(430px,1.5fr) minmax(190px,.7fr); gap:clamp(28px,4vw,70px); background:var(--paper); color:var(--ink); }
     footer strong { display:block; font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; font-size:clamp(38px,6vw,78px); line-height:.8; letter-spacing:1px; text-transform:uppercase; }
     footer p { margin:12px 0 0; font-size:12px; letter-spacing:1px; }
@@ -313,17 +321,23 @@
         <div class="feature-copy">
           <div class="eyebrow">Sponsorship / 2026</div>
           <h2>Partner<br>With Us.</h2>
-          <p>合作夥伴可透過技術、材料、資源與品牌支持參與這段旅程，與我們一起把創意推上賽道。</p>
-          <div class="partner-actions">
-            <a class="pdf-link" href="assets/design-studio-creative-brief.pdf" target="_blank" rel="noopener">View Creative Brief ↗</a>
-            <a class="pdf-link" href="assets/design-studio-creative-brief.pdf" download>Download PDF ↓</a>
+          <p>與 Dragon Dance 合作，讓品牌走進校園 STEM 賽事、設計過程與下一次起跑。</p>
+          <div class="proposal-cta">
+            <span class="proposal-cta-label">2026 Sponsorship Proposal</span>
+            <strong>Build the next race with us.</strong>
+            <p>了解品牌曝光、校園活動、社交媒體故事與技術教育合作的可能性。</p>
+            <div class="partner-actions">
+              <a class="proposal-link" href="assets/design-studio-creative-brief.pdf" target="_blank" rel="noopener">Open Proposal PDF ↗</a>
+              <a class="proposal-contact" href="mailto:dragondance@lstc.edu.hk?subject=Sponsorship%20Enquiry">Discuss a Partnership</a>
+            </div>
+            <a class="pdf-download" href="assets/design-studio-creative-brief.pdf" download>Download Proposal PDF ↓</a>
           </div>
         </div>
         <div class="partner-grid">
-          <div class="partner-item"><span>01 / Title</span><strong>Title Partner</strong><p>核心品牌曝光與長期合作。</p></div>
-          <div class="partner-item"><span>02 / Technical</span><strong>Engineering Partner</strong><p>技術、材料與製造支援。</p></div>
-          <div class="partner-item"><span>03 / Race</span><strong>Race Partner</strong><p>參賽、交通與活動支援。</p></div>
-          <div class="partner-item"><span>04 / Community</span><strong>Community Partner</strong><p>教育與社群合作。</p></div>
+          <div class="partner-item"><span>01 / Visibility</span><strong>Brand Visibility</strong><p>在網站、提案與隊伍內容中呈現合作品牌。</p></div>
+          <div class="partner-item"><span>02 / Campus</span><strong>Campus Activation</strong><p>連結校園活動、學生社群與 STEM 學習故事。</p></div>
+          <div class="partner-item"><span>03 / Social</span><strong>Social Storytelling</strong><p>透過專案進度與 Instagram 分享品牌合作。</p></div>
+          <div class="partner-item"><span>04 / Technical</span><strong>Team Development</strong><p>支持設計、製造、測試與下一代創意人才。</p></div>
         </div>
       </article>
     </section>
