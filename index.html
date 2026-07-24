@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#080808" />
-  <meta name="description" content="Dragon Dance 是香港的 STEM Racing 計劃，結合工程、設計、品牌與賽事策略。" />
+  <meta name="description" content="Dragon Dance 是香港 STEM Racing（前稱 F1 in Schools）計劃，結合工程、設計、品牌與賽事策略。" />
   <meta name="robots" content="index, follow" />
   <meta name="googlebot" content="index, follow, max-image-preview:large" />
   <meta name="google-site-verification" content="F8efArbxCXPLMs-96xFn05EZojD4o2mcQE4IT9WQdnM" />
@@ -19,11 +19,11 @@
   <meta property="og:locale" content="zh_HK" />
   <meta property="og:url" content="https://lstc-dragon-dance.vercel.app/" />
   <meta property="og:title" content="Dragon Dance | STEM Racing" />
-  <meta property="og:description" content="Dragon Dance 是香港的 STEM Racing 計劃，結合工程、設計、品牌與賽事策略。" />
+  <meta property="og:description" content="Dragon Dance 是香港 STEM Racing（前稱 F1 in Schools）計劃，結合工程、設計、品牌與賽事策略。" />
   <meta property="og:image" content="https://lstc-dragon-dance.vercel.app/assets/race-car.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Dragon Dance | STEM Racing" />
-  <meta name="twitter:description" content="Dragon Dance 是香港的 STEM Racing 計劃。" />
+  <meta name="twitter:description" content="Dragon Dance 是香港 STEM Racing（前稱 F1 in Schools）計劃。" />
   <meta name="twitter:image" content="https://lstc-dragon-dance.vercel.app/assets/race-car.jpg" />
   <link rel="manifest" href="site.webmanifest" />
   <script type="application/ld+json">
@@ -31,11 +31,12 @@
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Dragon Dance",
-      "alternateName": ["Dragon Dance STEM Racing", "STEM Racing"],
+      "alternateName": ["Dragon Dance STEM Racing", "Dragon Dance F1 in Schools", "STEM Racing"],
       "url": "https://lstc-dragon-dance.vercel.app/",
       "logo": "https://lstc-dragon-dance.vercel.app/assets/dragon-search-icon.jpg",
       "image": "https://lstc-dragon-dance.vercel.app/assets/race-car.jpg",
-      "description": "Dragon Dance is a STEM Racing programme in Hong Kong.",
+      "description": "Dragon Dance is a STEM Racing programme in Hong Kong, formerly known as F1 in Schools.",
+      "knowsAbout": ["STEM Racing", "F1 in Schools", "student racing", "engineering", "aerodynamics"],
       "email": "dragondance@lstc.edu.hk",
       "sameAs": ["https://www.instagram.com/team_dragon_dance?igsh=MWppemVhZGswdHpvNQ=="],
       "parentOrganization": {
@@ -53,8 +54,22 @@
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Dragon Dance",
-      "alternateName": ["Dragon Dance STEM Racing", "STEM Racing"],
+      "alternateName": ["Dragon Dance STEM Racing", "Dragon Dance F1 in Schools", "STEM Racing"],
       "url": "https://lstc-dragon-dance.vercel.app/"
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Is Dragon Dance connected to F1 in Schools?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dragon Dance participates in STEM Racing, the student racing challenge formerly known as F1 in Schools. Based in Hong Kong, the team combines engineering, design, branding and race strategy."
+        }
+      }]
     }
   </script>
   <title>Dragon Dance | STEM Racing</title>
@@ -204,10 +219,17 @@
     .contact-copy span, .contact-detail { display:block; overflow-wrap:anywhere; color:#4e4e4b; font-size:11px; line-height:1.45; }
     .contact-detail { margin-top:3px; text-decoration:underline; text-decoration-color:#aaa; text-underline-offset:3px; transition:color .2s; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
+    .racing-context { display:grid; grid-template-columns:minmax(260px,.8fr) minmax(0,1.2fr); gap:clamp(36px,8vw,130px); align-items:end; padding:46px 4.2vw; border-top:1px solid #8e8e89; background:#e7e7e2; color:var(--ink); }
+    .racing-context-label { display:block; color:var(--red); font-size:10px; font-weight:bold; letter-spacing:1.5px; text-transform:uppercase; }
+    .racing-context h2 { margin:10px 0 0; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(30px,4vw,56px); font-weight:400; line-height:.9; letter-spacing:1px; text-transform:uppercase; }
+    .racing-context h2 em { color:var(--red); font-style:normal; }
+    .racing-context p { max-width:620px; margin:0; color:#393936; font-size:15px; line-height:1.65; }
     @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:66px; min-height:88px; gap:10px; } .pager-line { width:33px; height:2px; } .pager-line:after { width:9px; height:9px; } .pager-label { font-size:10px; } .pager-next { right:max(2vw, env(safe-area-inset-right)); } .pager-prev { left:max(2vw, env(safe-area-inset-left)); } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .proposal-cta { margin-left:78px; } .member-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:26px; } .member-card-copy { padding:9px 10px 11px; } .member-card-role { font-size:8px; letter-spacing:.9px; } .member-card strong { font-size:11px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
     @media (max-width:800px) {
       nav .navlinks { display:flex; flex:1; min-width:0; gap:0; justify-content:center; }
       nav .nav-tagline { max-width:44vw; font-size:9px; line-height:1.15; }
+      .racing-context { grid-template-columns:1fr; gap:20px; padding:38px 6vw; }
+      .racing-context p { font-size:14px; }
     }
   </style>
 </head>
@@ -344,6 +366,13 @@
     </section>
 
   </main>
+  <section class="racing-context" aria-labelledby="racing-context-title">
+    <div>
+      <span class="racing-context-label">STEM Racing / F1 in Schools</span>
+      <h2 id="racing-context-title">STEM Racing,<br><em>formerly F1 in Schools.</em></h2>
+    </div>
+    <p>Dragon Dance participates in STEM Racing, the student racing challenge formerly known as F1 in Schools. Based in Hong Kong, we bring engineering, design, branding and race strategy together.</p>
+  </section>
   <footer>
     <div><strong>Dance with<br>the dragon.</strong><p>DRAGON DANCE / STEM RACING</p></div>
     <section class="footer-contact" aria-label="聯絡我們">
