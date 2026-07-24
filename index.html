@@ -9,6 +9,9 @@
   <meta name="googlebot" content="index, follow, max-image-preview:large" />
   <meta name="google-site-verification" content="F8efArbxCXPLMs-96xFn05EZojD4o2mcQE4IT9WQdnM" />
   <meta name="application-name" content="Dragon Dance" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet" />
   <link rel="canonical" href="https://lstc-dragon-dance.vercel.app/" />
   <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
   <link rel="icon" type="image/png" sizes="48x48" href="assets/dragon-icon-48.png" />
@@ -79,6 +82,13 @@
     html, body { touch-action:pan-y; }
     html { scroll-behavior:smooth; }
     body { margin:0; background:var(--ink); color:var(--paper); font-family:Arial,"Microsoft JhengHei","PingFang TC",sans-serif; overflow-x:hidden; }
+    html[lang="zh-Hant"] body { font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; }
+    html[lang="zh-Hant"] h1[data-i18n-html],
+    html[lang="zh-Hant"] .title-page h2[data-i18n-html],
+    html[lang="zh-Hant"] .machine-copy h2[data-i18n-html],
+    html[lang="zh-Hant"] .feature-copy h2[data-i18n-html],
+    html[lang="zh-Hant"] .racing-context h2[data-i18n-html],
+    html[lang="zh-Hant"] footer strong[data-i18n-html] { font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; font-weight:900; letter-spacing:0; }
     a { color:inherit; text-decoration:none; }
     .topline { height:6px; background:repeating-linear-gradient(90deg,var(--paper) 0 20px,var(--ink) 20px 40px); }
     nav { height:76px; display:flex; align-items:center; justify-content:space-between; padding:0 4.2vw; border-bottom:1px solid var(--line); position:relative; z-index:5; }
