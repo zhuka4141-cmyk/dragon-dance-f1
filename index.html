@@ -87,8 +87,8 @@
     .navlinks { display:flex; flex:1; min-width:0; justify-content:center; gap:28px; font-size:12px; letter-spacing:1.2px; text-transform:uppercase; color:#d7d7d3; }
     .nav-tagline { display:block; max-width:min(58vw,650px); color:#d7d7d3; font-family:"Cambria Math","Segoe Script",cursive; font-size:15px; letter-spacing:.25px; line-height:1.15; text-align:center; text-transform:none; }
     .nav-tools { display:flex; align-items:center; justify-content:flex-end; gap:16px; min-width:132px; }
-    .language-switch { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700; letter-spacing:1px; line-height:1; }
-    .language-switch button { min-width:24px; padding:8px 1px; border:0; border-bottom:1px solid transparent; background:transparent; color:#858582; font:inherit; cursor:pointer; transition:color .2s,border-color .2s; }
+    .language-switch { display:inline-flex; align-items:center; gap:5px; font-family:"Microsoft JhengHei","PingFang TC",Arial,sans-serif; font-size:10px; font-weight:700; letter-spacing:1px; line-height:1; }
+    .language-switch button { min-width:28px; padding:8px 1px; border:0; border-bottom:1px solid transparent; background:transparent; color:#858582; font:inherit; cursor:pointer; transition:color .2s,border-color .2s; }
     .language-switch button:hover, .language-switch button:focus-visible { color:var(--paper); outline:0; }
     .language-switch button[aria-pressed="true"] { color:var(--paper); border-bottom-color:var(--red); }
     .language-divider { color:#555; }
@@ -237,7 +237,7 @@
       .nav-tools { min-width:auto; gap:10px; }
       .nav-tools .eyebrow { font-size:9px; }
       .language-switch { gap:3px; }
-      .language-switch button { min-width:21px; padding:8px 0; }
+      .language-switch button { min-width:28px; padding:8px 0; }
       nav .navlinks { display:none; }
       .racing-context { grid-template-columns:1fr; gap:20px; padding:38px 6vw; }
       .racing-context p { font-size:14px; }
@@ -251,7 +251,7 @@
     <div class="navlinks"><span class="nav-tagline">𝓘𝓰𝓷𝓲𝓽𝓮 𝓽𝓱𝓮 𝓢𝓹𝓮𝓮𝓭. 𝓢𝓱𝓲𝓷𝓮 𝓽𝓱𝓮 𝓒𝓾𝓵𝓽𝓾𝓻𝓮</span></div>
     <div class="nav-tools">
       <div class="language-switch" role="group" aria-label="Language selector">
-        <button id="langEnglish" type="button" aria-pressed="true">EN</button><span class="language-divider" aria-hidden="true">/</span><button id="langChinese" type="button" aria-pressed="false">中</button>
+        <button id="langEnglish" type="button" aria-pressed="true">EN</button><span class="language-divider" aria-hidden="true">/</span><button id="langChinese" type="button" aria-pressed="false">中文</button>
       </div>
       <div class="eyebrow">HK / 2026</div>
     </div>
