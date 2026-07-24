@@ -349,7 +349,7 @@
         setStatus(editorStatus, '正在发布...');
         try {
           const files = Array.from(fields.imageFiles.files);
-          if (files.length > 8) throw new Error('每则动态最多可上传 8 张图片。');
+          if (existingImageUrls.length + files.length > 8) throw new Error('每则动态最多可保留 8 张图片。');
           const uploadedUrls = await Promise.all(files.map(uploadImage));
           const imageUrls = [...existingImageUrls, ...uploadedUrls].slice(0, 8);
           const coverUrl = imageUrls[0] || null;
