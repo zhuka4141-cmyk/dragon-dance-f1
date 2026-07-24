@@ -159,6 +159,13 @@
     .feature-copy h2 { margin:17px 0 25px; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(48px,6.3vw,92px); font-weight:400; line-height:.86; letter-spacing:1px; text-transform:uppercase; }
     .feature-copy p { max-width:430px; margin:0; color:#bdbdb8; font-size:15px; line-height:1.65; }
     .sponsor-showcase .feature-copy p { color:#555; }
+    .crew-content { min-width:0; }
+    .member-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-bottom:30px; }
+    .member-card { min-width:0; overflow:hidden; border:1px solid #484848; background:#181818; }
+    .member-card img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; object-position:center 52%; filter:saturate(.88) contrast(1.04); }
+    .member-card-copy { padding:11px 12px 13px; }
+    .member-card-role { display:block; margin-bottom:6px; color:var(--red); font-size:9px; font-weight:700; letter-spacing:1.2px; line-height:1.3; text-transform:uppercase; }
+    .member-card strong { display:block; font-size:12px; letter-spacing:.5px; line-height:1.25; text-transform:uppercase; }
     .role-list { align-self:stretch; border-top:1px solid #484848; }
     .role-item { display:grid; grid-template-columns:42px minmax(0,1fr); gap:18px; padding:17px 0; border-bottom:1px solid #484848; }
     .role-item > span { padding-top:2px; color:var(--red); font-size:10px; font-weight:bold; letter-spacing:1.4px; }
@@ -188,7 +195,7 @@
     .contact-copy span, .contact-detail { display:block; overflow-wrap:anywhere; color:#4e4e4b; font-size:11px; line-height:1.45; }
     .contact-detail { margin-top:3px; text-decoration:underline; text-decoration-color:#aaa; text-underline-offset:3px; transition:color .2s; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
-    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:66px; min-height:88px; gap:10px; } .pager-line { width:33px; height:2px; } .pager-line:after { width:9px; height:9px; } .pager-label { font-size:10px; } .pager-next { right:max(2vw, env(safe-area-inset-right)); } .pager-prev { left:max(2vw, env(safe-area-inset-left)); } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
+    @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:66px; min-height:88px; gap:10px; } .pager-line { width:33px; height:2px; } .pager-line:after { width:9px; height:9px; } .pager-label { font-size:10px; } .pager-next { right:max(2vw, env(safe-area-inset-right)); } .pager-prev { left:max(2vw, env(safe-area-inset-left)); } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .member-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:26px; } .member-card-copy { padding:9px 10px 11px; } .member-card-role { font-size:8px; letter-spacing:.9px; } .member-card strong { font-size:11px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
   </style>
 </head>
 <body>
@@ -274,12 +281,28 @@
           <h2>One Crew.<br>Many<br>Skills.</h2>
           <p>每個角色負責不同環節，從時間管理到賽車與品牌，彼此交接、互相補位。</p>
         </div>
-        <div class="role-list">
+        <div class="crew-content">
+          <div class="member-grid" aria-label="已加入的队员照片">
+            <article class="member-card">
+              <img src="assets/project-manager.jpg" alt="Project Manager 队员照片" loading="lazy" />
+              <div class="member-card-copy"><span class="member-card-role">01 / Crew</span><strong>Project Manager</strong></div>
+            </article>
+            <article class="member-card">
+              <img src="assets/manufacturing.jpg" alt="Manufacturing 队员照片" loading="lazy" />
+              <div class="member-card-copy"><span class="member-card-role">02 / Crew</span><strong>Manufacturing</strong></div>
+            </article>
+            <article class="member-card">
+              <img src="assets/sponsorship-marketing.jpg" alt="Sponsorship &amp; Marketing 队员照片" loading="lazy" />
+              <div class="member-card-copy"><span class="member-card-role">03 / Crew</span><strong>Sponsorship &amp; Marketing</strong></div>
+            </article>
+          </div>
+          <div class="role-list">
           <div class="role-item"><span>01</span><div><strong>Project Manager</strong><p>協調進度、分工與比賽準備。</p></div></div>
           <div class="role-item"><span>02</span><div><strong>Design &amp; Engineering</strong><p>負責賽車設計、建模與測試。</p></div></div>
           <div class="role-item"><span>03</span><div><strong>Manufacturing</strong><p>把數位模型轉化為可上賽道的實體。</p></div></div>
           <div class="role-item"><span>04</span><div><strong>Sponsorship &amp; Marketing</strong><p>建立合作關係與商業計劃。</p></div></div>
           <div class="role-item"><span>05</span><div><strong>Brand &amp; Media</strong><p>統一視覺、內容與對外溝通。</p></div></div>
+          </div>
         </div>
       </article>
       <article class="feature-page sponsor-showcase" aria-label="第 3 頁贊助合作">
