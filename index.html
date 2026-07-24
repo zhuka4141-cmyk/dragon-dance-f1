@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#080808" />
-  <meta name="description" content="Dragon Dance 是香港 STEM Racing（前稱 F1 in Schools）計劃，結合工程、設計、品牌與賽事策略。" />
+  <meta name="description" content="Dragon Dance is a Hong Kong STEM Racing team, formerly F1 in Schools. We bring together engineering, design, branding and race strategy." />
   <meta name="robots" content="index, follow" />
   <meta name="googlebot" content="index, follow, max-image-preview:large" />
   <meta name="google-site-verification" content="F8efArbxCXPLMs-96xFn05EZojD4o2mcQE4IT9WQdnM" />
@@ -16,14 +16,14 @@
   <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="assets/dragon-icon-180.png" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Dragon Dance" />
-  <meta property="og:locale" content="zh_HK" />
+  <meta property="og:locale" content="en_HK" />
   <meta property="og:url" content="https://lstc-dragon-dance.vercel.app/" />
   <meta property="og:title" content="Dragon Dance | STEM Racing" />
-  <meta property="og:description" content="Dragon Dance 是香港 STEM Racing（前稱 F1 in Schools）計劃，結合工程、設計、品牌與賽事策略。" />
+  <meta property="og:description" content="Dragon Dance is a Hong Kong STEM Racing team, formerly F1 in Schools. We bring together engineering, design, branding and race strategy." />
   <meta property="og:image" content="https://lstc-dragon-dance.vercel.app/assets/race-car.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Dragon Dance | STEM Racing" />
-  <meta name="twitter:description" content="Dragon Dance 是香港 STEM Racing（前稱 F1 in Schools）計劃。" />
+  <meta name="twitter:description" content="Dragon Dance is a Hong Kong STEM Racing team, formerly F1 in Schools." />
   <meta name="twitter:image" content="https://lstc-dragon-dance.vercel.app/assets/race-car.jpg" />
   <link rel="manifest" href="site.webmanifest" />
   <script type="application/ld+json">
@@ -86,6 +86,12 @@
     .wordmark span { color:var(--red); display:block; font-size:11px; letter-spacing:3px; margin-left:2px; }
     .navlinks { display:flex; flex:1; min-width:0; justify-content:center; gap:28px; font-size:12px; letter-spacing:1.2px; text-transform:uppercase; color:#d7d7d3; }
     .nav-tagline { display:block; max-width:min(58vw,650px); color:#d7d7d3; font-family:"Cambria Math","Segoe Script",cursive; font-size:15px; letter-spacing:.25px; line-height:1.15; text-align:center; text-transform:none; }
+    .nav-tools { display:flex; align-items:center; justify-content:flex-end; gap:16px; min-width:132px; }
+    .language-switch { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700; letter-spacing:1px; line-height:1; }
+    .language-switch button { min-width:24px; padding:8px 1px; border:0; border-bottom:1px solid transparent; background:transparent; color:#858582; font:inherit; cursor:pointer; transition:color .2s,border-color .2s; }
+    .language-switch button:hover, .language-switch button:focus-visible { color:var(--paper); outline:0; }
+    .language-switch button[aria-pressed="true"] { color:var(--paper); border-bottom-color:var(--red); }
+    .language-divider { color:#555; }
     .hero { position:relative; min-height:670px; padding:0; border-bottom:1px solid var(--line); isolation:isolate; overflow:hidden; }
     .hero:before { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(8,8,8,.16),#080808 61%), repeating-linear-gradient(90deg,transparent 0 12.45%,rgba(255,255,255,.055) 12.5% 12.6%); z-index:-1; }
     .hero-pages { display:flex; min-height:670px; transform:translateX(0); transition:transform .56s cubic-bezier(.22,.8,.24,1); touch-action:pan-y; will-change:transform; }
@@ -161,7 +167,7 @@
     .car-photo { position:relative; overflow:hidden; min-height:480px; }
     .car-photo img { width:100%; height:100%; object-fit:cover; filter:grayscale(1) contrast(1.15); opacity:.86; transition:filter .35s,transform .5s; }
     .car-photo:hover img { filter:grayscale(.15) contrast(1.1); transform:scale(1.025); }
-    .car-photo:after { content:"01 / DRAGON PROTOTYPE"; position:absolute; left:27px; bottom:25px; font-size:10px; letter-spacing:1.5px; font-weight:bold; background:var(--red); padding:9px 11px; }
+    .car-photo:after { content:attr(data-label); position:absolute; left:27px; bottom:25px; font-size:10px; letter-spacing:1.5px; font-weight:bold; background:var(--red); padding:9px 11px; }
     .machine-copy { padding:clamp(45px,7vw,105px) 4.2vw; display:flex; flex-direction:column; justify-content:space-between; }
     .machine-copy h2 { font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; font-size:clamp(48px,6vw,90px); line-height:.85; margin:16px 0 25px; letter-spacing:1px; text-transform:uppercase; }
     .machine-copy p { color:#bdbdb8; max-width:390px; line-height:1.65; font-size:15px; }
@@ -228,8 +234,11 @@
     .racing-context p { max-width:620px; margin:0; color:#393936; font-size:15px; line-height:1.65; }
     @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:66px; min-height:88px; gap:10px; } .pager-line { width:33px; height:2px; } .pager-line:after { width:9px; height:9px; } .pager-label { font-size:10px; } .pager-next { right:max(2vw, env(safe-area-inset-right)); } .pager-prev { left:max(2vw, env(safe-area-inset-left)); } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .proposal-cta { margin-left:78px; } .member-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:26px; } .member-card-copy { padding:9px 10px 11px; } .member-card-role { font-size:8px; letter-spacing:.9px; } .member-card strong { font-size:11px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item, .school-contact { min-height:0; grid-column:span 1; } .footer-meta { text-align:left; } }
     @media (max-width:800px) {
-      nav .navlinks { display:flex; flex:1; min-width:0; gap:0; justify-content:center; }
-      nav .nav-tagline { max-width:44vw; font-size:9px; line-height:1.15; }
+      .nav-tools { min-width:auto; gap:10px; }
+      .nav-tools .eyebrow { font-size:9px; }
+      .language-switch { gap:3px; }
+      .language-switch button { min-width:21px; padding:8px 0; }
+      nav .navlinks { display:none; }
       .racing-context { grid-template-columns:1fr; gap:20px; padding:38px 6vw; }
       .racing-context p { font-size:14px; }
     }
@@ -240,129 +249,134 @@
   <nav>
     <a class="wordmark" href="#top">Dragon Dance<span>STEM Racing</span></a>
     <div class="navlinks"><span class="nav-tagline">𝓘𝓰𝓷𝓲𝓽𝓮 𝓽𝓱𝓮 𝓢𝓹𝓮𝓮𝓭. 𝓢𝓱𝓲𝓷𝓮 𝓽𝓱𝓮 𝓒𝓾𝓵𝓽𝓾𝓻𝓮</span></div>
-    <div class="eyebrow">HK / 2026</div>
+    <div class="nav-tools">
+      <div class="language-switch" role="group" aria-label="Language selector">
+        <button id="langEnglish" type="button" aria-pressed="true">EN</button><span class="language-divider" aria-hidden="true">/</span><button id="langChinese" type="button" aria-pressed="false">中</button>
+      </div>
+      <div class="eyebrow">HK / 2026</div>
+    </div>
   </nav>
   <main id="top">
-    <section class="hero" id="heroPager" aria-label="Dragon Dance 首頁圖片分頁" tabindex="0">
-      <div class="pager-hint" aria-hidden="true">Swipe to change page · 滑動更換頁面</div>
+    <section class="hero" id="heroPager" aria-label="Dragon Dance homepage" tabindex="0">
+      <div class="pager-hint" data-i18n="pagerHint" aria-hidden="true">Swipe to change page</div>
       <div class="hero-pages" id="heroPages">
-        <article class="hero-page hero-page-intro" aria-label="第 1 頁">
+        <article class="hero-page hero-page-intro" aria-label="Page 1">
           <canvas class="fog-field" id="fogField" aria-hidden="true"></canvas>
-          <div class="hero-kicker">博愛醫院歷屆總理聯誼會梁省德中學 · STEM Racing</div>
-          <h1>Born to<br><i>Move.</i></h1>
-          <p class="hero-copy">我們是 Dragon Dance。以速度為骨、創意為鱗，從設計桌走向賽道，為每一個千分之一秒全力衝刺。</p>
-          <div class="dragon-stage" id="dragonStage" aria-label="可互動的龍圖案">
+          <div class="hero-kicker" data-i18n="heroKicker">AD&amp;FD POHL Leung Sing Tak College · STEM Racing</div>
+          <h1 data-i18n-html="heroTitle">Born to<br><i>Move.</i></h1>
+          <p class="hero-copy" data-i18n="heroCopy">We are Dragon Dance. Built on speed and shaped by imagination, we move from the design desk to the track and fight for every thousandth of a second.</p>
+          <div class="dragon-stage" id="dragonStage" aria-label="Interactive Dragon Dance dragon symbol">
             <div class="dragon-halo"></div>
             <div class="dragon-mist dragon-mist-one"></div>
             <div class="dragon-mist dragon-mist-two"></div>
             <div class="dragon-mist dragon-mist-three"></div>
-            <img class="dragon" id="dragon" src="assets/dragon-mark.png" alt="Dragon Dance 龍圖案" />
+            <img class="dragon" id="dragon" src="assets/dragon-mark.png" alt="Dragon Dance dragon symbol" />
           </div>
-          <div class="hero-footer"><span>STEM Racing</span><span>Precision. Teamwork. Momentum.</span><a class="scroll-indicator" href="#about">Scroll to explore ↓</a></div>
+          <div class="hero-footer"><span>STEM Racing</span><span data-i18n="heroMantra">Precision. Teamwork. Momentum.</span><a class="scroll-indicator" href="#about" data-i18n="scrollExplore">Scroll to explore ↓</a></div>
         </article>
-        <article class="hero-page title-page title-page-crew" aria-label="第 2 頁">
-          <div class="title-page-index">02 / The Crew</div>
-          <h2>Meet<br>The Crew</h2>
-          <p>Project management、engineering、brand 與 sponsorship，隊員各自發揮專長，讓 Dragon Dance 同步前進。</p>
+        <article class="hero-page title-page title-page-crew" aria-label="Page 2">
+          <div class="title-page-index" data-i18n="crewIndex">02 / The Crew</div>
+          <h2 data-i18n-html="crewTitle">Meet<br>The Crew</h2>
+          <p data-i18n="crewIntro">From project management and engineering to brand and sponsorship, every member brings their expertise to keep Dragon Dance moving as one.</p>
         </article>
-        <article class="hero-page title-page title-page-partners" aria-label="第 3 頁">
-          <div class="title-page-index">03 / Our Partners</div>
-          <h2>Driven<br>By Support</h2>
-          <p>與重視創新、教育與青年發展的夥伴並肩，把工程實踐與品牌故事推上更大的舞台。</p>
+        <article class="hero-page title-page title-page-partners" aria-label="Page 3">
+          <div class="title-page-index" data-i18n="partnersIndex">03 / Our Partners</div>
+          <h2 data-i18n-html="partnersTitle">Driven<br>By Support</h2>
+          <p data-i18n="partnersIntro">We work with partners who value innovation, education and youth development to take engineering in practice and brand storytelling to a bigger stage.</p>
         </article>
       </div>
     </section>
-    <button class="pager-arrow pager-prev" id="pagerPrev" type="button" aria-label="上一頁" title="上一頁"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerPrevLabel" aria-hidden="true"></span></button>
-    <button class="pager-arrow pager-next" id="pagerNext" type="button" aria-label="下一頁" title="下一頁"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerNextLabel" aria-hidden="true"></span></button>
+    <button class="pager-arrow pager-prev" id="pagerPrev" type="button" aria-label="Previous page" title="Previous page"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerPrevLabel" aria-hidden="true"></span></button>
+    <button class="pager-arrow pager-next" id="pagerNext" type="button" aria-label="Next page" title="Next page"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerNextLabel" aria-hidden="true"></span></button>
 
     <section class="about" id="about">
       <div class="about-pages" id="aboutPages" aria-live="polite">
-        <article class="about-page is-active" aria-label="第 1 頁內容">
-          <div><div class="section-label">01 / The Team</div></div>
+        <article class="about-page is-active" aria-label="Page 1 overview">
+          <div><div class="section-label" data-i18n="teamLabel">01 / The Team</div></div>
           <div>
             <h2>Dragon<br>Dance</h2>
-            <p>Dragon Dance 是一隊來自博愛醫院歷屆總理聯誼會梁省德中學的 STEM Racing 車隊。我們把工程思維、視覺設計與賽事策略放在同一條起跑線，打造一支有速度、也有態度的隊伍。</p>
-            <div class="fact-row"><div class="fact"><b>Base</b><span>Hong Kong</span></div><div class="fact"><b>Program</b><span>STEM Racing</span></div><div class="fact"><b>Identity</b><span>龍舞疾行</span></div></div>
+            <p data-i18n="teamOverview">Dragon Dance is a STEM Racing team from AD&amp;FD POHL Leung Sing Tak College. We bring engineering thinking, visual design and race strategy to the same start line to build a team with speed and character.</p>
+            <div class="fact-row"><div class="fact"><b data-i18n="baseLabel">Base</b><span>Hong Kong</span></div><div class="fact"><b data-i18n="programLabel">Program</b><span>STEM Racing</span></div><div class="fact"><b data-i18n="identityLabel">Identity</b><span data-i18n="identityValue">Dragon Dance in Motion</span></div></div>
           </div>
         </article>
-        <article class="about-page" aria-label="第 2 頁內容">
-          <div><div class="section-label">02 / The Crew</div></div>
+        <article class="about-page" aria-label="Page 2 overview">
+          <div><div class="section-label" data-i18n="crewIndex">02 / The Crew</div></div>
           <div>
-            <h2>Meet<br>The Crew</h2>
-            <p>Dragon Dance 由不同專長的隊員組成。從專案管理、工程設計到品牌與贊助，每一個角色都在同一個節奏中協作，讓想法真正站上賽道。</p>
-            <div class="fact-row"><div class="fact"><b>Direction</b><span>One Team</span></div><div class="fact"><b>Method</b><span>Shared Ownership</span></div><div class="fact"><b>Energy</b><span>Full Commitment</span></div></div>
+            <h2 data-i18n-html="crewTitle">Meet<br>The Crew</h2>
+            <p data-i18n="crewOverview">Dragon Dance brings together members with different strengths. From project management and engineering to brand and sponsorship, every role works in rhythm to put ideas on the track.</p>
+            <div class="fact-row"><div class="fact"><b data-i18n="directionLabel">Direction</b><span data-i18n="oneTeam">One Team</span></div><div class="fact"><b data-i18n="methodLabel">Method</b><span data-i18n="sharedOwnership">Shared Ownership</span></div><div class="fact"><b data-i18n="energyLabel">Energy</b><span data-i18n="fullCommitment">Full Commitment</span></div></div>
           </div>
         </article>
-        <article class="about-page" aria-label="第 3 頁內容">
-          <div><div class="section-label">03 / Our Partners</div></div>
+        <article class="about-page" aria-label="Page 3 overview">
+          <div><div class="section-label" data-i18n="partnersIndex">03 / Our Partners</div></div>
           <div>
-            <h2>Driven<br>By Support</h2>
-            <p>每一份支持都讓 Dragon Dance 走得更遠。我們期待與重視創新、教育與青年發展的夥伴合作，把工程實踐與品牌故事一起帶到更大的舞台。</p>
-            <div class="fact-row"><div class="fact"><b>Partnership</b><span>Open</span></div><div class="fact"><b>Reach</b><span>Hong Kong</span></div><div class="fact"><b>Contact</b><span>Email Us</span></div></div>
+            <h2 data-i18n-html="partnersTitle">Driven<br>By Support</h2>
+            <p data-i18n="partnersOverview">Every contribution helps Dragon Dance go further. We welcome partners who care about innovation, education and youth development to bring engineering in practice and brand stories to a bigger stage.</p>
+            <div class="fact-row"><div class="fact"><b data-i18n="partnershipLabel">Partnership</b><span data-i18n="openLabel">Open</span></div><div class="fact"><b data-i18n="reachLabel">Reach</b><span>Hong Kong</span></div><div class="fact"><b data-i18n="contactLabel">Contact</b><span data-i18n="emailUs">Email Us</span></div></div>
           </div>
         </article>
       </div>
     </section>
 
     <section class="feature-stack" id="machine" aria-live="polite">
-      <article class="feature-page machine is-active" aria-label="第 1 頁延伸內容">
-        <div class="car-photo"><img src="assets/race-car.jpg" alt="Dragon Dance 賽車在 STEM Racing 賽道上" /></div>
+      <article class="feature-page machine is-active" aria-label="Page 1 feature">
+        <div class="car-photo" data-label="01 / DRAGON PROTOTYPE"><img src="assets/race-car.jpg" alt="Dragon Dance race car on a STEM Racing track" /></div>
         <div class="machine-copy">
-          <div><div class="eyebrow">02 / The Machine</div><h2>Engineered<br>to launch.</h2><p>每一個翼面、每一段車身輪廓，都在追求更乾淨的氣流、更少的阻力，以及一個明確的終點。</p></div>
-          <div class="specs"><div class="spec"><span>Chassis</span><span>Precision Crafted</span></div><div class="spec"><span>Focus</span><span>Aerodynamics</span></div><div class="spec"><span>Race Mode</span><span>Full Attack</span></div></div>
+          <div><div class="eyebrow" data-i18n="machineLabel">02 / The Machine</div><h2 data-i18n-html="machineTitle">Engineered<br>to launch.</h2><p data-i18n="machineCopy">Every wing surface and body contour pursues cleaner airflow, less drag and one clear destination.</p></div>
+          <div class="specs"><div class="spec"><span data-i18n="chassisLabel">Chassis</span><span data-i18n="precisionCrafted">Precision Crafted</span></div><div class="spec"><span data-i18n="focusLabel">Focus</span><span data-i18n="aerodynamics">Aerodynamics</span></div><div class="spec"><span data-i18n="raceMode">Race Mode</span><span data-i18n="fullAttack">Full Attack</span></div></div>
         </div>
       </article>
-      <article class="feature-page team-showcase" aria-label="第 2 頁隊員分工">
+      <article class="feature-page team-showcase" aria-label="Page 2 team roles">
         <div class="feature-copy">
-          <div class="eyebrow">Roles / Responsibilities</div>
-          <h2>One Crew.<br>Many<br>Skills.</h2>
-          <p>每個角色負責不同環節，從時間管理到賽車與品牌，彼此交接、互相補位。</p>
+          <div class="eyebrow" data-i18n="rolesLabel">Roles / Responsibilities</div>
+          <h2 data-i18n-html="rolesTitle">One Crew.<br>Many<br>Skills.</h2>
+          <p data-i18n="rolesCopy">Every role owns a different part of the work, from time management to racing and brand, handing over smoothly and backing each other up.</p>
         </div>
         <div class="crew-content">
-          <div class="member-grid" aria-label="已加入的队员照片">
+          <div class="member-grid" aria-label="Current team member photos">
             <article class="member-card">
-              <img src="assets/project-manager.jpg" alt="Project Manager 队员照片" loading="lazy" />
-              <div class="member-card-copy"><span class="member-card-role">01 / Crew</span><strong>Project Manager</strong></div>
+              <img src="assets/project-manager.jpg" alt="Project Manager team member" loading="lazy" />
+              <div class="member-card-copy"><span class="member-card-role" data-i18n="crewMemberOne">01 / Crew</span><strong data-i18n="projectManager">Project Manager</strong></div>
             </article>
             <article class="member-card">
-              <img src="assets/manufacturing.jpg" alt="Manufacturing 队员照片" loading="lazy" />
-              <div class="member-card-copy"><span class="member-card-role">02 / Crew</span><strong>Manufacturing</strong></div>
+              <img src="assets/manufacturing.jpg" alt="Manufacturing team member" loading="lazy" />
+              <div class="member-card-copy"><span class="member-card-role" data-i18n="crewMemberTwo">02 / Crew</span><strong data-i18n="manufacturing">Manufacturing</strong></div>
             </article>
             <article class="member-card">
-              <img src="assets/sponsorship-marketing-portrait.jpg" alt="Sponsorship &amp; Marketing 队员照片" loading="lazy" />
-              <div class="member-card-copy"><span class="member-card-role">03 / Crew</span><strong>Sponsorship &amp; Marketing</strong></div>
+              <img src="assets/sponsorship-marketing-portrait.jpg" alt="Sponsorship and Marketing team member" loading="lazy" />
+              <div class="member-card-copy"><span class="member-card-role" data-i18n="crewMemberThree">03 / Crew</span><strong data-i18n="sponsorshipMarketing">Sponsorship &amp; Marketing</strong></div>
             </article>
           </div>
           <div class="role-list">
-          <div class="role-item"><span>01</span><div><strong>Project Manager</strong><p>協調進度、分工與比賽準備。</p></div></div>
-          <div class="role-item"><span>02</span><div><strong>Design &amp; Engineering</strong><p>負責賽車設計、建模與測試。</p></div></div>
-          <div class="role-item"><span>03</span><div><strong>Manufacturing</strong><p>把數位模型轉化為可上賽道的實體。</p></div></div>
-          <div class="role-item"><span>04</span><div><strong>Sponsorship &amp; Marketing</strong><p>建立合作關係與商業計劃。</p></div></div>
-          <div class="role-item"><span>05</span><div><strong>Brand &amp; Media</strong><p>統一視覺、內容與對外溝通。</p></div></div>
+          <div class="role-item"><span>01</span><div><strong data-i18n="projectManager">Project Manager</strong><p data-i18n="projectManagerCopy">Coordinates progress, responsibilities and race preparation.</p></div></div>
+          <div class="role-item"><span>02</span><div><strong data-i18n="designEngineering">Design &amp; Engineering</strong><p data-i18n="designEngineeringCopy">Leads race car design, modelling and testing.</p></div></div>
+          <div class="role-item"><span>03</span><div><strong data-i18n="manufacturing">Manufacturing</strong><p data-i18n="manufacturingCopy">Turns digital models into race-ready physical parts.</p></div></div>
+          <div class="role-item"><span>04</span><div><strong data-i18n="sponsorshipMarketing">Sponsorship &amp; Marketing</strong><p data-i18n="sponsorshipMarketingCopy">Builds partnerships and the team's commercial plan.</p></div></div>
+          <div class="role-item"><span>05</span><div><strong data-i18n="brandMedia">Brand &amp; Media</strong><p data-i18n="brandMediaCopy">Shapes visual identity, content and external communication.</p></div></div>
           </div>
         </div>
       </article>
-      <article class="feature-page sponsor-showcase" aria-label="第 3 頁贊助合作">
+      <article class="feature-page sponsor-showcase" aria-label="Page 3 sponsorship">
         <div class="feature-copy">
-          <div class="eyebrow">Sponsorship / 2026</div>
-          <h2>Partner<br>With Us.</h2>
-          <p>與 Dragon Dance 合作，讓品牌走進校園 STEM 賽事、設計過程與下一次起跑。</p>
+          <div class="eyebrow" data-i18n="sponsorshipLabel">Sponsorship / 2026</div>
+          <h2 data-i18n-html="sponsorTitle">Partner<br>With Us.</h2>
+          <p data-i18n="sponsorCopy">Partner with Dragon Dance to bring your brand into school STEM racing, our design process and the next start line.</p>
           <div class="proposal-cta">
-            <span class="proposal-cta-label">2026 Sponsorship Proposal</span>
-            <strong>Build the next race with us.</strong>
-            <p>了解品牌曝光、校園活動、社交媒體故事與技術教育合作的可能性。</p>
+            <span class="proposal-cta-label" data-i18n="proposalLabel">2026 Sponsorship Proposal</span>
+            <strong data-i18n="proposalTitle">Build the next race with us.</strong>
+            <p data-i18n="proposalCopy">Explore brand visibility, campus events, social storytelling and technical education partnerships.</p>
             <div class="partner-actions">
-              <a class="proposal-link" href="assets/design-studio-creative-brief.pdf" target="_blank" rel="noopener">Open Proposal PDF ↗</a>
-              <a class="proposal-contact" href="mailto:dragondance@lstc.edu.hk?subject=Sponsorship%20Enquiry">Discuss a Partnership</a>
+              <a class="proposal-link" href="assets/design-studio-creative-brief.pdf" target="_blank" rel="noopener" data-i18n="openProposal">Open Proposal PDF ↗</a>
+              <a class="proposal-contact" href="mailto:dragondance@lstc.edu.hk?subject=Sponsorship%20Enquiry" data-i18n="discussPartnership">Discuss a Partnership</a>
             </div>
-            <a class="pdf-download" href="assets/design-studio-creative-brief.pdf" download>Download Proposal PDF ↓</a>
+            <a class="pdf-download" href="assets/design-studio-creative-brief.pdf" download data-i18n="downloadProposal">Download Proposal PDF ↓</a>
           </div>
         </div>
         <div class="partner-grid">
-          <div class="partner-item"><span>01 / Visibility</span><strong>Brand Visibility</strong><p>在網站、提案與隊伍內容中呈現合作品牌。</p></div>
-          <div class="partner-item"><span>02 / Campus</span><strong>Campus Activation</strong><p>連結校園活動、學生社群與 STEM 學習故事。</p></div>
-          <div class="partner-item"><span>03 / Social</span><strong>Social Storytelling</strong><p>透過專案進度與 Instagram 分享品牌合作。</p></div>
-          <div class="partner-item"><span>04 / Technical</span><strong>Team Development</strong><p>支持設計、製造、測試與下一代創意人才。</p></div>
+          <div class="partner-item"><span data-i18n="visibilityIndex">01 / Visibility</span><strong data-i18n="brandVisibility">Brand Visibility</strong><p data-i18n="brandVisibilityCopy">Feature partner brands across the website, proposal and team content.</p></div>
+          <div class="partner-item"><span data-i18n="campusIndex">02 / Campus</span><strong data-i18n="campusActivation">Campus Activation</strong><p data-i18n="campusActivationCopy">Connect with campus events, student communities and STEM learning stories.</p></div>
+          <div class="partner-item"><span data-i18n="socialIndex">03 / Social</span><strong data-i18n="socialStorytelling">Social Storytelling</strong><p data-i18n="socialStorytellingCopy">Share partner stories through project progress and Instagram.</p></div>
+          <div class="partner-item"><span data-i18n="technicalIndex">04 / Technical</span><strong data-i18n="teamDevelopment">Team Development</strong><p data-i18n="teamDevelopmentCopy">Support design, manufacturing, testing and the next generation of creative talent.</p></div>
         </div>
       </article>
     </section>
@@ -371,22 +385,22 @@
   <section class="racing-context" aria-labelledby="racing-context-title">
     <div>
       <span class="racing-context-label">STEM Racing / F1 in Schools</span>
-      <h2 id="racing-context-title">STEM Racing,<br><em>formerly F1 in Schools.</em></h2>
+      <h2 id="racing-context-title" data-i18n-html="racingTitle">STEM Racing,<br><em>formerly F1 in Schools.</em></h2>
     </div>
-    <p>Dragon Dance participates in STEM Racing, the student racing challenge formerly known as F1 in Schools. Based in Hong Kong, we bring engineering, design, branding and race strategy together.</p>
+    <p data-i18n="racingCopy">Dragon Dance participates in STEM Racing, the student racing challenge formerly known as F1 in Schools. Based in Hong Kong, we bring engineering, design, branding and race strategy together.</p>
   </section>
   <footer>
-    <div><strong>Dance with<br>the dragon.</strong><p>DRAGON DANCE / STEM RACING</p></div>
-    <section class="footer-contact" aria-label="聯絡我們">
-      <span class="footer-label">Contact</span>
+    <div><strong data-i18n-html="footerTitle">Dance with<br>the dragon.</strong><p>DRAGON DANCE / STEM RACING</p></div>
+    <section class="footer-contact" aria-label="Contact">
+      <span class="footer-label" data-i18n="contactLabel">Contact</span>
       <div class="contact-list">
         <a class="contact-item" href="mailto:dragondance@lstc.edu.hk" aria-label="Email Dragon Dance">
           <span class="contact-icon"><img src="assets/contact-email.svg" alt="" /></span>
-          <span class="contact-copy"><b>Email</b><span>dragondance@lstc.edu.hk</span></span>
+          <span class="contact-copy"><b data-i18n="emailLabel">Email</b><span>dragondance@lstc.edu.hk</span></span>
         </a>
         <div class="contact-item">
           <span class="contact-icon"><img src="assets/contact-whatsapp.svg" alt="" /></span>
-          <span class="contact-copy"><b>WhatsApp</b><a class="contact-detail" href="https://wa.me/85291639154" target="_blank" rel="noopener">Project Manager · 91639154</a><a class="contact-detail" href="https://wa.me/85260116515" target="_blank" rel="noopener">Sponsorship &amp; Marketing · 60116515</a></span>
+          <span class="contact-copy"><b>WhatsApp</b><a class="contact-detail" href="https://wa.me/85291639154" target="_blank" rel="noopener" data-i18n="projectManagerContact">Project Manager · 91639154</a><a class="contact-detail" href="https://wa.me/85260116515" target="_blank" rel="noopener" data-i18n="sponsorshipContact">Sponsorship &amp; Marketing · 60116515</a></span>
         </div>
         <a class="contact-item" href="https://www.instagram.com/team_dragon_dance?igsh=MWppemVhZGswdHpvNQ==" target="_blank" rel="noopener" aria-label="Instagram Team Dragon Dance">
           <span class="contact-icon"><img src="assets/contact-instagram.svg" alt="" /></span>
@@ -394,11 +408,11 @@
         </a>
         <a class="contact-item school-contact" href="https://www.lstc.edu.hk/tc/" target="_blank" rel="noopener" aria-label="Visit AD&FD POHL Leung Sing Tak College website">
           <span class="contact-icon"><img src="assets/lstc-school-logo.jpg" alt="" /></span>
-          <span class="contact-copy"><b>School Website</b><span>lstc.edu.hk</span></span>
+          <span class="contact-copy"><b data-i18n="schoolWebsite">School Website</b><span>lstc.edu.hk</span></span>
         </a>
       </div>
     </section>
-    <div class="footer-meta">AD&amp;FD POHL Leung Sing Tak College<br>Hong Kong</div>
+    <div class="footer-meta" data-i18n-html="footerMeta">AD&amp;FD POHL Leung Sing Tak College<br>Hong Kong</div>
   </footer>
   <script>
     (() => {
@@ -413,11 +427,20 @@
       const pagerNext = document.getElementById('pagerNext');
       const pagerPrevLabel = document.getElementById('pagerPrevLabel');
       const pagerNextLabel = document.getElementById('pagerNextLabel');
-      const pagerLabels = [
-        { prev:'', next:'隊員' },
-        { prev:'首頁', next:'贊助商' },
-        { prev:'隊員', next:'' }
-      ];
+      const langEnglish = document.getElementById('langEnglish');
+      const langChinese = document.getElementById('langChinese');
+      const pagerLabels = {
+        en: [
+          { prev:'', next:'Crew' },
+          { prev:'Home', next:'Partners' },
+          { prev:'Crew', next:'' }
+        ],
+        zh: [
+          { prev:'', next:'隊員' },
+          { prev:'首頁', next:'贊助商' },
+          { prev:'隊員', next:'' }
+        ]
+      };
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const wisps = [
         { x:.02, y:.18, radius:110, stretch:2.8, speed:7, wave:.42, alpha:.13 },
@@ -438,6 +461,128 @@
       let pageIndex = 0;
       let swipeStart = null;
       let suppressClickUntil = 0;
+      let language = 'en';
+      const textElements = Array.from(document.querySelectorAll('[data-i18n]'));
+      const htmlElements = Array.from(document.querySelectorAll('[data-i18n-html]'));
+      const englishText = Object.fromEntries(textElements.map(element => [element.dataset.i18n, element.textContent]));
+      const englishHtml = Object.fromEntries(htmlElements.map(element => [element.dataset.i18nHtml, element.innerHTML]));
+      const chineseText = {
+        pagerHint:'滑動更換頁面',
+        heroKicker:'博愛醫院歷屆總理聯誼會梁省德中學 · STEM Racing',
+        heroCopy:'我們是 Dragon Dance。以速度為骨、創意為鱗，從設計桌走向賽道，為每一個千分之一秒全力衝刺。',
+        heroMantra:'精準。協作。衝勁。',
+        scrollExplore:'向下探索 ↓',
+        crewIndex:'02 / 隊員',
+        crewIntro:'從專案管理、工程設計到品牌與贊助，隊員各自發揮專長，讓 Dragon Dance 同步前進。',
+        partnersIndex:'03 / 贊助商',
+        partnersIntro:'與重視創新、教育與青年發展的夥伴並肩，把工程實踐與品牌故事推上更大的舞台。',
+        teamLabel:'01 / 車隊',
+        teamOverview:'Dragon Dance 是一隊來自博愛醫院歷屆總理聯誼會梁省德中學的 STEM Racing 車隊。我們把工程思維、視覺設計與賽事策略放在同一條起跑線，打造一支有速度、也有態度的隊伍。',
+        baseLabel:'基地',
+        programLabel:'項目',
+        identityLabel:'精神',
+        identityValue:'龍舞疾行',
+        crewOverview:'Dragon Dance 由不同專長的隊員組成。從專案管理、工程設計到品牌與贊助，每一個角色都在同一個節奏中協作，讓想法真正站上賽道。',
+        directionLabel:'方向',
+        oneTeam:'同一隊伍',
+        methodLabel:'方式',
+        sharedOwnership:'共同承擔',
+        energyLabel:'投入',
+        fullCommitment:'全力以赴',
+        partnersOverview:'每一份支持都讓 Dragon Dance 走得更遠。我們期待與重視創新、教育與青年發展的夥伴合作，把工程實踐與品牌故事一起帶到更大的舞台。',
+        partnershipLabel:'合作',
+        openLabel:'開放合作',
+        reachLabel:'地點',
+        contactLabel:'聯絡我們',
+        emailUs:'電郵聯絡',
+        machineLabel:'02 / 賽車',
+        machineCopy:'每一個翼面、每一段車身輪廓，都在追求更乾淨的氣流、更少的阻力，以及一個明確的終點。',
+        chassisLabel:'底盤',
+        precisionCrafted:'精密打造',
+        focusLabel:'重點',
+        aerodynamics:'空氣動力學',
+        raceMode:'比賽模式',
+        fullAttack:'全力出擊',
+        rolesLabel:'職責 / 分工',
+        rolesCopy:'每個角色負責不同環節，從時間管理到賽車與品牌，彼此交接、互相補位。',
+        crewMemberOne:'01 / 成員',
+        crewMemberTwo:'02 / 成員',
+        crewMemberThree:'03 / 成員',
+        projectManager:'專案經理',
+        projectManagerCopy:'協調進度、分工與比賽準備。',
+        designEngineering:'設計與工程',
+        designEngineeringCopy:'負責賽車設計、建模與測試。',
+        manufacturing:'製造',
+        manufacturingCopy:'把數位模型轉化為可上賽道的實體。',
+        sponsorshipMarketing:'贊助與推廣',
+        sponsorshipMarketingCopy:'建立合作關係與商業計劃。',
+        brandMedia:'品牌與媒體',
+        brandMediaCopy:'統一視覺、內容與對外溝通。',
+        sponsorCopy:'與 Dragon Dance 合作，讓品牌走進校園 STEM 賽事、設計過程與下一次起跑。',
+        sponsorshipLabel:'贊助 / 2026',
+        proposalLabel:'2026 贊助提案',
+        proposalTitle:'一起打造下一場賽事。',
+        proposalCopy:'了解品牌曝光、校園活動、社交媒體故事與技術教育合作的可能性。',
+        openProposal:'開啟贊助提案 PDF ↗',
+        discussPartnership:'洽談合作',
+        downloadProposal:'下載贊助提案 PDF ↓',
+        visibilityIndex:'01 / 曝光',
+        brandVisibility:'品牌曝光',
+        brandVisibilityCopy:'在網站、提案與隊伍內容中呈現合作品牌。',
+        campusIndex:'02 / 校園',
+        campusActivation:'校園互動',
+        campusActivationCopy:'連結校園活動、學生社群與 STEM 學習故事。',
+        socialIndex:'03 / 社群',
+        socialStorytelling:'社群故事',
+        socialStorytellingCopy:'透過專案進度與 Instagram 分享品牌合作。',
+        technicalIndex:'04 / 技術',
+        teamDevelopment:'車隊發展',
+        teamDevelopmentCopy:'支持設計、製造、測試與下一代創意人才。',
+        racingCopy:'Dragon Dance 參與 STEM Racing，這項學生賽車挑戰前稱 F1 in Schools。我們立足香港，將工程、設計、品牌與賽事策略結合在一起。',
+        footerTitle:'與龍<br>共舞。',
+        emailLabel:'電郵',
+        projectManagerContact:'專案經理 · 91639154',
+        sponsorshipContact:'贊助及推廣經理 · 60116515',
+        schoolWebsite:'學校網站'
+      };
+      const chineseHtml = {
+        heroTitle:'為速度<br><i>而生。</i>',
+        crewTitle:'認識<br>隊員',
+        partnersTitle:'支持<br>驅動。',
+        machineTitle:'為起跑<br>而生。',
+        rolesTitle:'一隊夥伴。<br>多種<br>專長。',
+        sponsorTitle:'與我們<br>同行。',
+        racingTitle:'STEM Racing，<br><em>前稱 F1 in Schools。</em>',
+        footerTitle:'與龍<br>共舞。',
+        footerMeta:'博愛醫院歷屆總理聯誼會梁省德中學<br>香港'
+      };
+
+      function applyLanguage(nextLanguage) {
+        language = nextLanguage === 'zh' ? 'zh' : 'en';
+        const text = language === 'zh' ? chineseText : englishText;
+        const html = language === 'zh' ? chineseHtml : englishHtml;
+        textElements.forEach(element => {
+          const value = text[element.dataset.i18n];
+          if (value) element.textContent = value;
+        });
+        htmlElements.forEach(element => {
+          const value = html[element.dataset.i18nHtml];
+          if (value) element.innerHTML = value;
+        });
+
+        const chinese = language === 'zh';
+        document.documentElement.lang = chinese ? 'zh-Hant' : 'en';
+        hero.setAttribute('aria-label', chinese ? 'Dragon Dance 首頁' : 'Dragon Dance homepage');
+        heroSlides.forEach((slide, index) => slide.setAttribute('aria-label', chinese ? `第 ${index + 1} 頁` : `Page ${index + 1}`));
+        document.getElementById('dragonStage').setAttribute('aria-label', chinese ? '可互動的龍圖案' : 'Interactive Dragon Dance dragon symbol');
+        document.getElementById('dragon').alt = chinese ? 'Dragon Dance 龍圖案' : 'Dragon Dance dragon symbol';
+        document.querySelector('.car-photo').dataset.label = chinese ? '01 / 龍舞原型' : '01 / DRAGON PROTOTYPE';
+        document.querySelector('.footer-contact').setAttribute('aria-label', chinese ? '聯絡我們' : 'Contact');
+        langEnglish.setAttribute('aria-pressed', String(!chinese));
+        langChinese.setAttribute('aria-pressed', String(chinese));
+        try { window.localStorage.setItem('dragon-dance-language', language); } catch (_) {}
+        setPage(pageIndex);
+      }
 
       function renderTrack(offset = 0) {
         if (!offset) {
@@ -460,10 +605,15 @@
         pagerNext.setAttribute('aria-hidden', String(nextHidden));
         pagerPrev.tabIndex = prevHidden ? -1 : 0;
         pagerNext.tabIndex = nextHidden ? -1 : 0;
-        pagerPrevLabel.textContent = pagerLabels[pageIndex].prev;
-        pagerNextLabel.textContent = pagerLabels[pageIndex].next;
-        pagerPrev.title = pagerLabels[pageIndex].prev ? `上一頁 / ${pagerLabels[pageIndex].prev}` : '上一頁';
-        pagerNext.title = pagerLabels[pageIndex].next ? `下一頁 / ${pagerLabels[pageIndex].next}` : '下一頁';
+        const labels = pagerLabels[language][pageIndex];
+        const previousPage = language === 'zh' ? '上一頁' : 'Previous page';
+        const nextPage = language === 'zh' ? '下一頁' : 'Next page';
+        pagerPrevLabel.textContent = labels.prev;
+        pagerNextLabel.textContent = labels.next;
+        pagerPrev.title = labels.prev ? `${previousPage} / ${labels.prev}` : previousPage;
+        pagerNext.title = labels.next ? `${nextPage} / ${labels.next}` : nextPage;
+        pagerPrev.setAttribute('aria-label', labels.prev ? `${previousPage}: ${labels.prev}` : previousPage);
+        pagerNext.setAttribute('aria-label', labels.next ? `${nextPage}: ${labels.next}` : nextPage);
         heroSlides.forEach((slide, index) => slide.setAttribute('aria-hidden', String(index !== pageIndex)));
         aboutPages.forEach((panel, index) => {
           const active = index === pageIndex;
@@ -605,8 +755,10 @@
         lastSample = { time:now, x, y };
       }
 
+      let savedLanguage = 'en';
+      try { savedLanguage = window.localStorage.getItem('dragon-dance-language') || 'en'; } catch (_) {}
+      applyLanguage(savedLanguage === 'zh' ? 'zh' : 'en');
       resizeFog();
-      setPage(0);
       window.addEventListener('resize', resizeFog, { passive:true });
       window.addEventListener('pointerdown', disperseFog, { passive:true });
       window.addEventListener('pointermove', disperseFog, { passive:true });
@@ -622,6 +774,8 @@
       }, true);
       pagerPrev.addEventListener('click', () => setPage(pageIndex - 1));
       pagerNext.addEventListener('click', () => setPage(pageIndex + 1));
+      langEnglish.addEventListener('click', () => applyLanguage('en'));
+      langChinese.addEventListener('click', () => applyLanguage('zh'));
       hero.addEventListener('keydown', event => {
         if (event.key === 'ArrowLeft' && pageIndex > 0) {
           event.preventDefault();
