@@ -68,8 +68,8 @@
     nav { height:76px; display:flex; align-items:center; justify-content:space-between; padding:0 4.2vw; border-bottom:1px solid var(--line); position:relative; z-index:5; }
     .wordmark { font-family:Impact,"Arial Narrow",sans-serif; font-size:27px; letter-spacing:1px; line-height:.75; text-transform:uppercase; }
     .wordmark span { color:var(--red); display:block; font-size:11px; letter-spacing:3px; margin-left:2px; }
-    .navlinks { display:flex; gap:28px; font-size:12px; letter-spacing:1.2px; text-transform:uppercase; color:#d7d7d3; }
-    .navlinks a:hover { color:var(--red); }
+    .navlinks { display:flex; flex:1; min-width:0; justify-content:center; gap:28px; font-size:12px; letter-spacing:1.2px; text-transform:uppercase; color:#d7d7d3; }
+    .nav-tagline { display:block; max-width:min(58vw,650px); color:#d7d7d3; font-family:"Cambria Math","Segoe Script",cursive; font-size:15px; letter-spacing:.25px; line-height:1.15; text-align:center; text-transform:none; }
     .hero { position:relative; min-height:670px; padding:0; border-bottom:1px solid var(--line); isolation:isolate; overflow:hidden; }
     .hero:before { content:""; position:absolute; inset:0; background:linear-gradient(90deg,rgba(8,8,8,.16),#080808 61%), repeating-linear-gradient(90deg,transparent 0 12.45%,rgba(255,255,255,.055) 12.5% 12.6%); z-index:-1; }
     .hero-pages { display:flex; min-height:670px; transform:translateX(0); transition:transform .56s cubic-bezier(.22,.8,.24,1); touch-action:pan-y; will-change:transform; }
@@ -196,13 +196,17 @@
     .contact-detail { margin-top:3px; text-decoration:underline; text-decoration-color:#aaa; text-underline-offset:3px; transition:color .2s; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
     @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:66px; min-height:88px; gap:10px; } .pager-line { width:33px; height:2px; } .pager-line:after { width:9px; height:9px; } .pager-label { font-size:10px; } .pager-next { right:max(2vw, env(safe-area-inset-right)); } .pager-prev { left:max(2vw, env(safe-area-inset-left)); } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .member-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:26px; } .member-card-copy { padding:9px 10px 11px; } .member-card-role { font-size:8px; letter-spacing:.9px; } .member-card strong { font-size:11px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item { min-height:0; } .footer-meta { text-align:left; } }
+    @media (max-width:800px) {
+      nav .navlinks { display:flex; flex:1; min-width:0; gap:0; justify-content:center; }
+      nav .nav-tagline { max-width:44vw; font-size:9px; line-height:1.15; }
+    }
   </style>
 </head>
 <body>
   <div class="topline"></div>
   <nav>
     <a class="wordmark" href="#top">Dragon Dance<span>F1 in Schools</span></a>
-    <div class="navlinks"><a href="#about" id="navPrimary">隊伍</a><a href="#machine" id="navSecondary">賽車</a></div>
+    <div class="navlinks"><span class="nav-tagline">𝓘𝓰𝓷𝓲𝓽𝓮 𝓽𝓱𝓮 𝓢𝓹𝓮𝓮𝓭. 𝓢𝓱𝓲𝓷𝓮 𝓽𝓱𝓮 𝓒𝓾𝓵𝓽𝓾𝓻𝓮</span></div>
     <div class="eyebrow">HK / 2026</div>
   </nav>
   <main id="top">
@@ -355,17 +359,10 @@
       const heroSlides = Array.from(heroPages.children);
       const aboutPages = Array.from(document.querySelectorAll('.about-page'));
       const featurePages = Array.from(document.querySelectorAll('.feature-page'));
-      const navPrimary = document.getElementById('navPrimary');
-      const navSecondary = document.getElementById('navSecondary');
       const pagerPrev = document.getElementById('pagerPrev');
       const pagerNext = document.getElementById('pagerNext');
       const pagerPrevLabel = document.getElementById('pagerPrevLabel');
       const pagerNextLabel = document.getElementById('pagerNextLabel');
-      const navLabels = [
-        { primary:'隊伍', secondary:'賽車' },
-        { primary:'隊員', secondary:'分工' },
-        { primary:'贊助', secondary:'合作' }
-      ];
       const pagerLabels = [
         { prev:'', next:'隊員' },
         { prev:'首頁', next:'贊助商' },
@@ -428,8 +425,6 @@
           panel.classList.toggle('is-active', active);
           panel.setAttribute('aria-hidden', String(!active));
         });
-        navPrimary.textContent = navLabels[pageIndex].primary;
-        navSecondary.textContent = navLabels[pageIndex].secondary;
       }
 
       function beginSwipe(event) {
