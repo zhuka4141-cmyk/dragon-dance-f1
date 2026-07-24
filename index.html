@@ -88,6 +88,7 @@
     html[lang="zh-Hant"] .machine-copy h2[data-i18n-html],
     html[lang="zh-Hant"] .feature-copy h2[data-i18n-html],
     html[lang="zh-Hant"] .racing-context h2[data-i18n-html],
+    html[lang="zh-Hant"] .contact-dialog h2[data-i18n-html],
     html[lang="zh-Hant"] footer strong[data-i18n-html] { font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; font-weight:900; letter-spacing:0; }
     a { color:inherit; text-decoration:none; }
     .topline { height:6px; background:repeating-linear-gradient(90deg,var(--paper) 0 20px,var(--ink) 20px 40px); }
@@ -158,7 +159,7 @@
     .dragon-mist-three { left:-66%; bottom:9%; width:136%; background:linear-gradient(90deg,transparent,rgba(240,242,237,.22) 44%,rgba(223,230,223,.12) 66%,transparent); animation-duration:14s; animation-delay:-9s; }
     @keyframes mist-drift { 0% { opacity:.04; transform:translate3d(-10%,14%,0) scale(.9); } 38% { opacity:.4; } 70% { opacity:.16; } 100% { opacity:.03; transform:translate3d(132%,-20%,0) scale(1.17); } }
     .dragon { position:relative; z-index:1; width:100%; height:100%; object-fit:contain; filter:grayscale(1) contrast(1.35) invert(1) drop-shadow(0 0 16px rgba(255,255,255,.22)); opacity:.96; user-select:none; -webkit-user-drag:none; }
-    @media (prefers-reduced-motion:reduce) { .dragon-mist, .pager-line { animation:none; opacity:.32; } .hero-pages { transition:none; } body.is-language-switching .hero-page[aria-hidden="false"], body.is-language-switching .about-page.is-active, body.is-language-switching .feature-page.is-active, body.is-language-switching .racing-context, body.is-language-switching footer { animation:none; } }
+    @media (prefers-reduced-motion:reduce) { .dragon-mist, .pager-line { animation:none; opacity:.32; } .hero-pages, .contact-modal, .contact-dialog { transition:none; } body.is-language-switching .hero-page[aria-hidden="false"], body.is-language-switching .about-page.is-active, body.is-language-switching .feature-page.is-active, body.is-language-switching .racing-context, body.is-language-switching footer { animation:none; } }
     .hero-footer { position:absolute; z-index:3; left:4.2vw; right:4.2vw; bottom:20px; display:flex; justify-content:space-between; border-top:1px solid #353535; padding-top:12px; font-size:10px; letter-spacing:1.4px; color:#aaa; text-transform:uppercase; }
     .scroll-indicator { color:var(--paper); }
     section { padding:100px 4.2vw; }
@@ -222,10 +223,28 @@
     .partner-actions { display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; margin-top:18px; }
     .proposal-link { display:inline-flex; min-height:42px; align-items:center; justify-content:center; padding:0 15px; background:var(--ink); color:var(--paper); font-size:11px; font-weight:bold; letter-spacing:1px; text-transform:uppercase; transition:background .2s,color .2s; }
     .proposal-link:hover { background:var(--red); color:#fff; }
-    .proposal-contact { color:var(--ink); font-size:11px; font-weight:bold; letter-spacing:.8px; text-decoration:underline; text-decoration-color:var(--red); text-decoration-thickness:2px; text-underline-offset:5px; text-transform:uppercase; transition:color .2s; }
+    .proposal-contact { border:0; padding:0; background:transparent; color:var(--ink); font:inherit; font-size:11px; font-weight:bold; letter-spacing:.8px; text-align:left; text-decoration:underline; text-decoration-color:var(--red); text-decoration-thickness:2px; text-underline-offset:5px; text-transform:uppercase; cursor:pointer; transition:color .2s; }
     .proposal-contact:hover { color:var(--red); }
     .pdf-download { display:inline-block; margin-top:13px; color:#555; font-size:10px; font-weight:bold; letter-spacing:1px; text-decoration:underline; text-underline-offset:4px; text-transform:uppercase; transition:color .2s; }
     .pdf-download:hover { color:var(--red); }
+    .contact-modal { position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:24px; visibility:hidden; opacity:0; pointer-events:none; transition:opacity .24s ease,visibility 0s linear .24s; }
+    .contact-modal.is-open { visibility:visible; opacity:1; pointer-events:auto; transition-delay:0s; }
+    .modal-backdrop { position:absolute; inset:0; border:0; background:rgba(8,8,8,.72); cursor:default; }
+    .contact-dialog { position:relative; width:min(100%,470px); padding:clamp(28px,5vw,44px); border:1px solid rgba(8,8,8,.35); border-radius:4px; background:var(--paper); color:var(--ink); box-shadow:0 24px 70px rgba(0,0,0,.46); opacity:0; transform:translateY(14px) scale(.98); transition:opacity .28s ease,transform .34s cubic-bezier(.22,.8,.24,1); }
+    .contact-modal.is-open .contact-dialog { opacity:1; transform:translateY(0) scale(1); }
+    .modal-close { position:absolute; top:12px; right:14px; width:34px; height:34px; border:0; background:transparent; color:#555; font-size:29px; font-weight:300; line-height:1; cursor:pointer; transition:color .2s,transform .2s; }
+    .modal-close:hover, .modal-close:focus-visible { color:var(--red); outline:0; transform:rotate(90deg); }
+    .modal-kicker { display:block; margin-bottom:12px; color:var(--red); font-size:10px; font-weight:bold; letter-spacing:1.5px; text-transform:uppercase; }
+    .contact-dialog h2 { max-width:360px; margin:0; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(38px,7vw,64px); font-weight:400; line-height:.86; letter-spacing:1px; text-transform:uppercase; }
+    .contact-dialog > p { max-width:350px; margin:18px 0 27px; color:#4d4d49; font-size:14px; line-height:1.6; }
+    .modal-contact-list { display:grid; gap:10px; }
+    .modal-contact-link { display:grid; grid-template-columns:32px minmax(0,1fr); gap:11px; align-items:center; min-width:0; padding:13px 0; border-top:1px solid #a7a7a2; transition:color .2s,border-color .2s; }
+    .modal-contact-link:hover { color:var(--red); border-color:var(--red); }
+    .modal-contact-link img { width:24px; height:24px; object-fit:contain; }
+    .modal-contact-copy, .modal-contact-copy b, .modal-contact-copy > span { display:block; }
+    .modal-contact-copy b { font-size:11px; letter-spacing:.8px; text-transform:uppercase; }
+    .modal-contact-copy > span { margin-top:3px; color:#555; font-size:12px; overflow-wrap:anywhere; }
+    body.has-modal { overflow:hidden; }
     footer { padding:42px 4.2vw 24px; display:grid; grid-template-columns:minmax(230px,.8fr) minmax(430px,1.5fr) minmax(190px,.7fr); gap:clamp(28px,4vw,70px); background:var(--paper); color:var(--ink); }
     footer strong { display:block; font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; font-size:clamp(38px,6vw,78px); line-height:.8; letter-spacing:1px; text-transform:uppercase; }
     footer p { margin:12px 0 0; font-size:12px; letter-spacing:1px; }
@@ -258,6 +277,9 @@
       nav .navlinks { display:none; }
       .racing-context { grid-template-columns:1fr; gap:20px; padding:38px 6vw; }
       .racing-context p { font-size:14px; }
+      .contact-modal { padding:16px; }
+      .contact-dialog { padding:30px 24px; }
+      .contact-dialog h2 { font-size:clamp(36px,12vw,52px); }
     }
   </style>
 </head>
@@ -384,7 +406,7 @@
             <p data-i18n="proposalCopy">Explore brand visibility, campus events, social storytelling and technical education partnerships.</p>
             <div class="partner-actions">
               <a class="proposal-link" href="assets/design-studio-creative-brief.pdf" target="_blank" rel="noopener" data-i18n="openProposal">Open Proposal PDF ↗</a>
-              <a class="proposal-contact" href="mailto:dragondance@lstc.edu.hk?subject=Sponsorship%20Enquiry" data-i18n="discussPartnership">Discuss a Partnership</a>
+              <button class="proposal-contact" id="partnershipTrigger" type="button" aria-haspopup="dialog" aria-controls="partnershipModal" data-i18n="discussPartnership">Discuss a Partnership</button>
             </div>
             <a class="pdf-download" href="assets/design-studio-creative-brief.pdf" download data-i18n="downloadProposal">Download Proposal PDF ↓</a>
           </div>
@@ -431,6 +453,25 @@
     </section>
     <div class="footer-meta" data-i18n-html="footerMeta">AD&amp;FD POHL Leung Sing Tak College<br>Hong Kong</div>
   </footer>
+  <div class="contact-modal" id="partnershipModal" aria-hidden="true">
+    <button class="modal-backdrop" id="partnershipBackdrop" type="button" tabindex="-1" aria-label="Close dialog"></button>
+    <section class="contact-dialog" role="dialog" aria-modal="true" aria-labelledby="partnershipModalTitle" aria-describedby="partnershipModalCopy">
+      <button class="modal-close" id="partnershipClose" type="button" aria-label="Close dialog">&times;</button>
+      <span class="modal-kicker" data-i18n="partnershipKicker">Partnership Contact</span>
+      <h2 id="partnershipModalTitle" data-i18n-html="partnershipModalTitle">Let&apos;s start<br>a conversation.</h2>
+      <p id="partnershipModalCopy" data-i18n="partnershipModalCopy">Talk to our team about sponsorship, brand partnerships and opportunities to support Dragon Dance.</p>
+      <div class="modal-contact-list">
+        <a class="modal-contact-link" href="mailto:dragondance@lstc.edu.hk?subject=Sponsorship%20Enquiry">
+          <img src="assets/contact-email.svg" alt="" />
+          <span class="modal-contact-copy"><b data-i18n="emailLabel">Email</b><span>dragondance@lstc.edu.hk</span></span>
+        </a>
+        <a class="modal-contact-link" href="https://wa.me/85260116515" target="_blank" rel="noopener">
+          <img src="assets/contact-whatsapp.svg" alt="" />
+          <span class="modal-contact-copy"><b data-i18n="sponsorshipManagerLabel">Sponsorship &amp; Marketing Manager</b><span>WhatsApp · 60116515</span></span>
+        </a>
+      </div>
+    </section>
+  </div>
   <script>
     (() => {
       const hero = document.querySelector('.hero');
@@ -446,6 +487,10 @@
       const pagerNextLabel = document.getElementById('pagerNextLabel');
       const langEnglish = document.getElementById('langEnglish');
       const langChinese = document.getElementById('langChinese');
+      const partnershipTrigger = document.getElementById('partnershipTrigger');
+      const partnershipModal = document.getElementById('partnershipModal');
+      const partnershipBackdrop = document.getElementById('partnershipBackdrop');
+      const partnershipClose = document.getElementById('partnershipClose');
       const pagerLabels = {
         en: [
           { prev:'', next:'Crew' },
@@ -539,6 +584,9 @@
         brandMediaCopy:'統一視覺、內容與對外溝通。',
         sponsorCopy:'與 Dragon Dance 合作，讓品牌走進校園 STEM 賽事、設計過程與下一次起跑。',
         sponsorshipLabel:'贊助 / 2026',
+        partnershipKicker:'合作聯絡',
+        partnershipModalCopy:'歡迎聯絡我們的隊伍，洽談贊助、品牌合作，以及支持 Dragon Dance 的不同方式。',
+        sponsorshipManagerLabel:'贊助及推廣經理',
         proposalLabel:'2026 贊助提案',
         proposalTitle:'一起打造下一場賽事。',
         proposalCopy:'了解品牌曝光、校園活動、社交媒體故事與技術教育合作的可能性。',
@@ -571,10 +619,47 @@
         machineTitle:'為起跑<br>而生。',
         rolesTitle:'一隊夥伴。<br>多種<br>專長。',
         sponsorTitle:'與我們<br>同行。',
+        partnershipModalTitle:'與我們<br>合作。',
         racingTitle:'STEM Racing，<br><em>前稱 F1 in Schools。</em>',
         footerTitle:'與龍<br>共舞。',
         footerMeta:'博愛醫院歷屆總理聯誼會梁省德中學<br>香港'
       };
+
+      function openPartnershipModal() {
+        partnershipModal.classList.add('is-open');
+        partnershipModal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('has-modal');
+        partnershipClose.focus();
+      }
+
+      function closePartnershipModal() {
+        if (!partnershipModal.classList.contains('is-open')) return;
+        partnershipModal.classList.remove('is-open');
+        partnershipModal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('has-modal');
+        partnershipTrigger.focus();
+      }
+
+      function handleModalKeydown(event) {
+        if (!partnershipModal.classList.contains('is-open')) return;
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          closePartnershipModal();
+          return;
+        }
+        if (event.key !== 'Tab') return;
+        const focusable = Array.from(partnershipModal.querySelectorAll('a[href], button:not([disabled])')).filter(element => element.tabIndex >= 0);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (!first || !last) return;
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
 
       function applyLanguage(nextLanguage, animate = true) {
         const next = nextLanguage === 'zh' ? 'zh' : 'en';
@@ -599,6 +684,8 @@
         document.getElementById('dragon').alt = chinese ? 'Dragon Dance 龍圖案' : 'Dragon Dance dragon symbol';
         document.querySelector('.car-photo').dataset.label = chinese ? '01 / 龍舞原型' : '01 / DRAGON PROTOTYPE';
         document.querySelector('.footer-contact').setAttribute('aria-label', chinese ? '聯絡我們' : 'Contact');
+        partnershipClose.setAttribute('aria-label', chinese ? '關閉對話框' : 'Close dialog');
+        partnershipBackdrop.setAttribute('aria-label', chinese ? '關閉對話框' : 'Close dialog');
         langEnglish.setAttribute('aria-pressed', String(!chinese));
         langChinese.setAttribute('aria-pressed', String(chinese));
         try { window.localStorage.setItem('dragon-dance-language', language); } catch (_) {}
@@ -804,6 +891,10 @@
       pagerNext.addEventListener('click', () => setPage(pageIndex + 1));
       langEnglish.addEventListener('click', () => applyLanguage('en'));
       langChinese.addEventListener('click', () => applyLanguage('zh'));
+      partnershipTrigger.addEventListener('click', openPartnershipModal);
+      partnershipBackdrop.addEventListener('click', closePartnershipModal);
+      partnershipClose.addEventListener('click', closePartnershipModal);
+      document.addEventListener('keydown', handleModalKeydown);
       hero.addEventListener('keydown', event => {
         if (event.key === 'ArrowLeft' && pageIndex > 0) {
           event.preventDefault();
