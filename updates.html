@@ -47,6 +47,7 @@
     .update-slide.is-active { opacity:1; transform:scale(1); }
     .update-entry:hover .update-slide.is-active { filter:grayscale(0) contrast(1.05); }
     .carousel-count { position:absolute; right:12px; bottom:12px; z-index:1; padding:5px 7px; background:rgba(8,8,8,.65); color:var(--paper); font-size:10px; font-weight:bold; letter-spacing:1px; }
+    .update-pin { display:inline-block; margin:0 0 10px; padding:4px 6px; border:1px solid var(--red); color:var(--red); font-size:9px; font-weight:bold; letter-spacing:1.1px; text-transform:uppercase; }
     .update-date { display:block; margin-bottom:18px; color:var(--red); font-size:10px; font-weight:bold; letter-spacing:1.5px; text-transform:uppercase; }
     .update-entry h2 { max-width:780px; margin:0; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(40px,5vw,78px); font-weight:400; line-height:.85; letter-spacing:1px; text-transform:uppercase; }
     .update-body { max-width:670px; margin-top:28px; }
@@ -115,6 +116,7 @@
         return {
           id:row.slug,
           published:row.published_at,
+          isPinned:Boolean(row.is_pinned),
           cover:images[0] || row.cover_url,
           images:[...new Set(images)],
           title:{ en:row.title_en, zh:row.title_zh },
@@ -266,6 +268,12 @@
           if (window.location.hash === `#${post.id}`) entry.classList.add('is-target');
           if (post.images.length) entry.append(createCarousel(post));
           const copy = document.createElement('div');
+          if (post.isPinned) {
+            const pin = document.createElement('span');
+            pin.className = 'update-pin';
+            pin.textContent = language === 'zh' ? '置頂' : 'Pinned';
+            copy.append(pin);
+          }
           const date = document.createElement('time');
           date.className = 'update-date';
           date.dateTime = post.published || '';
@@ -304,8 +312,9 @@
       applyLanguage(language);
       updatesDatabase
         .from('updates')
-        .select('slug,published_at,title_en,title_zh,body_en,body_zh,cover_url,image_urls')
+        .select('slug,published_at,title_en,title_zh,body_en,body_zh,cover_url,image_urls,is_pinned')
         .eq('is_published', true)
+        .order('is_pinned', { ascending:false })
         .order('published_at', { ascending:false })
         .then(({ data, error }) => { updates = error ? [] : data.map(mapUpdate); renderUpdates(); })
         .catch(() => { updates = []; renderUpdates(); });

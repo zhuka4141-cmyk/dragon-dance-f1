@@ -63,9 +63,11 @@
     .image-preview-grid img { width:100%; aspect-ratio:1; object-fit:cover; background:#111; }
     .posts-list { display:grid; gap:0; }
     .admin-post { display:grid; grid-template-columns:96px minmax(0,1fr); gap:14px; padding:15px 0; border-top:1px solid #4c4c48; }
+    .admin-post.is-pinned { border-top-color:var(--red); }
     .admin-post-image { width:96px; aspect-ratio:1; overflow:hidden; background:#292929; }
     .admin-post-image img { width:100%; height:100%; object-fit:cover; }
     .admin-post-date { color:var(--red); font-size:10px; font-weight:700; letter-spacing:1px; }
+    .pin-state { display:inline-block; margin-left:7px; padding:2px 5px; border:1px solid var(--red); color:#ffb1b4; font-size:9px; font-weight:900; letter-spacing:1px; text-transform:uppercase; vertical-align:middle; }
     .admin-post h3 { margin:8px 0 8px; font-size:23px; }
     .admin-post p { margin:0; color:#bababa; font-size:12px; line-height:1.5; }
     .post-actions { display:flex; gap:10px; margin-top:13px; }
@@ -255,7 +257,7 @@
         }
         publishedPosts.forEach(post => {
           const article = document.createElement('article');
-          article.className = 'admin-post';
+          article.className = `admin-post${post.is_pinned ? ' is-pinned' : ''}`;
           const imageBox = document.createElement('div');
           imageBox.className = 'admin-post-image';
           if (post.cover_url) {
@@ -268,6 +270,12 @@
           const date = document.createElement('span');
           date.className = 'admin-post-date';
           date.textContent = post.published_at;
+          if (post.is_pinned) {
+            const pinState = document.createElement('span');
+            pinState.className = 'pin-state';
+            pinState.textContent = '首页置顶';
+            date.append(pinState);
+          }
           const title = document.createElement('h3');
           title.textContent = post.title_zh || post.title_en;
           const excerpt = document.createElement('p');
@@ -279,12 +287,17 @@
           edit.type = 'button';
           edit.textContent = '编辑';
           edit.addEventListener('click', () => editPost(post));
+          const pin = document.createElement('button');
+          pin.className = 'text-button';
+          pin.type = 'button';
+          pin.textContent = post.is_pinned ? '取消置顶' : '置顶到首页';
+          pin.addEventListener('click', () => togglePin(post, pin));
           const remove = document.createElement('button');
           remove.className = 'text-button';
           remove.type = 'button';
           remove.textContent = '删除';
           remove.addEventListener('click', () => deletePost(post));
-          actions.append(edit, remove);
+          actions.append(edit, pin, remove);
           copy.append(date, title, excerpt, actions);
           article.append(imageBox, copy);
           postsList.append(article);
@@ -292,13 +305,34 @@
       }
 
       async function loadPosts() {
-        const { data, error } = await client.from('updates').select('*').order('published_at', { ascending:false });
+        const { data, error } = await client.from('updates').select('*').order('is_pinned', { ascending:false }).order('published_at', { ascending:false });
         if (error) {
           setStatus(editorStatus, error.message, 'error');
           return;
         }
         publishedPosts = data || [];
         renderPosts();
+      }
+
+      async function togglePin(post, button) {
+        button.disabled = true;
+        setStatus(editorStatus, post.is_pinned ? '正在取消置顶...' : '正在置顶到首页...');
+        try {
+          if (post.is_pinned) {
+            const { error } = await client.from('updates').update({ is_pinned:false }).eq('id', post.id);
+            if (error) throw error;
+          } else {
+            const { error: clearError } = await client.from('updates').update({ is_pinned:false }).eq('is_pinned', true).neq('id', post.id);
+            if (clearError) throw clearError;
+            const { error: pinError } = await client.from('updates').update({ is_pinned:true }).eq('id', post.id);
+            if (pinError) throw pinError;
+          }
+          setStatus(editorStatus, post.is_pinned ? '已取消首页置顶。' : '已置顶到首页。', 'success');
+          await loadPosts();
+        } catch (error) {
+          setStatus(editorStatus, error.message || '无法更新置顶状态，请再试一次。', 'error');
+          button.disabled = false;
+        }
       }
 
       function editPost(post) {
