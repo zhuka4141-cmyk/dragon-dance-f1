@@ -124,8 +124,8 @@
           <form id="updateForm">
             <div class="field-columns">
               <label>发布日期<input id="publishedAt" type="date" required /></label>
-              <label>网址识别名称<input id="slug" type="text" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="race-day-2026" required /></label>
             </div>
+            <input id="slug" type="hidden" />
             <label>封面图片<input id="coverFile" type="file" accept="image/jpeg,image/png,image/webp" /></label>
             <div class="cover-preview" id="coverPreview" hidden><img id="coverPreviewImage" alt="" /></div>
             <div class="field-columns">
@@ -212,6 +212,23 @@
 
       function slugify(value) {
         return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 72);
+      }
+
+      async function resolveSlug() {
+        const titleSlug = slugify(fields.titleEn.value);
+        const fallback = `update-${new Date().toISOString().slice(0, 10)}`;
+        const base = slugify(fields.slug.value) || titleSlug || fallback;
+        if (editingId) return base;
+
+        let candidate = base;
+        let suffix = 2;
+        while (true) {
+          const { data, error } = await client.from('updates').select('id').eq('slug', candidate).limit(1);
+          if (error) throw error;
+          if (!data?.length) return candidate;
+          const suffixText = `-${suffix++}`;
+          candidate = `${base.slice(0, 72 - suffixText.length)}${suffixText}`;
+        }
       }
 
       function showPasswordPanel() {
@@ -342,8 +359,9 @@
           let coverUrl = existingCoverUrl;
           const file = fields.coverFile.files[0];
           if (file) coverUrl = await uploadCover(file);
+          const slug = await resolveSlug();
           const payload = {
-            slug:fields.slug.value.trim(),
+            slug,
             published_at:fields.publishedAt.value,
             title_en:fields.titleEn.value.trim(),
             title_zh:fields.titleZh.value.trim(),
