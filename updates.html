@@ -54,7 +54,8 @@
     .update-body p { margin:0 0 16px; color:#51514d; font-size:15px; line-height:1.7; }
     .gallery-overlay { position:fixed; z-index:20; inset:0; display:grid; place-items:center; padding:22px; background:rgba(0,0,0,.88); }
     .gallery-dialog { position:relative; display:grid; grid-template-columns:minmax(0,1fr); gap:14px; width:min(1120px,100%); max-height:100%; }
-    .gallery-image { display:block; width:100%; max-height:min(72vh,780px); object-fit:contain; background:#080808; }
+    .gallery-image { display:grid; place-items:center; width:100%; height:min(72vh,780px); background:#080808; }
+    .gallery-stage-media { display:block; width:100%; height:100%; object-fit:contain; }
     .gallery-close, .gallery-nav { position:absolute; z-index:1; display:grid; place-items:center; width:44px; height:44px; border:1px solid rgba(242,242,239,.65); border-radius:0; background:rgba(8,8,8,.68); color:var(--paper); font-size:25px; line-height:1; }
     .gallery-close { top:12px; right:12px; }
     .gallery-nav { top:50%; transform:translateY(-50%); }
@@ -64,7 +65,7 @@
     .gallery-thumbnails { display:flex; gap:8px; overflow:auto; padding-bottom:3px; }
     .gallery-thumb { flex:0 0 72px; height:54px; overflow:hidden; border:1px solid transparent; border-radius:0; padding:0; background:#202020; }
     .gallery-thumb.is-active { border-color:var(--red); }
-    .gallery-thumb img { width:100%; height:100%; object-fit:cover; }
+    .gallery-thumb img, .gallery-thumb video { width:100%; height:100%; object-fit:cover; }
     body.has-gallery { overflow:hidden; }
     .updates-status { padding:46px 0; border-top:1px solid #999; color:#555; font-size:16px; }
     footer { display:flex; align-items:end; justify-content:space-between; gap:25px; padding:34px 4.2vw 24px; background:var(--paper); color:var(--ink); border-top:1px solid #a4a4a0; }
@@ -136,6 +137,10 @@
         return new Intl.DateTimeFormat(language === 'zh' ? 'zh-HK' : 'en-GB', { day:'2-digit', month:'long', year:'numeric' }).format(date);
       }
 
+      function isVideoUrl(url) {
+        return /\.(?:mp4|webm|ogg)(?:[?#].*)?$/i.test(String(url || ''));
+      }
+
       function clearCarousels() {
         carouselTimers.forEach(timer => window.clearInterval(timer));
         carouselTimers = [];
@@ -151,8 +156,8 @@
         dialog.setAttribute('role', 'dialog');
         dialog.setAttribute('aria-modal', 'true');
         dialog.setAttribute('aria-label', title);
-        const image = document.createElement('img');
-        image.className = 'gallery-image';
+        const stage = document.createElement('div');
+        stage.className = 'gallery-image';
         const close = document.createElement('button');
         close.className = 'gallery-close';
         close.type = 'button';
@@ -175,18 +180,34 @@
           thumb.className = 'gallery-thumb';
           thumb.type = 'button';
           thumb.setAttribute('aria-label', `View image ${index + 1}`);
-          const thumbImage = document.createElement('img');
-          thumbImage.src = url;
-          thumbImage.alt = '';
-          thumb.append(thumbImage);
+          const thumbMedia = isVideoUrl(url) ? document.createElement('video') : document.createElement('img');
+          thumbMedia.src = url;
+          thumbMedia.alt = '';
+          if (thumbMedia.tagName === 'VIDEO') {
+            thumbMedia.muted = true;
+            thumbMedia.playsInline = true;
+          }
+          thumb.append(thumbMedia);
           thumb.addEventListener('click', () => showImage(index));
           thumbnails.append(thumb);
           return thumb;
         });
         function showImage(index) {
           activeIndex = (index + images.length) % images.length;
-          image.src = images[activeIndex];
-          image.alt = `${title} ${activeIndex + 1}`;
+          const url = images[activeIndex];
+          const media = isVideoUrl(url) ? document.createElement('video') : document.createElement('img');
+          media.className = 'gallery-stage-media';
+          media.src = url;
+          if (media.tagName === 'VIDEO') {
+            media.controls = true;
+            media.autoplay = true;
+            media.loop = true;
+            media.muted = true;
+            media.playsInline = true;
+          } else {
+            media.alt = `${title} ${activeIndex + 1}`;
+          }
+          stage.replaceChildren(media);
           thumbButtons.forEach((thumb, thumbIndex) => thumb.classList.toggle('is-active', thumbIndex === activeIndex));
         }
         function closeGallery() {
@@ -208,7 +229,7 @@
           next.hidden = true;
           thumbnails.hidden = true;
         }
-        dialog.append(image, close, previous, next, thumbnails);
+        dialog.append(stage, close, previous, next, thumbnails);
         overlay.append(dialog);
         document.body.append(overlay);
         document.body.classList.add('has-gallery');
@@ -222,19 +243,34 @@
         const media = document.createElement('button');
         media.className = 'update-media';
         media.type = 'button';
-        media.setAttribute('aria-label', `Open image gallery: ${postText(post, 'title')}`);
+        media.setAttribute('aria-label', `Open media gallery: ${postText(post, 'title')}`);
         const slides = post.images.map((url, index) => {
-          const image = document.createElement('img');
-          image.className = `update-slide${index === 0 ? ' is-active' : ''}`;
-          image.src = url;
-          image.alt = index === 0 ? postText(post, 'title') : '';
-          image.loading = index === 0 ? 'eager' : 'lazy';
-          media.append(image);
-          return image;
+          const slide = isVideoUrl(url) ? document.createElement('video') : document.createElement('img');
+          slide.className = `update-slide${index === 0 ? ' is-active' : ''}`;
+          slide.src = url;
+          if (slide.tagName === 'VIDEO') {
+            slide.muted = true;
+            slide.loop = true;
+            slide.autoplay = index === 0;
+            slide.playsInline = true;
+            slide.preload = index === 0 ? 'auto' : 'metadata';
+          } else {
+            slide.alt = index === 0 ? postText(post, 'title') : '';
+            slide.loading = index === 0 ? 'eager' : 'lazy';
+          }
+          media.append(slide);
+          return slide;
         });
         function showSlide(index) {
           activeIndex = (index + slides.length) % slides.length;
-          slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === activeIndex));
+          slides.forEach((slide, slideIndex) => {
+            const isActive = slideIndex === activeIndex;
+            slide.classList.toggle('is-active', isActive);
+            if (slide.tagName === 'VIDEO') {
+              if (isActive) slide.play().catch(() => {});
+              else slide.pause();
+            }
+          });
           if (count) count.textContent = `${activeIndex + 1} / ${slides.length}`;
         }
         let count = null;

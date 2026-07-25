@@ -60,12 +60,12 @@
     .form-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:5px; }
     .form-actions .button { padding:0 16px; }
     .image-preview-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:3px; }
-    .image-preview-grid img { width:100%; aspect-ratio:1; object-fit:cover; background:#111; }
+    .image-preview-grid img, .image-preview-grid video { width:100%; aspect-ratio:1; object-fit:cover; background:#111; }
     .posts-list { display:grid; gap:0; }
     .admin-post { display:grid; grid-template-columns:96px minmax(0,1fr); gap:14px; padding:15px 0; border-top:1px solid #4c4c48; }
     .admin-post.is-pinned { border-top-color:var(--red); }
     .admin-post-image { width:96px; aspect-ratio:1; overflow:hidden; background:#292929; }
-    .admin-post-image img { width:100%; height:100%; object-fit:cover; }
+    .admin-post-image img, .admin-post-image video { width:100%; height:100%; object-fit:cover; }
     .admin-post-date { color:var(--red); font-size:10px; font-weight:700; letter-spacing:1px; }
     .pin-state { display:inline-block; margin-left:7px; padding:2px 5px; border:1px solid var(--red); color:#ffb1b4; font-size:9px; font-weight:900; letter-spacing:1px; text-transform:uppercase; vertical-align:middle; }
     .admin-post h3 { margin:8px 0 8px; font-size:23px; }
@@ -87,7 +87,7 @@
     <section id="authView">
       <span class="kicker">Dragon Dance / Updates Admin</span>
       <h1>管理<br>动态。</h1>
-      <p class="lede">登录后可上传图片、撰写中英文内容并直接发布。公开网站会即时读取已发布的动态。</p>
+      <p class="lede">登录后可上传图片或影片、撰写中英文内容并直接发布。公开网站会即时读取已发布的动态。</p>
       <div class="auth-grid">
         <section class="auth-panel">
           <h2>登录</h2>
@@ -128,7 +128,7 @@
               <label>发布日期（预设今天，可调整）<input id="publishedAt" type="date" required /></label>
             </div>
             <input id="slug" type="hidden" />
-            <label>图片（可多选；首张会作首页封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple /></label>
+            <label>图片或影片（可多选；首个会作首页封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple /></label>
             <div class="image-preview-grid" id="imagePreviewGrid" hidden></div>
             <label>标题（English）<input id="titleEn" type="text" required /></label>
             <label>标题（中文）<input id="titleZh" type="text" required /></label>
@@ -150,6 +150,8 @@
       </div>
     </section>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../supabase-config.js"></script>
   <script>
@@ -197,6 +199,14 @@
         return [...new Set(urls)];
       }
 
+      function isVideoUrl(url) {
+        return /\.(?:mp4|webm|ogg)(?:[?#].*)?$/i.test(String(url || ''));
+      }
+
+      function isVideoFile(file) {
+        return String(file?.type || '').startsWith('video/');
+      }
+
       function storagePathFromUrl(url) {
         const marker = '/storage/v1/object/public/updates/';
         const start = String(url || '').indexOf(marker);
@@ -222,11 +232,19 @@
       function setImagePreview(urls) {
         const preview = document.getElementById('imagePreviewGrid');
         preview.replaceChildren();
-        urls.forEach((url, index) => {
-          const image = document.createElement('img');
-          image.src = assetUrl(url);
-          image.alt = index === 0 ? 'Cover image preview' : 'Update image preview';
-          preview.append(image);
+        urls.forEach((entry, index) => {
+          const url = typeof entry === 'string' ? entry : entry.url;
+          const video = typeof entry === 'object' ? entry.type?.startsWith('video/') : isVideoUrl(url);
+          const media = video ? document.createElement('video') : document.createElement('img');
+          media.src = typeof entry === 'string' ? assetUrl(url) : url;
+          media.alt = index === 0 ? 'Cover media preview' : 'Update media preview';
+          if (video) {
+            media.muted = true;
+            media.loop = true;
+            media.playsInline = true;
+            media.autoplay = true;
+          }
+          preview.append(media);
         });
         preview.hidden = !urls.length;
       }
@@ -291,10 +309,16 @@
           const imageBox = document.createElement('div');
           imageBox.className = 'admin-post-image';
           if (post.cover_url) {
-            const image = document.createElement('img');
-            image.src = assetUrl(post.cover_url);
-            image.alt = post.cover_alt_zh || post.title_zh || post.title_en;
-            imageBox.append(image);
+            const coverMedia = isVideoUrl(post.cover_url) ? document.createElement('video') : document.createElement('img');
+            coverMedia.src = assetUrl(post.cover_url);
+            coverMedia.alt = post.cover_alt_zh || post.title_zh || post.title_en;
+            if (coverMedia.tagName === 'VIDEO') {
+              coverMedia.muted = true;
+              coverMedia.loop = true;
+              coverMedia.autoplay = true;
+              coverMedia.playsInline = true;
+            }
+            imageBox.append(coverMedia);
           }
           const copy = document.createElement('div');
           const date = document.createElement('span');
@@ -403,7 +427,65 @@
         await loadPosts();
       }
 
-      async function uploadImage(file) {
+      let videoCompressor = null;
+      let videoCompressorLoading = null;
+
+      async function getVideoCompressor() {
+        if (videoCompressor?.loaded) return videoCompressor;
+        if (!videoCompressorLoading) {
+          videoCompressorLoading = (async () => {
+            const FFmpegClass = window.FFmpegWASM?.FFmpeg;
+            const toBlobURL = window.FFmpegUtil?.toBlobURL;
+            if (!FFmpegClass || !toBlobURL) throw new Error('影片压缩组件载入失败，请重新整理页面。');
+            const ffmpeg = new FFmpegClass();
+            const coreBase = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
+            await ffmpeg.load({
+              coreURL:await toBlobURL(`${coreBase}/ffmpeg-core.js`, 'text/javascript'),
+              wasmURL:await toBlobURL(`${coreBase}/ffmpeg-core.wasm`, 'application/wasm')
+            });
+            ffmpeg.on('progress', ({ progress }) => {
+              if (Number.isFinite(progress)) setStatus(editorStatus, `正在压缩影片 ${Math.round(progress * 100)}%...`);
+            });
+            videoCompressor = ffmpeg;
+            return ffmpeg;
+          })();
+        }
+        return videoCompressorLoading;
+      }
+
+      async function compressVideo(file) {
+        if (file.size > 150 * 1024 * 1024) throw new Error('单个影片原档不能超过 150 MB。');
+        const ffmpeg = await getVideoCompressor();
+        const inputExtension = file.name.split('.').pop().toLowerCase() || 'mp4';
+        const inputName = `input-${crypto.randomUUID()}.${inputExtension}`;
+        const outputName = `output-${crypto.randomUUID()}.mp4`;
+        try {
+          await ffmpeg.writeFile(inputName, await window.FFmpegUtil.fetchFile(file));
+          await ffmpeg.exec([
+            '-i', inputName,
+            '-vf', "scale='min(1280,iw)':-2",
+            '-c:v', 'libx264',
+            '-preset', 'veryfast',
+            '-crf', '28',
+            '-c:a', 'aac',
+            '-b:a', '96k',
+            '-movflags', '+faststart',
+            outputName
+          ]);
+          const output = await ffmpeg.readFile(outputName);
+          if (output.byteLength > 50 * 1024 * 1024) throw new Error('影片压缩后仍超过 50 MB，请先降低影片长度或画质。');
+          const baseName = file.name.replace(/\.[^.]+$/, '') || 'dragon-dance-video';
+          return new File([output], `${baseName}.mp4`, { type:'video/mp4' });
+        } finally {
+          await Promise.allSettled([ffmpeg.deleteFile(inputName), ffmpeg.deleteFile(outputName)]);
+        }
+      }
+
+      async function prepareMediaFile(file) {
+        return isVideoFile(file) ? compressVideo(file) : file;
+      }
+
+      async function uploadMedia(file) {
         const extension = file.name.split('.').pop().toLowerCase();
         const fileName = `${Date.now()}-${crypto.randomUUID()}.${extension}`;
         const path = `${currentUser.id}/${fileName}`;
@@ -422,8 +504,13 @@
         setStatus(editorStatus, '正在发布...');
         try {
           const files = Array.from(fields.imageFiles.files);
-          if (existingImageUrls.length + files.length > 8) throw new Error('每则动态最多可保留 8 张图片。');
-          const uploadedUrls = await Promise.all(files.map(uploadImage));
+          if (existingImageUrls.length + files.length > 8) throw new Error('每则动态最多可保留 8 个媒体档案。');
+          const preparedFiles = [];
+          for (const file of files) {
+            setStatus(editorStatus, isVideoFile(file) ? '正在准备压缩影片...' : '正在准备图片...');
+            preparedFiles.push(await prepareMediaFile(file));
+          }
+          const uploadedUrls = await Promise.all(preparedFiles.map(uploadMedia));
           const imageUrls = [...existingImageUrls, ...uploadedUrls].slice(0, 8);
           const coverUrl = imageUrls[0] || null;
           const slug = await resolveSlug();
@@ -529,7 +616,7 @@
         dateWasChanged = true;
       });
       fields.imageFiles.addEventListener('change', () => {
-        const pendingUrls = Array.from(fields.imageFiles.files).map(file => URL.createObjectURL(file));
+        const pendingUrls = Array.from(fields.imageFiles.files).map(file => ({ url:URL.createObjectURL(file), type:file.type }));
         setImagePreview([...existingImageUrls, ...pendingUrls].slice(0, 8));
       });
       updateForm.addEventListener('submit', savePost);
