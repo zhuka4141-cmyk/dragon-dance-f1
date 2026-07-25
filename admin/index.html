@@ -194,6 +194,28 @@
         return [...new Set(urls)];
       }
 
+      function storagePathFromUrl(url) {
+        const marker = '/storage/v1/object/public/updates/';
+        const start = String(url || '').indexOf(marker);
+        if (start < 0) return null;
+        return decodeURIComponent(String(url).slice(start + marker.length).split('?')[0]);
+      }
+
+      async function deleteStoredImages(post) {
+        const sharedUrls = new Set(
+          publishedPosts
+            .filter(candidate => candidate.id !== post.id)
+            .flatMap(normaliseImageUrls)
+        );
+        const paths = normaliseImageUrls(post)
+          .filter(url => !sharedUrls.has(url))
+          .map(storagePathFromUrl)
+          .filter(Boolean);
+        if (!paths.length) return;
+        const { error } = await client.storage.from('updates').remove(paths);
+        if (error) throw error;
+      }
+
       function setImagePreview(urls) {
         const preview = document.getElementById('imagePreviewGrid');
         preview.replaceChildren();
@@ -357,8 +379,16 @@
           setStatus(editorStatus, error.message, 'error');
           return;
         }
+        try {
+          await deleteStoredImages(post);
+        } catch (storageError) {
+          if (editingId === post.id) resetForm();
+          setStatus(editorStatus, '动态已删除，但图片档案未能删除。请再试一次或联络管理员。', 'error');
+          await loadPosts();
+          return;
+        }
         if (editingId === post.id) resetForm();
-        setStatus(editorStatus, '动态已删除。', 'success');
+        setStatus(editorStatus, '动态和专属图片档案已删除。', 'success');
         await loadPosts();
       }
 
