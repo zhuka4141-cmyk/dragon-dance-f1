@@ -313,6 +313,9 @@
     .deadline-copy strong { display:block; max-width:300px; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(30px,3.5vw,48px); font-weight:400; line-height:.88; letter-spacing:1px; text-transform:uppercase; }
     .deadline-copy p { max-width:280px; margin:0; color:#50504c; font-size:13px; line-height:1.55; }
     .deadline-countdown { display:inline-flex; width:max-content; max-width:100%; border-bottom:1px solid #8d8d88; padding-bottom:5px; color:#343431; font-size:10px; font-weight:bold; letter-spacing:1.25px; line-height:1.2; text-transform:uppercase; }
+    .race-deadlines [data-scroll-reveal] { transition-delay:80ms; }
+    .race-deadlines .deadline-card:nth-child(2) { transition-delay:160ms; }
+    .race-deadlines .qr-share { transition-delay:230ms; }
     .qr-share { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:34px; margin-top:14px; border-top:1px solid #aaa9a4; background:#d2d2cd; padding:24px; }
     .qr-share-copy { min-width:0; }
     .qr-share-copy strong { display:block; margin-top:9px; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(30px,3.5vw,47px); font-weight:400; line-height:.88; letter-spacing:1px; text-transform:uppercase; }
@@ -489,22 +492,22 @@
       </article>
     </section>
 
-    <section class="race-deadlines" id="deadlines" aria-labelledby="deadlinesTitle" data-scroll-reveal>
-      <div class="race-deadlines-header">
+    <section class="race-deadlines" id="deadlines" aria-labelledby="deadlinesTitle">
+      <div class="race-deadlines-header" data-scroll-reveal>
         <div><div class="eyebrow" data-i18n="deadlinesLabel">Race Calendar / 2026</div><h2 id="deadlinesTitle" data-i18n-html="deadlinesTitle">Two Dates.<br>One Finish Line.</h2></div>
         <p class="race-deadlines-note" data-i18n="deadlinesNote">Keep these hand-in dates close as we move from preparation to the track.</p>
       </div>
       <div class="deadline-grid">
-        <article class="deadline-card">
+        <article class="deadline-card" data-scroll-reveal>
           <div class="deadline-date">27<span data-i18n="november2026">November 2026</span></div>
           <div class="deadline-copy"><strong data-i18n="onlineFileTitle">Online File</strong><p data-i18n="onlineFileCopy">Final online file submission deadline.</p><span class="deadline-countdown" data-deadline="2026-11-27"></span></div>
         </article>
-        <article class="deadline-card">
+        <article class="deadline-card" data-scroll-reveal>
           <div class="deadline-date">28<span data-i18n="november2026">November 2026</span></div>
           <div class="deadline-copy"><strong data-i18n="carHandoverTitle">Car Handover</strong><p data-i18n="carHandoverCopy">Hand over the completed race car for inspection.</p><span class="deadline-countdown" data-deadline="2026-11-28"></span></div>
         </article>
       </div>
-      <div class="qr-share">
+      <div class="qr-share" data-scroll-reveal>
         <div class="qr-share-copy"><div class="eyebrow" data-i18n="qrLabel">Dragon Dance / QR</div><strong data-i18n-html="qrTitle">Scan.<br>Stay Connected.</strong><p data-i18n="qrCopy">Scan to open the official Dragon Dance STEM Racing website.</p></div>
         <a class="qr-code-link" href="https://lstc-dragon-dance.vercel.app/" aria-label="Open Dragon Dance STEM Racing website">
           <div class="qr-code" id="siteQrCode" aria-hidden="true"></div><span data-i18n="qrLinkText">Scan to visit<br>the website</span>
@@ -598,6 +601,8 @@
       const partnershipBackdrop = document.getElementById('partnershipBackdrop');
       const partnershipClose = document.getElementById('partnershipClose');
       const homeUpdates = document.getElementById('homeUpdates');
+      const deadlinesSection = document.getElementById('deadlines');
+      const updatesSection = document.getElementById('updates');
       const deadlineCountdowns = Array.from(document.querySelectorAll('.deadline-countdown'));
       const siteQrCode = document.getElementById('siteQrCode');
       const updatesDatabase = window.supabase.createClient(window.DRAGON_DANCE_SUPABASE.url, window.DRAGON_DANCE_SUPABASE.publishableKey);
@@ -1038,6 +1043,11 @@
           const active = index === pageIndex;
           panel.classList.toggle('is-active', active);
           panel.setAttribute('aria-hidden', String(!active));
+        });
+        const showHomeOnlySections = pageIndex === 0;
+        [deadlinesSection, updatesSection].forEach(section => {
+          section.hidden = !showHomeOnlySections;
+          section.setAttribute('aria-hidden', String(!showHomeOnlySections));
         });
         if (pageChanged && !reduceMotion) {
           [aboutPageStack, featureStack].forEach(stack => {
