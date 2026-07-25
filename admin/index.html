@@ -122,9 +122,11 @@
         <section class="editor-panel">
           <span class="kicker" id="formMode">New update</span>
           <h2 id="formTitle">发布<br>新动态。</h2>
-          <p>中英文内容会分别显示在网站的语言切换版本。发布日期会自动记录为发布当天；发布后会立即出现在首页和完整动态页。</p>
+          <p>中英文内容会分别显示在网站的语言切换版本。发布日期预设为当天，也可以在发布前调整；发布后会立即出现在首页和完整动态页。</p>
           <form id="updateForm">
-            <input id="publishedAt" type="hidden" />
+            <div class="field-columns">
+              <label>发布日期（预设今天，可调整）<input id="publishedAt" type="date" required /></label>
+            </div>
             <input id="slug" type="hidden" />
             <label>图片（可多选；首张会作首页封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp" multiple /></label>
             <div class="image-preview-grid" id="imagePreviewGrid" hidden></div>
@@ -177,6 +179,7 @@
       let editingId = null;
       let existingImageUrls = [];
       let publishedPosts = [];
+      let dateWasChanged = false;
 
       function setStatus(element, message, type = '') {
         element.textContent = message;
@@ -254,11 +257,18 @@
         document.getElementById('newPassword').focus();
       }
 
+      function todayIsoDate() {
+        const now = new Date();
+        const localNow = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+        return localNow.toISOString().slice(0, 10);
+      }
+
       function resetForm() {
         editingId = null;
         existingImageUrls = [];
+        dateWasChanged = false;
         updateForm.reset();
-        fields.publishedAt.value = new Date().toISOString().slice(0, 10);
+        fields.publishedAt.value = todayIsoDate();
         document.getElementById('formMode').textContent = 'New update';
         document.getElementById('formTitle').innerHTML = '发布<br>新动态。';
         document.getElementById('publishButton').textContent = '发布动态';
@@ -358,6 +368,7 @@
       function editPost(post) {
         editingId = post.id;
         existingImageUrls = normaliseImageUrls(post);
+        dateWasChanged = false;
         fields.publishedAt.value = post.published_at || '';
         fields.slug.value = post.slug || '';
         fields.titleEn.value = post.title_en || '';
@@ -416,9 +427,13 @@
           const imageUrls = [...existingImageUrls, ...uploadedUrls].slice(0, 8);
           const coverUrl = imageUrls[0] || null;
           const slug = await resolveSlug();
+          const publishDate = editingId
+            ? (fields.publishedAt.value || todayIsoDate())
+            : (dateWasChanged && fields.publishedAt.value ? fields.publishedAt.value : todayIsoDate());
+          fields.publishedAt.value = publishDate;
           const payload = {
             slug,
-            published_at:fields.publishedAt.value,
+            published_at:publishDate,
             title_en:fields.titleEn.value.trim(),
             title_zh:fields.titleZh.value.trim(),
             excerpt_en:fields.bodyEn.value.trim(),
@@ -509,6 +524,9 @@
 
       fields.titleEn.addEventListener('input', () => {
         if (!editingId && !fields.slug.value) fields.slug.value = slugify(fields.titleEn.value);
+      });
+      fields.publishedAt.addEventListener('change', () => {
+        dateWasChanged = true;
       });
       fields.imageFiles.addEventListener('change', () => {
         const pendingUrls = Array.from(fields.imageFiles.files).map(file => URL.createObjectURL(file));
