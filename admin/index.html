@@ -60,7 +60,12 @@
     .form-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:5px; }
     .form-actions .button { padding:0 16px; }
     .image-preview-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:3px; }
-    .image-preview-grid img, .image-preview-grid video { width:100%; aspect-ratio:1; object-fit:cover; background:#111; }
+    .image-preview-card { min-width:0; display:grid; gap:5px; }
+    .image-preview-card img, .image-preview-card video { width:100%; aspect-ratio:1; object-fit:cover; background:#111; }
+    .image-preview-meta { min-width:0; display:grid; gap:2px; color:#aaa; font-size:10px; line-height:1.35; }
+    .image-preview-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .image-preview-size { color:#ff9ca1; font-weight:700; letter-spacing:.4px; }
+    .image-preview-summary { margin-top:9px; color:#c9c9c4; font-size:11px; line-height:1.4; }
     .posts-list { display:grid; gap:0; }
     .admin-post { display:grid; grid-template-columns:96px minmax(0,1fr); gap:14px; padding:15px 0; border-top:1px solid #4c4c48; }
     .admin-post.is-pinned { border-top-color:var(--red); }
@@ -130,6 +135,7 @@
             <input id="slug" type="hidden" />
             <label>图片或影片（可多选；首个会作首页封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple /></label>
             <div class="image-preview-grid" id="imagePreviewGrid" hidden></div>
+            <div class="image-preview-summary" id="imagePreviewSummary" hidden></div>
             <label>标题（English）<input id="titleEn" type="text" required /></label>
             <label>标题（中文）<input id="titleZh" type="text" required /></label>
             <label>内文（English）<textarea id="bodyEn" required></textarea></label>
@@ -233,12 +239,22 @@
         if (error) throw error;
       }
 
+      function formatFileSize(bytes) {
+        const size = Number(bytes);
+        if (!Number.isFinite(size) || size < 0) return '';
+        return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+      }
+
       function setImagePreview(urls) {
         const preview = document.getElementById('imagePreviewGrid');
+        const summary = document.getElementById('imagePreviewSummary');
+        let totalBytes = 0;
+        let sizedFiles = 0;
         preview.replaceChildren();
         urls.forEach((entry, index) => {
+          const details = typeof entry === 'object' ? entry : null;
           const url = typeof entry === 'string' ? entry : entry.url;
-          const video = typeof entry === 'object' ? entry.type?.startsWith('video/') : isVideoUrl(url);
+          const video = details ? details.type?.startsWith('video/') : isVideoUrl(url);
           const media = video ? document.createElement('video') : document.createElement('img');
           media.src = typeof entry === 'string' ? assetUrl(url) : url;
           media.alt = index === 0 ? 'Cover media preview' : 'Update media preview';
@@ -248,9 +264,29 @@
             media.playsInline = true;
             media.autoplay = true;
           }
-          preview.append(media);
+          const card = document.createElement('div');
+          card.className = 'image-preview-card';
+          card.append(media);
+          if (details?.size) {
+            totalBytes += details.size;
+            sizedFiles += 1;
+            const meta = document.createElement('div');
+            meta.className = 'image-preview-meta';
+            const name = document.createElement('span');
+            name.className = 'image-preview-name';
+            name.textContent = details.name || (video ? 'Video' : 'Image');
+            name.title = name.textContent;
+            const size = document.createElement('span');
+            size.className = 'image-preview-size';
+            size.textContent = formatFileSize(details.size);
+            meta.append(name, size);
+            card.append(meta);
+          }
+          preview.append(card);
         });
         preview.hidden = !urls.length;
+        summary.hidden = !sizedFiles;
+        summary.textContent = sizedFiles ? `Selected ${sizedFiles} file${sizedFiles === 1 ? '' : 's'} · Total ${formatFileSize(totalBytes)}` : '';
       }
 
       function slugify(value) {
@@ -632,7 +668,12 @@
         dateWasChanged = true;
       });
       fields.imageFiles.addEventListener('change', () => {
-        const pendingUrls = Array.from(fields.imageFiles.files).map(file => ({ url:URL.createObjectURL(file), type:file.type }));
+        const pendingUrls = Array.from(fields.imageFiles.files).map(file => ({
+          url:URL.createObjectURL(file),
+          type:file.type,
+          name:file.name,
+          size:file.size
+        }));
         setImagePreview([...existingImageUrls, ...pendingUrls].slice(0, 8));
       });
       updateForm.addEventListener('submit', savePost);
