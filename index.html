@@ -163,6 +163,11 @@
     .hero-footer { position:absolute; z-index:3; left:4.2vw; right:4.2vw; bottom:20px; display:flex; justify-content:space-between; border-top:1px solid #353535; padding-top:12px; font-size:10px; letter-spacing:1.4px; color:#aaa; text-transform:uppercase; }
     .scroll-indicator { color:var(--paper); }
     section { padding:100px 4.2vw; }
+    [data-scroll-reveal] { opacity:1; transform:none; }
+    .has-scroll-reveal [data-scroll-reveal] { opacity:0; transform:translate3d(0,38px,0); transition:opacity .72s ease,transform .72s cubic-bezier(.22,.8,.24,1); will-change:opacity,transform; }
+    .has-scroll-reveal [data-scroll-reveal].is-visible { opacity:1; transform:none; }
+    .has-scroll-reveal .updates-preview-feed [data-scroll-reveal] { transition-delay:var(--scroll-reveal-delay,0ms); }
+    @media (prefers-reduced-motion:reduce) { .has-scroll-reveal [data-scroll-reveal], .has-scroll-reveal [data-scroll-reveal].is-visible { opacity:1; transform:none; transition:none; will-change:auto; } }
     .about { padding:0; background:var(--paper); color:var(--ink); overflow:hidden; }
     .about-pages { display:grid; }
     .about-page { grid-area:1 / 1; min-width:0; display:grid; grid-template-columns:1fr 1.7fr; gap:clamp(35px,9vw,150px); padding:100px 4.2vw; opacity:0; visibility:hidden; pointer-events:none; transform:translateY(18px); filter:blur(7px); transition:opacity .46s ease,transform .56s cubic-bezier(.22,.8,.24,1),filter .46s ease,visibility 0s linear .5s; }
@@ -353,7 +358,7 @@
     <button class="pager-arrow pager-prev" id="pagerPrev" type="button" aria-label="Previous page" title="Previous page"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerPrevLabel" aria-hidden="true"></span></button>
     <button class="pager-arrow pager-next" id="pagerNext" type="button" aria-label="Next page" title="Next page"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerNextLabel" aria-hidden="true"></span></button>
 
-    <section class="about" id="about">
+    <section class="about" id="about" data-scroll-reveal>
       <div class="about-pages" id="aboutPages" aria-live="polite">
         <article class="about-page is-active" aria-label="Page 1 overview">
           <div><div class="section-label" data-i18n="teamLabel">01 / The Team</div></div>
@@ -382,7 +387,7 @@
       </div>
     </section>
 
-    <section class="feature-stack" id="machine" aria-live="polite">
+    <section class="feature-stack" id="machine" aria-live="polite" data-scroll-reveal>
       <article class="feature-page machine is-active" aria-label="Page 1 feature">
         <div class="car-photo" data-label="01 / DRAGON PROTOTYPE"><img src="assets/race-car.jpg" alt="F1 Dragon Dance race car on a STEM Racing track" /></div>
         <div class="machine-copy">
@@ -445,7 +450,7 @@
       </article>
     </section>
 
-    <section class="latest-updates" id="updates" aria-labelledby="updatesPreviewTitle">
+    <section class="latest-updates" id="updates" aria-labelledby="updatesPreviewTitle" data-scroll-reveal>
       <div class="updates-preview-header">
         <div><div class="eyebrow" data-i18n="updatesLabel">Latest / Updates</div><h2 id="updatesPreviewTitle" data-i18n-html="updatesTitle">On The<br>Move.</h2></div>
         <a class="updates-preview-link" href="updates.html" data-i18n="viewAllUpdates">View all updates ↗</a>
@@ -454,14 +459,14 @@
     </section>
 
   </main>
-  <section class="racing-context" aria-labelledby="racing-context-title">
+  <section class="racing-context" aria-labelledby="racing-context-title" data-scroll-reveal>
     <div>
       <span class="racing-context-label">STEM Racing / F1 in Schools</span>
       <h2 id="racing-context-title" data-i18n-html="racingTitle">STEM Racing,<br><em>formerly F1 in Schools.</em></h2>
     </div>
     <p data-i18n="racingCopy">F1 Dragon Dance is Dragon Dance's STEM Racing identity in Hong Kong. STEM Racing is the student racing challenge formerly known as F1 in Schools, where we bring engineering, design, branding and race strategy together.</p>
   </section>
-  <footer>
+  <footer data-scroll-reveal>
     <div><strong data-i18n-html="footerTitle">Dance with<br>the dragon.</strong><p>DRAGON DANCE / STEM RACING</p></div>
     <section class="footer-contact" aria-label="Contact">
       <span class="footer-label" data-i18n="contactLabel">Contact</span>
@@ -509,6 +514,7 @@
   <script src="supabase-config.js"></script>
   <script>
     (() => {
+      document.documentElement.classList.add('has-scroll-reveal');
       const hero = document.querySelector('.hero');
       const canvas = document.getElementById('fogField');
       const context = canvas.getContext('2d');
@@ -563,6 +569,7 @@
       let language = 'en';
       let languageAnimationTimer = 0;
       let updates = [];
+      let scrollRevealObserver = null;
       const textElements = Array.from(document.querySelectorAll('[data-i18n]'));
       const htmlElements = Array.from(document.querySelectorAll('[data-i18n-html]'));
       const englishText = Object.fromEntries(textElements.map(element => [element.dataset.i18n, element.textContent]));
@@ -669,6 +676,31 @@
         footerMeta:'博愛醫院歷屆總理聯誼會梁省德中學<br>香港'
       };
 
+      function observeScrollReveal(element) {
+        if (!element) return;
+        if (reduceMotion || !scrollRevealObserver) {
+          element.classList.add('is-visible');
+          return;
+        }
+        scrollRevealObserver.observe(element);
+      }
+
+      function initScrollReveals() {
+        const elements = Array.from(document.querySelectorAll('[data-scroll-reveal]'));
+        if (reduceMotion || !('IntersectionObserver' in window)) {
+          elements.forEach(element => element.classList.add('is-visible'));
+          return;
+        }
+        scrollRevealObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-visible');
+            scrollRevealObserver.unobserve(entry.target);
+          });
+        }, { rootMargin:'0px 0px -12% 0px', threshold:.12 });
+        elements.forEach(observeScrollReveal);
+      }
+
       function updateText(post, field) {
         const value = post[field];
         if (typeof value === 'string') return value;
@@ -701,6 +733,8 @@
         posts.forEach((post, index) => {
           const card = document.createElement('a');
           card.className = `update-preview-card${index === 0 ? ' is-featured' : ''}`;
+          card.dataset.scrollReveal = '';
+          card.style.setProperty('--scroll-reveal-delay', `${index * 80}ms`);
           card.href = `updates.html#${encodeURIComponent(post.id || '')}`;
           const title = updateText(post, 'title');
           card.setAttribute('aria-label', `${language === 'zh' ? '查看動態：' : 'Read update: '}${title}`);
@@ -746,6 +780,7 @@
           copy.append(date, heading, more);
           card.append(copy);
           homeUpdates.append(card);
+          observeScrollReveal(card);
         });
       }
 
@@ -1025,6 +1060,7 @@
 
       let savedLanguage = 'en';
       try { savedLanguage = window.localStorage.getItem('dragon-dance-language') || 'en'; } catch (_) {}
+      initScrollReveals();
       applyLanguage(savedLanguage === 'zh' ? 'zh' : 'en', false);
       loadUpdates();
       resizeFog();
