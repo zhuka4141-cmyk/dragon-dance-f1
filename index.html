@@ -91,7 +91,6 @@
     html[lang="zh-Hant"] .machine-copy h2[data-i18n-html],
     html[lang="zh-Hant"] .feature-copy h2[data-i18n-html],
     html[lang="zh-Hant"] .race-deadlines h2[data-i18n-html],
-    html[lang="zh-Hant"] .qr-share-copy strong[data-i18n-html],
     html[lang="zh-Hant"] .racing-context h2[data-i18n-html],
     html[lang="zh-Hant"] .contact-dialog h2[data-i18n-html],
     html[lang="zh-Hant"] footer strong[data-i18n-html] { font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; font-weight:900; letter-spacing:0; }
@@ -315,16 +314,6 @@
     .deadline-countdown { display:inline-flex; width:max-content; max-width:100%; border-bottom:1px solid #8d8d88; padding-bottom:5px; color:#343431; font-size:10px; font-weight:bold; letter-spacing:1.25px; line-height:1.2; text-transform:uppercase; }
     .race-deadlines [data-scroll-reveal] { transition-delay:80ms; }
     .race-deadlines .deadline-card:nth-child(2) { transition-delay:160ms; }
-    .race-deadlines .qr-share { transition-delay:230ms; }
-    .qr-share { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:34px; margin-top:14px; border-top:1px solid #aaa9a4; background:#d2d2cd; padding:24px; }
-    .qr-share-copy { min-width:0; }
-    .qr-share-copy strong { display:block; margin-top:9px; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(30px,3.5vw,47px); font-weight:400; line-height:.88; letter-spacing:1px; text-transform:uppercase; }
-    .qr-share-copy p { max-width:460px; margin:12px 0 0; color:#50504c; font-size:13px; line-height:1.55; }
-    .qr-code-link { display:grid; grid-template-columns:116px auto; align-items:center; gap:14px; color:inherit; }
-    .qr-code { width:116px; height:116px; display:block; border:8px solid #fff; background:#fff; }
-    .qr-code canvas, .qr-code img { width:100% !important; height:100% !important; display:block; image-rendering:pixelated; }
-    .qr-code-link span { max-width:118px; color:#555550; font-size:10px; font-weight:bold; letter-spacing:1.1px; line-height:1.45; text-transform:uppercase; }
-    .qr-code-link:hover span, .qr-code-link:focus-visible span { color:var(--red); }
     @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:52px; min-height:72px; gap:7px; border:0; border-radius:0; background:transparent; box-shadow:none; color:#fff; opacity:.58; mix-blend-mode:difference; backdrop-filter:none; } .pager-arrow:active { opacity:1; } .pager-line { width:25px; height:1px; } .pager-line:after { width:8px; height:8px; border-width:1px; } .pager-label { font-size:8px; letter-spacing:1px; } .pager-next { right:0; } .pager-prev { left:0; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .proposal-cta { margin-left:78px; } .member-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:26px; } .member-card-copy { padding:9px 10px 11px; } .member-card-role { font-size:8px; letter-spacing:.9px; } .member-card strong { font-size:11px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item, .school-contact { min-height:0; grid-column:span 1; } .footer-meta { text-align:left; } }
     @media (max-width:800px) {
       .nav-tools { min-width:auto; gap:10px; }
@@ -349,9 +338,6 @@
       .deadline-card { min-height:176px; gap:18px; padding:20px; }
       .deadline-date { font-size:64px; }
       .deadline-copy strong { font-size:35px; }
-      .qr-share { grid-template-columns:1fr; gap:22px; padding:20px; }
-      .qr-code-link { grid-template-columns:96px auto; }
-      .qr-code { width:96px; height:96px; }
     }
   </style>
 </head>
@@ -507,12 +493,6 @@
           <div class="deadline-copy"><strong data-i18n="carHandoverTitle">Car Handover</strong><p data-i18n="carHandoverCopy">Hand over the completed race car for inspection.</p><span class="deadline-countdown" data-deadline="2026-11-28"></span></div>
         </article>
       </div>
-      <div class="qr-share" data-scroll-reveal>
-        <div class="qr-share-copy"><div class="eyebrow" data-i18n="qrLabel">Dragon Dance / QR</div><strong data-i18n-html="qrTitle">Scan.<br>Stay Connected.</strong><p data-i18n="qrCopy">Scan to open the official Dragon Dance STEM Racing website.</p></div>
-        <a class="qr-code-link" href="https://lstc-dragon-dance.vercel.app/" aria-label="Open Dragon Dance STEM Racing website">
-          <div class="qr-code" id="siteQrCode" aria-hidden="true"></div><span data-i18n="qrLinkText">Scan to visit<br>the website</span>
-        </a>
-      </div>
     </section>
 
     <section class="latest-updates" id="updates" aria-labelledby="updatesPreviewTitle" data-scroll-reveal>
@@ -576,7 +556,6 @@
     </section>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="assets/qrcode.min.js"></script>
   <script src="supabase-config.js"></script>
   <script>
     (() => {
@@ -604,7 +583,6 @@
       const deadlinesSection = document.getElementById('deadlines');
       const updatesSection = document.getElementById('updates');
       const deadlineCountdowns = Array.from(document.querySelectorAll('.deadline-countdown'));
-      const siteQrCode = document.getElementById('siteQrCode');
       const updatesDatabase = window.supabase.createClient(window.DRAGON_DANCE_SUPABASE.url, window.DRAGON_DANCE_SUPABASE.publishableKey);
       const pagerLabels = {
         en: [
@@ -655,9 +633,6 @@
         carHandoverTitle:'交接賽車',
         carHandoverCopy:'交接完成的賽車，以供檢查。',
         november2026:'2026年11月',
-        qrLabel:'Dragon Dance / 二維碼',
-        qrCopy:'掃描即可打開 Dragon Dance STEM Racing 官方網站。',
-        qrLinkText:'掃描瀏覽<br>官方網站',
         pagerHint:'滑動更換頁面',
         updatesLabel:'最新 / 動態',
         viewAllUpdates:'查看全部動態 ↗',
@@ -747,7 +722,6 @@
       };
       const chineseHtml = {
         deadlinesTitle:'兩個日期。<br>同一條終點線。',
-        qrTitle:'掃描。<br>保持連結。',
         updatesTitle:'持續<br>前進。',
         heroTitle:'為速度<br><i>而生</i>',
         crewTitle:'認識<br>隊員',
@@ -813,19 +787,6 @@
           else label = language === 'zh' ? '已完成' : 'Complete';
           element.textContent = label;
           element.setAttribute('aria-label', label);
-        });
-      }
-
-      function renderSiteQrCode() {
-        if (!siteQrCode || !window.QRCode) return;
-        siteQrCode.replaceChildren();
-        new window.QRCode(siteQrCode, {
-          text:'https://lstc-dragon-dance.vercel.app/',
-          width:180,
-          height:180,
-          colorDark:'#080808',
-          colorLight:'#ffffff',
-          correctLevel:window.QRCode.CorrectLevel.M
         });
       }
 
@@ -1195,7 +1156,6 @@
       try { savedLanguage = window.localStorage.getItem('dragon-dance-language') || 'en'; } catch (_) {}
       initScrollReveals();
       applyLanguage(savedLanguage === 'zh' ? 'zh' : 'en', false);
-      renderSiteQrCode();
       loadUpdates();
       resizeFog();
       window.addEventListener('resize', resizeFog, { passive:true });
