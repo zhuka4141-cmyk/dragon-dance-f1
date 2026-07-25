@@ -506,10 +506,10 @@
             '-i', inputName,
             '-vf', "scale='min(1280,iw)':-2",
             '-c:v', 'libx264',
-            '-preset', 'veryfast',
-            '-crf', '28',
+            '-preset', 'ultrafast',
+            '-crf', '30',
             '-c:a', 'aac',
-            '-b:a', '96k',
+            '-b:a', '64k',
             '-movflags', '+faststart',
             outputName
           ]);
@@ -524,6 +524,11 @@
 
       async function prepareMediaFile(file) {
         if (!isVideoFile(file)) return file;
+        if (canUploadOriginalVideo(file)) {
+          setStatus(editorStatus, `Video ${formatFileSize(file.size)} is within the 50 MB limit; uploading directly.`);
+          return file;
+        }
+        setStatus(editorStatus, `Compressing video ${formatFileSize(file.size)}...`);
         try {
           return await compressVideo(file);
         } catch (error) {
@@ -562,7 +567,13 @@
             setStatus(editorStatus, isVideoFile(file) ? '正在准备压缩影片...' : '正在准备图片...');
             preparedFiles.push(await prepareMediaFile(file));
           }
-          const uploadedUrls = await Promise.all(preparedFiles.map(uploadMedia));
+          const uploadedUrls = [];
+          for (let index = 0; index < preparedFiles.length; index += 1) {
+            const file = preparedFiles[index];
+            setStatus(editorStatus, `Uploading media ${index + 1}/${preparedFiles.length} (${formatFileSize(file.size)})...`);
+            uploadedUrls.push(await uploadMedia(file));
+          }
+          if (uploadedUrls.length) setStatus(editorStatus, 'Media uploaded. Saving update...');
           const imageUrls = [...existingImageUrls, ...uploadedUrls].slice(0, 8);
           const coverUrl = imageUrls[0] || null;
           const slug = await resolveSlug();
