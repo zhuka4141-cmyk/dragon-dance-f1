@@ -296,6 +296,17 @@
     .update-preview-summary { display:block; color:#c8c8c4; font-size:14px; line-height:1.6; }
     .update-preview-more { margin-top:24px; color:var(--paper); font-size:10px; font-weight:bold; letter-spacing:1.1px; text-transform:uppercase; }
     .updates-preview-status { grid-column:1 / -1; padding:30px 0; border-top:1px solid #555; color:#bdbdb8; font-size:14px; }
+    .race-deadlines { padding:clamp(68px,8vw,108px) 4.2vw; border-top:1px solid var(--line); background:var(--paper); color:var(--ink); }
+    .race-deadlines-header { display:flex; align-items:end; justify-content:space-between; gap:32px; margin-bottom:34px; }
+    .race-deadlines-header h2 { max-width:660px; margin:11px 0 0; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(46px,6.6vw,92px); font-weight:400; line-height:.83; letter-spacing:1px; text-transform:uppercase; }
+    .race-deadlines-note { max-width:260px; margin:0; color:#565652; font-size:13px; line-height:1.55; }
+    .deadline-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .deadline-card { min-height:225px; display:grid; grid-template-columns:auto 1fr; align-items:stretch; gap:22px; border-top:3px solid var(--red); background:#deded9; padding:22px 24px 26px; }
+    .deadline-date { color:var(--red); font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(52px,7vw,94px); font-weight:400; line-height:.76; letter-spacing:1px; }
+    .deadline-date span { display:block; margin-top:10px; color:#555; font-family:Arial,sans-serif; font-size:10px; font-weight:bold; letter-spacing:1.5px; line-height:1.2; text-transform:uppercase; }
+    .deadline-copy { display:flex; flex-direction:column; justify-content:space-between; gap:18px; }
+    .deadline-copy strong { display:block; max-width:300px; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(30px,3.5vw,48px); font-weight:400; line-height:.88; letter-spacing:1px; text-transform:uppercase; }
+    .deadline-copy p { max-width:280px; margin:0; color:#50504c; font-size:13px; line-height:1.55; }
     @media (max-width:800px) { nav { height:63px; } .navlinks { display:none; } .hero, .hero-pages, .hero-page { min-height:735px; } .hero-page-intro { padding:58px 6vw 45px; } h1 { font-size:clamp(68px,20vw,130px); max-width:470px; position:relative; z-index:1; } .hero-copy { position:relative; z-index:1; font-size:15px; max-width:330px; } .dragon-stage { top:310px; right:-6vw; width:92vw; height:350px; opacity:.76; } .dragon-stage:after { right:10%; bottom:3%; } .pager-hint { top:15px; font-size:8px; letter-spacing:1.2px; } .pager-arrow { width:52px; min-height:72px; gap:7px; border:0; border-radius:0; background:transparent; box-shadow:none; color:#fff; opacity:.58; mix-blend-mode:difference; backdrop-filter:none; } .pager-arrow:active { opacity:1; } .pager-line { width:25px; height:1px; } .pager-line:after { width:8px; height:8px; border-width:1px; } .pager-label { font-size:8px; letter-spacing:1px; } .pager-next { right:0; } .pager-prev { left:0; } .hero-footer { font-size:9px; } .hero-footer span:last-child { display:none; } section { padding:70px 6vw; } .about-page, .machine, .team-showcase, .sponsor-showcase { grid-template-columns:1fr; } .about-page { gap:30px; padding:70px 6vw; } .about p { font-size:17px; } .fact-row { gap:0; } .fact span { font-size:11px; } .machine-copy { padding:55px 6vw 70px; } .team-showcase, .sponsor-showcase { gap:42px; padding:64px 6vw 72px; } .proposal-cta { margin-left:78px; } .member-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:26px; } .member-card-copy { padding:9px 10px 11px; } .member-card-role { font-size:8px; letter-spacing:.9px; } .member-card strong { font-size:11px; } .role-item { grid-template-columns:34px minmax(0,1fr); gap:12px; } .partner-grid { grid-template-columns:1fr; } .partner-item { min-height:132px; } footer { padding:31px 6vw 22px; grid-template-columns:1fr; } .footer-contact { align-self:auto; } .contact-list { grid-template-columns:1fr; gap:12px; } .contact-item, .school-contact { min-height:0; grid-column:span 1; } .footer-meta { text-align:left; } }
     @media (max-width:800px) {
       .nav-tools { min-width:auto; gap:10px; }
@@ -313,6 +324,13 @@
       .update-preview-card.is-featured { grid-column:auto; grid-template-columns:1fr; }
       .update-preview-card.is-featured .update-preview-media { min-height:0; height:auto; aspect-ratio:16 / 10; }
       .update-preview-copy { padding:20px; }
+      .race-deadlines { padding:62px 6vw; }
+      .race-deadlines-header { align-items:start; flex-direction:column; gap:18px; margin-bottom:28px; }
+      .race-deadlines-note { max-width:390px; }
+      .deadline-grid { grid-template-columns:1fr; gap:10px; }
+      .deadline-card { min-height:176px; gap:18px; padding:20px; }
+      .deadline-date { font-size:64px; }
+      .deadline-copy strong { font-size:35px; }
     }
   </style>
 </head>
@@ -453,6 +471,23 @@
       </article>
     </section>
 
+    <section class="race-deadlines" id="deadlines" aria-labelledby="deadlinesTitle" data-scroll-reveal>
+      <div class="race-deadlines-header">
+        <div><div class="eyebrow" data-i18n="deadlinesLabel">Race Calendar / 2026</div><h2 id="deadlinesTitle" data-i18n-html="deadlinesTitle">Two Dates.<br>One Finish Line.</h2></div>
+        <p class="race-deadlines-note" data-i18n="deadlinesNote">Keep these hand-in dates close as we move from preparation to the track.</p>
+      </div>
+      <div class="deadline-grid">
+        <article class="deadline-card">
+          <div class="deadline-date">27<span data-i18n="november2026">November 2026</span></div>
+          <div class="deadline-copy"><strong data-i18n="onlineFileTitle">Online File</strong><p data-i18n="onlineFileCopy">Final online file submission deadline.</p></div>
+        </article>
+        <article class="deadline-card">
+          <div class="deadline-date">28<span data-i18n="november2026">November 2026</span></div>
+          <div class="deadline-copy"><strong data-i18n="carHandoverTitle">Car Handover</strong><p data-i18n="carHandoverCopy">Hand over the completed race car for inspection.</p></div>
+        </article>
+      </div>
+    </section>
+
     <section class="latest-updates" id="updates" aria-labelledby="updatesPreviewTitle" data-scroll-reveal>
       <div class="updates-preview-header">
         <div><div class="eyebrow" data-i18n="updatesLabel">Latest / Updates</div><h2 id="updatesPreviewTitle" data-i18n-html="updatesTitle">On The<br>Move.</h2></div>
@@ -581,6 +616,13 @@
       const englishText = Object.fromEntries(textElements.map(element => [element.dataset.i18n, element.textContent]));
       const englishHtml = Object.fromEntries(htmlElements.map(element => [element.dataset.i18nHtml, element.innerHTML]));
       const chineseText = {
+        deadlinesLabel:'賽事日程 / 2026',
+        deadlinesNote:'由準備走向賽道，請記下這兩個重要提交日期。',
+        onlineFileTitle:'提交線上檔案',
+        onlineFileCopy:'線上檔案最終提交期限。',
+        carHandoverTitle:'交接賽車',
+        carHandoverCopy:'交接完成的賽車，以供檢查。',
+        november2026:'2026年11月',
         pagerHint:'滑動更換頁面',
         updatesLabel:'最新 / 動態',
         viewAllUpdates:'查看全部動態 ↗',
@@ -669,6 +711,7 @@
         schoolWebsite:'學校網站'
       };
       const chineseHtml = {
+        deadlinesTitle:'兩個日期。<br>同一條終點線。',
         updatesTitle:'持續<br>前進。',
         heroTitle:'為速度<br><i>而生</i>',
         crewTitle:'認識<br>隊員',
