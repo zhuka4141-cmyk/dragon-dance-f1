@@ -171,7 +171,7 @@
     .has-scroll-reveal [data-scroll-reveal] { opacity:0; transform:translate3d(0,38px,0); transition:opacity .72s ease,transform .72s cubic-bezier(.22,.8,.24,1); will-change:opacity,transform; }
     .has-scroll-reveal [data-scroll-reveal].is-visible { opacity:1; transform:none; }
     .has-scroll-reveal .updates-preview-feed [data-scroll-reveal] { transition-delay:var(--scroll-reveal-delay,0ms); }
-    @media (prefers-reduced-motion:reduce) { .has-scroll-reveal [data-scroll-reveal], .has-scroll-reveal [data-scroll-reveal].is-visible { opacity:1; transform:none; transition:none; will-change:auto; } }
+    @media (prefers-reduced-motion:reduce) { .has-scroll-reveal [data-scroll-reveal], .has-scroll-reveal [data-scroll-reveal].is-visible { opacity:1; transform:none; transition:none; will-change:auto; } .home-only-content, .home-only-inner { transition:none; } }
     .about { padding:0; background:var(--paper); color:var(--ink); overflow:hidden; }
     .about-pages { display:grid; }
     .about-page { grid-area:1 / 1; min-width:0; display:grid; grid-template-columns:1fr 1.7fr; gap:clamp(35px,9vw,150px); padding:100px 4.2vw; opacity:0; visibility:hidden; pointer-events:none; transform:translateY(30px); filter:blur(7px); transition:opacity .46s ease,transform .56s cubic-bezier(.22,.8,.24,1),filter .46s ease,visibility 0s linear .5s; }
@@ -300,6 +300,9 @@
     .update-preview-summary { display:block; color:#c8c8c4; font-size:14px; line-height:1.6; }
     .update-preview-more { margin-top:24px; color:var(--paper); font-size:10px; font-weight:bold; letter-spacing:1.1px; text-transform:uppercase; }
     .updates-preview-status { grid-column:1 / -1; padding:30px 0; border-top:1px solid #555; color:#bdbdb8; font-size:14px; }
+    .home-only-content { height:auto; overflow:hidden; transition:height .72s cubic-bezier(.22,.8,.24,1); }
+    .home-only-inner { min-height:0; overflow:hidden; opacity:1; transform:translate3d(0,0,0); transition:opacity .28s ease,transform .62s cubic-bezier(.22,.8,.24,1); }
+    .home-only-content.is-collapsed .home-only-inner { opacity:0; transform:translate3d(0,38px,0); pointer-events:none; }
     .race-deadlines { padding:clamp(68px,8vw,108px) 4.2vw; border-top:1px solid var(--line); background:var(--paper); color:var(--ink); }
     .race-deadlines-header { display:flex; align-items:end; justify-content:space-between; gap:32px; margin-bottom:34px; }
     .race-deadlines-header h2 { max-width:660px; margin:11px 0 0; font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(46px,6.6vw,92px); font-weight:400; line-height:.83; letter-spacing:1px; text-transform:uppercase; }
@@ -478,6 +481,8 @@
       </article>
     </section>
 
+    <div class="home-only-content" id="homeOnlyContent">
+      <div class="home-only-inner">
     <section class="race-deadlines" id="deadlines" aria-labelledby="deadlinesTitle">
       <div class="race-deadlines-header" data-scroll-reveal>
         <div><div class="eyebrow" data-i18n="deadlinesLabel">Race Calendar / 2026</div><h2 id="deadlinesTitle" data-i18n-html="deadlinesTitle">Two Dates.<br>One Finish Line.</h2></div>
@@ -502,6 +507,8 @@
       </div>
       <div class="updates-preview-feed" id="homeUpdates" aria-live="polite"><div class="updates-preview-status" data-i18n="updatesLoading">Loading latest updates...</div></div>
     </section>
+      </div>
+    </div>
 
   </main>
   <section class="racing-context" aria-labelledby="racing-context-title" data-scroll-reveal>
@@ -580,8 +587,8 @@
       const partnershipBackdrop = document.getElementById('partnershipBackdrop');
       const partnershipClose = document.getElementById('partnershipClose');
       const homeUpdates = document.getElementById('homeUpdates');
-      const deadlinesSection = document.getElementById('deadlines');
-      const updatesSection = document.getElementById('updates');
+      const homeOnlyContent = document.getElementById('homeOnlyContent');
+      const homeOnlyInner = homeOnlyContent.querySelector('.home-only-inner');
       const deadlineCountdowns = Array.from(document.querySelectorAll('.deadline-countdown'));
       const updatesDatabase = window.supabase.createClient(window.DRAGON_DANCE_SUPABASE.url, window.DRAGON_DANCE_SUPABASE.publishableKey);
       const pagerLabels = {
@@ -619,6 +626,8 @@
       let language = 'en';
       let languageAnimationTimer = 0;
       let pageAnimationTimer = 0;
+      let homeContentAnimationTimer = 0;
+      let homeOnlyVisible = true;
       let updates = [];
       let scrollRevealObserver = null;
       const textElements = Array.from(document.querySelectorAll('[data-i18n]'));
@@ -972,6 +981,37 @@
         heroPages.style.transform = `translate3d(calc(-${pageIndex * 100}%${adjustment}),0,0)`;
       }
 
+      function setHomeOnlyContentVisibility(show, animate) {
+        if (homeOnlyVisible === show) return;
+        homeOnlyVisible = show;
+        const shouldAnimate = animate && !reduceMotion;
+        window.clearTimeout(homeContentAnimationTimer);
+        homeOnlyContent.inert = !show;
+        homeOnlyContent.setAttribute('aria-hidden', String(!show));
+
+        if (!shouldAnimate) {
+          homeOnlyContent.classList.toggle('is-collapsed', !show);
+          homeOnlyContent.style.height = show ? 'auto' : '0px';
+          return;
+        }
+
+        if (show) {
+          homeOnlyContent.style.height = '0px';
+          homeOnlyContent.classList.remove('is-collapsed');
+          void homeOnlyContent.offsetHeight;
+          homeOnlyContent.style.height = `${homeOnlyInner.scrollHeight}px`;
+        } else {
+          homeOnlyContent.style.height = `${homeOnlyContent.getBoundingClientRect().height}px`;
+          void homeOnlyContent.offsetHeight;
+          homeOnlyContent.classList.add('is-collapsed');
+          homeOnlyContent.style.height = '0px';
+        }
+
+        homeContentAnimationTimer = window.setTimeout(() => {
+          if (homeOnlyVisible) homeOnlyContent.style.height = 'auto';
+        }, 740);
+      }
+
       function setPage(nextIndex) {
         const pageChanged = pageIndex !== Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
         pageIndex = Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
@@ -1006,10 +1046,7 @@
           panel.setAttribute('aria-hidden', String(!active));
         });
         const showHomeOnlySections = pageIndex === 0;
-        [deadlinesSection, updatesSection].forEach(section => {
-          section.hidden = !showHomeOnlySections;
-          section.setAttribute('aria-hidden', String(!showHomeOnlySections));
-        });
+        setHomeOnlyContentVisibility(showHomeOnlySections, pageChanged);
         if (pageChanged && !reduceMotion) {
           [aboutPageStack, featureStack].forEach(stack => {
             stack.classList.remove('is-page-switching');
