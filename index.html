@@ -170,9 +170,12 @@
     @media (prefers-reduced-motion:reduce) { .has-scroll-reveal [data-scroll-reveal], .has-scroll-reveal [data-scroll-reveal].is-visible { opacity:1; transform:none; transition:none; will-change:auto; } }
     .about { padding:0; background:var(--paper); color:var(--ink); overflow:hidden; }
     .about-pages { display:grid; }
-    .about-page { grid-area:1 / 1; min-width:0; display:grid; grid-template-columns:1fr 1.7fr; gap:clamp(35px,9vw,150px); padding:100px 4.2vw; opacity:0; visibility:hidden; pointer-events:none; transform:translateY(18px); filter:blur(7px); transition:opacity .46s ease,transform .56s cubic-bezier(.22,.8,.24,1),filter .46s ease,visibility 0s linear .5s; }
+    .about-page { grid-area:1 / 1; min-width:0; display:grid; grid-template-columns:1fr 1.7fr; gap:clamp(35px,9vw,150px); padding:100px 4.2vw; opacity:0; visibility:hidden; pointer-events:none; transform:translateY(30px); filter:blur(7px); transition:opacity .46s ease,transform .56s cubic-bezier(.22,.8,.24,1),filter .46s ease,visibility 0s linear .5s; }
     .about-page.is-active { z-index:1; opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0); filter:blur(0); transition-delay:0s; }
-    @media (prefers-reduced-motion:reduce) { .about-page { transition:none; transform:none; filter:none; } }
+    .about-pages.is-page-switching .about-page.is-active,
+    .feature-stack.is-page-switching .feature-page.is-active { animation:page-panel-rise .62s cubic-bezier(.22,.8,.24,1) both; }
+    @keyframes page-panel-rise { from { opacity:.18; transform:translate3d(0,30px,0); filter:blur(6px); } to { opacity:1; transform:translate3d(0,0,0); filter:blur(0); } }
+    @media (prefers-reduced-motion:reduce) { .about-page { transition:none; transform:none; filter:none; } .about-pages.is-page-switching .about-page.is-active, .feature-stack.is-page-switching .feature-page.is-active { animation:none; } }
     .section-label { font-size:12px; letter-spacing:1.6px; text-transform:uppercase; font-weight:bold; }
     .about h2 { font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(43px,7vw,98px); line-height:.86; font-weight:400; text-transform:uppercase; margin:0 0 36px; letter-spacing:1px; }
     .about p { max-width:610px; font-size:19px; line-height:1.6; margin:0 0 38px; }
@@ -183,7 +186,7 @@
     .fact b { display:block; font-size:10px; letter-spacing:1.3px; color:#555; margin-bottom:7px; text-transform:uppercase; }
     .fact span { font-size:14px; font-weight:bold; }
     .feature-stack { padding:0; display:grid; overflow:hidden; background:#111; }
-    .feature-page { grid-area:1 / 1; min-width:0; min-height:640px; opacity:0; visibility:hidden; pointer-events:none; transform:translateY(18px); filter:blur(7px); transition:opacity .46s ease,transform .56s cubic-bezier(.22,.8,.24,1),filter .46s ease,visibility 0s linear .5s; }
+    .feature-page { grid-area:1 / 1; min-width:0; min-height:640px; opacity:0; visibility:hidden; pointer-events:none; transform:translateY(30px); filter:blur(7px); transition:opacity .46s ease,transform .56s cubic-bezier(.22,.8,.24,1),filter .46s ease,visibility 0s linear .5s; }
     .feature-page.is-active { z-index:1; opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0); filter:blur(0); transition-delay:0s; }
     @media (prefers-reduced-motion:reduce) { .feature-page { transition:none; transform:none; filter:none; } }
     .machine { padding:0; display:grid; grid-template-columns:1.12fr .88fr; background:#111; }
@@ -520,7 +523,9 @@
       const context = canvas.getContext('2d');
       const heroPages = document.getElementById('heroPages');
       const heroSlides = Array.from(heroPages.children);
+      const aboutPageStack = document.getElementById('aboutPages');
       const aboutPages = Array.from(document.querySelectorAll('.about-page'));
+      const featureStack = document.getElementById('machine');
       const featurePages = Array.from(document.querySelectorAll('.feature-page'));
       const pagerPrev = document.getElementById('pagerPrev');
       const pagerNext = document.getElementById('pagerNext');
@@ -568,6 +573,7 @@
       let suppressClickUntil = 0;
       let language = 'en';
       let languageAnimationTimer = 0;
+      let pageAnimationTimer = 0;
       let updates = [];
       let scrollRevealObserver = null;
       const textElements = Array.from(document.querySelectorAll('[data-i18n]'));
@@ -897,6 +903,7 @@
       }
 
       function setPage(nextIndex) {
+        const pageChanged = pageIndex !== Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
         pageIndex = Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
         renderTrack();
         heroPages.dataset.page = String(pageIndex + 1);
@@ -928,6 +935,18 @@
           panel.classList.toggle('is-active', active);
           panel.setAttribute('aria-hidden', String(!active));
         });
+        if (pageChanged && !reduceMotion) {
+          [aboutPageStack, featureStack].forEach(stack => {
+            stack.classList.remove('is-page-switching');
+            void stack.offsetWidth;
+            stack.classList.add('is-page-switching');
+          });
+          window.clearTimeout(pageAnimationTimer);
+          pageAnimationTimer = window.setTimeout(() => {
+            aboutPageStack.classList.remove('is-page-switching');
+            featureStack.classList.remove('is-page-switching');
+          }, 700);
+        }
       }
 
       function beginSwipe(event) {
