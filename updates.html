@@ -112,14 +112,13 @@
       let carouselTimers = [];
 
       function mapUpdate(row) {
-        const images = Array.isArray(row.image_urls) ? row.image_urls.filter(Boolean) : [];
-        if (!images.length && row.cover_url) images.push(row.cover_url);
+        const images = normaliseMediaEntries(row);
         return {
           id:row.slug,
           published:row.published_at,
           isPinned:Boolean(row.is_pinned),
           cover:images[0] || row.cover_url,
-          images:[...new Set(images)],
+          images,
           title:{ en:row.title_en, zh:row.title_zh },
           body:{ en:row.body_en, zh:row.body_zh }
         };
@@ -139,6 +138,38 @@
 
       function isVideoUrl(url) {
         return /\.(?:mp4|webm|ogg)(?:[?#].*)?$/i.test(String(url || ''));
+      }
+
+      function mediaUrl(entry) {
+        return typeof entry === 'string' ? entry : entry?.url || '';
+      }
+
+      function normaliseMediaEntries(row) {
+        const raw = Array.isArray(row?.image_urls) ? row.image_urls : [];
+        const entries = raw.map(value => {
+          if (typeof value === 'string') return { url:value, positionX:50, positionY:50, scale:1 };
+          if (!value || typeof value.url !== 'string') return null;
+          return {
+            ...value,
+            positionX:Math.min(100, Math.max(0, Number(value.positionX ?? value.position_x ?? 50) || 50)),
+            positionY:Math.min(100, Math.max(0, Number(value.positionY ?? value.position_y ?? 50) || 50)),
+            scale:Math.min(2.5, Math.max(1, Number(value.scale ?? 1) || 1))
+          };
+        }).filter(Boolean);
+        if (!entries.length && row?.cover_url) entries.push({ url:row.cover_url, positionX:50, positionY:50, scale:1 });
+        const seen = new Set();
+        return entries.filter(entry => {
+          const url = mediaUrl(entry);
+          if (!url || seen.has(url)) return false;
+          seen.add(url);
+          return true;
+        });
+      }
+
+      function applyMediaLayout(media, entry) {
+        if (!entry) return;
+        media.style.objectPosition = `${entry.positionX}% ${entry.positionY}%`;
+        media.style.transform = `scale(${entry.scale})`;
       }
 
       function clearCarousels() {
@@ -175,14 +206,17 @@
         next.setAttribute('aria-label', 'Next image');
         const thumbnails = document.createElement('div');
         thumbnails.className = 'gallery-thumbnails';
-        const thumbButtons = images.map((url, index) => {
+        const thumbButtons = images.map((entry, index) => {
           const thumb = document.createElement('button');
           thumb.className = 'gallery-thumb';
           thumb.type = 'button';
           thumb.setAttribute('aria-label', `View image ${index + 1}`);
+          const url = mediaUrl(entry);
           const thumbMedia = isVideoUrl(url) ? document.createElement('video') : document.createElement('img');
           thumbMedia.src = url;
           thumbMedia.alt = '';
+          thumbMedia.loading = 'lazy';
+          applyMediaLayout(thumbMedia, entry);
           if (thumbMedia.tagName === 'VIDEO') {
             thumbMedia.muted = true;
             thumbMedia.playsInline = true;
@@ -194,7 +228,8 @@
         });
         function showImage(index) {
           activeIndex = (index + images.length) % images.length;
-          const url = images[activeIndex];
+          const entry = images[activeIndex];
+          const url = mediaUrl(entry);
           const media = isVideoUrl(url) ? document.createElement('video') : document.createElement('img');
           media.className = 'gallery-stage-media';
           media.src = url;
@@ -244,10 +279,13 @@
         media.className = 'update-media';
         media.type = 'button';
         media.setAttribute('aria-label', `Open media gallery: ${postText(post, 'title')}`);
-        const slides = post.images.map((url, index) => {
+        const slides = post.images.map((entry, index) => {
+          const url = mediaUrl(entry);
           const slide = isVideoUrl(url) ? document.createElement('video') : document.createElement('img');
           slide.className = `update-slide${index === 0 ? ' is-active' : ''}`;
           slide.src = url;
+          slide.decoding = 'async';
+          applyMediaLayout(slide, entry);
           if (slide.tagName === 'VIDEO') {
             slide.muted = true;
             slide.loop = true;

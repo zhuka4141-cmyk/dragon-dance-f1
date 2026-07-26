@@ -803,6 +803,38 @@
         return /\.(?:mp4|webm|ogg)(?:[?#].*)?$/i.test(String(url || ''));
       }
 
+      function mediaUrl(entry) {
+        return typeof entry === 'string' ? entry : entry?.url || '';
+      }
+
+      function normaliseMediaEntries(row) {
+        const raw = Array.isArray(row?.image_urls) ? row.image_urls : [];
+        const entries = raw.map(value => {
+          if (typeof value === 'string') return { url:value, positionX:50, positionY:50, scale:1 };
+          if (!value || typeof value.url !== 'string') return null;
+          return {
+            ...value,
+            positionX:Math.min(100, Math.max(0, Number(value.positionX ?? value.position_x ?? 50) || 50)),
+            positionY:Math.min(100, Math.max(0, Number(value.positionY ?? value.position_y ?? 50) || 50)),
+            scale:Math.min(2.5, Math.max(1, Number(value.scale ?? 1) || 1))
+          };
+        }).filter(Boolean);
+        if (!entries.length && row?.cover_url) entries.push({ url:row.cover_url, positionX:50, positionY:50, scale:1 });
+        const seen = new Set();
+        return entries.filter(entry => {
+          const url = mediaUrl(entry);
+          if (!url || seen.has(url)) return false;
+          seen.add(url);
+          return true;
+        });
+      }
+
+      function applyMediaLayout(media, entry) {
+        if (!entry) return;
+        media.style.objectPosition = `${entry.positionX}% ${entry.positionY}%`;
+        media.style.transform = `scale(${entry.scale})`;
+      }
+
       function renderHomeUpdates() {
         if (!homeUpdates) return;
         homeUpdates.replaceChildren();
@@ -826,8 +858,11 @@
           if (post.cover) {
             const media = document.createElement('span');
             media.className = 'update-preview-media';
-            const coverMedia = isVideoUrl(post.cover) ? document.createElement('video') : document.createElement('img');
-            coverMedia.src = post.cover;
+            const coverUrl = mediaUrl(post.cover);
+            const coverMedia = isVideoUrl(coverUrl) ? document.createElement('video') : document.createElement('img');
+            coverMedia.src = coverUrl;
+            coverMedia.decoding = 'async';
+            applyMediaLayout(coverMedia, post.cover);
             if (coverMedia.tagName === 'VIDEO') {
               coverMedia.muted = true;
               coverMedia.loop = true;
@@ -869,8 +904,7 @@
       }
 
       function mapUpdate(row) {
-        const images = Array.isArray(row.image_urls) ? row.image_urls.filter(Boolean) : [];
-        if (!images.length && row.cover_url) images.push(row.cover_url);
+        const images = normaliseMediaEntries(row);
         return {
           id:row.slug,
           published:row.published_at,

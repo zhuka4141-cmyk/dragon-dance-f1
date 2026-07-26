@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
-  <title>Dragon Dance Updates Admin</title>
+  <title>Dragon Dance 動態管理</title>
   <style>
     :root { --ink:#080808; --paper:#f2f2ef; --line:#42423f; --muted:#a5a5a0; --red:#e01823; --panel:#191919; }
     * { box-sizing:border-box; }
@@ -59,18 +59,27 @@
     .field-columns { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; }
     .form-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:5px; }
     .form-actions .button { padding:0 16px; }
-    .image-preview-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:3px; }
-    .image-preview-card { min-width:0; display:grid; gap:5px; }
-    .image-preview-card img, .image-preview-card video { width:100%; aspect-ratio:1; object-fit:cover; background:#111; }
+    .image-preview-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:3px; }
+    .image-preview-card { min-width:0; display:grid; gap:9px; padding:10px; border:1px solid #3e3e3a; background:#111; }
+    .media-preview-frame { position:relative; width:100%; aspect-ratio:4 / 3; overflow:hidden; background:#202020; }
+    .media-preview-frame img, .media-preview-frame video { display:block; width:100%; height:100%; object-fit:cover; transform-origin:center; transition:transform .12s ease,object-position .12s ease; }
+    .media-preview-badge { position:absolute; top:8px; left:8px; z-index:1; padding:4px 6px; background:rgba(8,8,8,.72); color:var(--paper); font-size:9px; font-weight:900; letter-spacing:1px; }
+    .media-editor-controls { display:grid; gap:7px; }
+    .media-control { display:grid; grid-template-columns:72px minmax(0,1fr) 42px; gap:8px; align-items:center; color:#c9c9c4; font-size:10px; font-weight:700; }
+    .media-control input[type="range"] { min-width:0; height:18px; padding:0; border:0; background:transparent; accent-color:var(--red); }
+    .media-control-value { color:#ffb1b4; text-align:right; font-variant-numeric:tabular-nums; }
+    .media-reset { justify-self:start; padding:0; border:0; background:transparent; color:#a5a5a0; font-size:10px; text-decoration:underline; text-underline-offset:3px; }
+    .media-reset:hover, .media-reset:focus-visible { color:var(--red); outline:0; }
     .image-preview-meta { min-width:0; display:grid; gap:2px; color:#aaa; font-size:10px; line-height:1.35; }
     .image-preview-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .image-preview-size { color:#ff9ca1; font-weight:700; letter-spacing:.4px; }
     .image-preview-summary { margin-top:9px; color:#c9c9c4; font-size:11px; line-height:1.4; }
+    .media-edit-hint { margin:-4px 0 0; color:#a5a5a0; font-size:11px; line-height:1.45; }
     .posts-list { display:grid; gap:0; }
     .admin-post { display:grid; grid-template-columns:96px minmax(0,1fr); gap:14px; padding:15px 0; border-top:1px solid #4c4c48; }
     .admin-post.is-pinned { border-top-color:var(--red); }
     .admin-post-image { width:96px; aspect-ratio:1; overflow:hidden; background:#292929; }
-    .admin-post-image img, .admin-post-image video { width:100%; height:100%; object-fit:cover; }
+    .admin-post-image img, .admin-post-image video { width:100%; height:100%; object-fit:cover; transform-origin:center; }
     .admin-post-date { color:var(--red); font-size:10px; font-weight:700; letter-spacing:1px; }
     .pin-state { display:inline-block; margin-left:7px; padding:2px 5px; border:1px solid var(--red); color:#ffb1b4; font-size:9px; font-weight:900; letter-spacing:1px; text-transform:uppercase; vertical-align:middle; }
     .admin-post h3 { margin:8px 0 8px; font-size:23px; }
@@ -86,23 +95,23 @@
   <div class="topline"></div>
   <header>
     <a class="wordmark" href="../index.html">Dragon Dance<span>STEM Racing</span></a>
-    <a class="site-link" href="../updates.html">查看公开动态 ↗</a>
+    <a class="site-link" href="../updates.html">查看公開動態 ↗</a>
   </header>
   <main>
     <section id="authView">
-      <span class="kicker">Dragon Dance / Updates Admin</span>
-      <h1>管理<br>动态。</h1>
-      <p class="lede">登录后可上传图片或影片、撰写中英文内容并直接发布。公开网站会即时读取已发布的动态。</p>
+      <span class="kicker">Dragon Dance / 動態管理</span>
+      <h1>管理<br>動態。</h1>
+      <p class="lede">登入後可上載圖片或影片、撰寫中英文內容並直接發佈。公開網站會即時讀取已發佈的動態。</p>
       <div class="auth-grid">
         <section class="auth-panel">
-          <h2>登录</h2>
-          <p>使用 Dragon Dance 管理邮箱与密码登录。</p>
+          <h2>登入</h2>
+          <p>使用 Dragon Dance 管理電郵與密碼登入。</p>
           <form id="signInForm">
-            <label>电邮<input id="signInEmail" type="email" autocomplete="email" required /></label>
-            <label>密码<input id="signInPassword" type="password" autocomplete="current-password" required /></label>
-            <button class="button" type="submit">登录后台</button>
+            <label>電郵<input id="signInEmail" type="email" autocomplete="email" required /></label>
+            <label>密碼<input id="signInPassword" type="password" autocomplete="current-password" required /></label>
+            <button class="button" type="submit">登入後台</button>
           </form>
-          <button class="text-button" id="resetPasswordButton" type="button">忘记密码？寄送重设电邮</button>
+          <button class="text-button" id="resetPasswordButton" type="button">忘記密碼？寄送重設電郵</button>
         </section>
       </div>
       <p class="status" id="authStatus" role="status"></p>
@@ -110,47 +119,48 @@
 
     <section class="admin-shell" id="editorView" hidden>
       <div class="admin-bar">
-        <div><span class="kicker">Signed in</span><h2>最新<br>动态。</h2><p id="editorEmail"></p></div>
+        <div><span class="kicker">已登入</span><h2>最新<br>動態。</h2><p id="editorEmail"></p></div>
         <div class="admin-actions">
-          <button class="button secondary" id="passwordSetupButton" type="button">设置密码</button>
+          <button class="button secondary" id="passwordSetupButton" type="button">設定密碼</button>
           <button class="button secondary" id="signOutButton" type="button">登出</button>
         </div>
       </div>
       <form class="password-panel" id="passwordForm" hidden>
-        <span class="kicker">Account security</span>
-        <p>请设定一个至少 8 个字元的独有密码；密码不会显示给任何人。</p>
-        <label>新密码<input id="newPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
-        <label>确认新密码<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
-        <div class="form-actions"><button class="button" type="submit">储存密码</button></div>
+        <span class="kicker">帳戶安全</span>
+        <p>請設定一個至少 8 個字元的獨有密碼；密碼不會顯示給任何人。</p>
+        <label>新密碼<input id="newPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
+        <label>確認新密碼<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
+        <div class="form-actions"><button class="button" type="submit">儲存密碼</button></div>
       </form>
       <div class="admin-content">
         <section class="editor-panel">
-          <span class="kicker" id="formMode">New update</span>
-          <h2 id="formTitle">发布<br>新动态。</h2>
-          <p>中英文内容会分别显示在网站的语言切换版本。发布日期预设为当天，也可以在发布前调整；发布后会立即出现在首页和完整动态页。</p>
+          <span class="kicker" id="formMode">新增動態</span>
+          <h2 id="formTitle">發佈<br>新動態。</h2>
+          <p>中英文內容會分別顯示在網站的語言切換版本。發佈日期預設為當天，也可以在發佈前調整；發佈後會立即出現在首頁和完整動態頁。</p>
           <form id="updateForm">
             <div class="field-columns">
-              <label>发布日期（预设今天，可调整）<input id="publishedAt" type="date" required /></label>
+              <label>發佈日期（預設今天，可調整）<input id="publishedAt" type="date" required /></label>
             </div>
             <input id="slug" type="hidden" />
-            <label>图片或影片（可多选；首个会作首页封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple /></label>
+            <label>圖片或影片（可多選；首個會作首頁封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple /></label>
+            <p class="media-edit-hint">可在下方調整每張圖片的水平位置、垂直位置與縮放；儲存後會同步到首頁及完整動態頁。</p>
             <div class="image-preview-grid" id="imagePreviewGrid" hidden></div>
             <div class="image-preview-summary" id="imagePreviewSummary" hidden></div>
-            <label>标题（English）<input id="titleEn" type="text" required /></label>
-            <label>标题（中文）<input id="titleZh" type="text" required /></label>
-            <label>内文（English）<textarea id="bodyEn" required></textarea></label>
-            <label>内文（中文）<textarea id="bodyZh" required></textarea></label>
+            <label>標題（English）<input id="titleEn" type="text" required /></label>
+            <label>標題（繁體中文）<input id="titleZh" type="text" required /></label>
+            <label>內文（English）<textarea id="bodyEn" required></textarea></label>
+            <label>內文（繁體中文）<textarea id="bodyZh" required></textarea></label>
             <div class="form-actions">
-              <button class="button" id="publishButton" type="submit">发布动态</button>
-              <button class="button secondary" id="resetButton" type="button">清除内容</button>
+              <button class="button" id="publishButton" type="submit">發佈動態</button>
+              <button class="button secondary" id="resetButton" type="button">清除內容</button>
             </div>
           </form>
           <p class="status" id="editorStatus" role="status"></p>
         </section>
         <section class="posts-panel">
-          <span class="kicker">Published</span>
-          <h2>所有<br>动态。</h2>
-          <p>点击编辑可修改已发布内容；删除后会从网站移除。</p>
+          <span class="kicker">已發佈</span>
+          <h2>所有<br>動態。</h2>
+          <p>點擊編輯可修改已發佈內容；刪除後會從網站移除。</p>
           <div class="posts-list" id="postsList"></div>
         </section>
       </div>
@@ -185,7 +195,7 @@
       };
       let currentUser = null;
       let editingId = null;
-      let existingImageUrls = [];
+      let editorMediaEntries = [];
       let publishedPosts = [];
       let dateWasChanged = false;
 
@@ -199,14 +209,47 @@
         return `../${url.replace(/^\//, '')}`;
       }
 
-      function normaliseImageUrls(post) {
-        const urls = Array.isArray(post.image_urls) ? post.image_urls.filter(Boolean) : [];
-        if (!urls.length && post.cover_url) urls.push(post.cover_url);
-        return [...new Set(urls)];
-      }
-
       function isVideoUrl(url) {
         return /\.(?:mp4|webm|ogg)(?:[?#].*)?$/i.test(String(url || ''));
+      }
+
+      function clamp(value, minimum, maximum) {
+        return Math.min(maximum, Math.max(minimum, Number(value) || minimum));
+      }
+
+      function mediaUrl(entry) {
+        return typeof entry === 'string' ? entry : entry?.url || '';
+      }
+
+      function normaliseMediaEntries(post) {
+        const rawEntries = Array.isArray(post?.image_urls) ? post.image_urls : [];
+        const entries = rawEntries.map(value => {
+          if (typeof value === 'string') {
+            return { url:value, type:isVideoUrl(value) ? 'video/mp4' : 'image/*', positionX:50, positionY:50, scale:1 };
+          }
+          if (!value || typeof value.url !== 'string') return null;
+          return {
+            ...value,
+            type:value.type || (isVideoUrl(value.url) ? 'video/mp4' : 'image/*'),
+            positionX:clamp(value.positionX ?? value.position_x ?? 50, 0, 100),
+            positionY:clamp(value.positionY ?? value.position_y ?? 50, 0, 100),
+            scale:clamp(value.scale ?? 1, 1, 2.5)
+          };
+        }).filter(Boolean);
+        if (!entries.length && post?.cover_url) {
+          entries.push({ url:post.cover_url, type:isVideoUrl(post.cover_url) ? 'video/mp4' : 'image/*', positionX:50, positionY:50, scale:1 });
+        }
+        const seen = new Set();
+        return entries.filter(entry => {
+          const url = mediaUrl(entry);
+          if (!url || seen.has(url)) return false;
+          seen.add(url);
+          return true;
+        });
+      }
+
+      function normaliseImageUrls(post) {
+        return normaliseMediaEntries(post).map(mediaUrl);
       }
 
       function isVideoFile(file) {
@@ -245,28 +288,51 @@
         return `${(size / (1024 * 1024)).toFixed(2)} MB`;
       }
 
-      function setImagePreview(urls) {
+      function applyMediaStyle(media, entry) {
+        media.style.objectPosition = `${clamp(entry.positionX, 0, 100)}% ${clamp(entry.positionY, 0, 100)}%`;
+        media.style.transform = `scale(${clamp(entry.scale, 1, 2.5)})`;
+      }
+
+      function releasePendingMedia(entries) {
+        entries.filter(entry => entry?.file && String(entry.url || '').startsWith('blob:')).forEach(entry => URL.revokeObjectURL(entry.url));
+      }
+
+      function setImagePreview(entries = editorMediaEntries) {
         const preview = document.getElementById('imagePreviewGrid');
         const summary = document.getElementById('imagePreviewSummary');
         let totalBytes = 0;
         let sizedFiles = 0;
         preview.replaceChildren();
-        urls.forEach((entry, index) => {
-          const details = typeof entry === 'object' ? entry : null;
-          const url = typeof entry === 'string' ? entry : entry.url;
-          const video = details ? details.type?.startsWith('video/') : isVideoUrl(url);
+        entries.forEach((entry, index) => {
+          const details = typeof entry === 'object' ? entry : { url:entry };
+          details.positionX = clamp(details.positionX ?? 50, 0, 100);
+          details.positionY = clamp(details.positionY ?? 50, 0, 100);
+          details.scale = clamp(details.scale ?? 1, 1, 2.5);
+          const url = mediaUrl(details);
+          const video = details.type?.startsWith('video/') || isVideoUrl(url);
           const media = video ? document.createElement('video') : document.createElement('img');
-          media.src = typeof entry === 'string' ? assetUrl(url) : url;
-          media.alt = index === 0 ? 'Cover media preview' : 'Update media preview';
+          media.src = details.file ? url : assetUrl(url);
+          media.alt = index === 0 ? '封面預覽' : '動態圖片預覽';
+          media.decoding = 'async';
           if (video) {
             media.muted = true;
             media.loop = true;
             media.playsInline = true;
             media.autoplay = true;
           }
+          applyMediaStyle(media, details);
           const card = document.createElement('div');
           card.className = 'image-preview-card';
-          card.append(media);
+          const frame = document.createElement('div');
+          frame.className = 'media-preview-frame';
+          if (index === 0) {
+            const badge = document.createElement('span');
+            badge.className = 'media-preview-badge';
+            badge.textContent = '首頁封面';
+            frame.append(badge);
+          }
+          frame.append(media);
+          card.append(frame);
           if (details?.size) {
             totalBytes += details.size;
             sizedFiles += 1;
@@ -274,7 +340,7 @@
             meta.className = 'image-preview-meta';
             const name = document.createElement('span');
             name.className = 'image-preview-name';
-            name.textContent = details.name || (video ? 'Video' : 'Image');
+            name.textContent = details.name || (video ? '影片' : '圖片');
             name.title = name.textContent;
             const size = document.createElement('span');
             size.className = 'image-preview-size';
@@ -282,11 +348,51 @@
             meta.append(name, size);
             card.append(meta);
           }
+          const controls = document.createElement('div');
+          controls.className = 'media-editor-controls';
+          const controlDefinitions = [
+            ['positionX', '水平位置', 0, 100, 1, `${Math.round(details.positionX)}%`],
+            ['positionY', '垂直位置', 0, 100, 1, `${Math.round(details.positionY)}%`],
+            ['scale', '圖片縮放', 1, 2.5, .05, `${Number(details.scale).toFixed(2)}×`]
+          ];
+          controlDefinitions.forEach(([key, labelText, min, max, step, initialValue]) => {
+            const row = document.createElement('label');
+            row.className = 'media-control';
+            row.textContent = labelText;
+            const input = document.createElement('input');
+            input.type = 'range';
+            input.min = String(min);
+            input.max = String(max);
+            input.step = String(step);
+            input.value = String(clamp(details[key], min, max));
+            const value = document.createElement('span');
+            value.className = 'media-control-value';
+            value.textContent = initialValue;
+            input.addEventListener('input', () => {
+              details[key] = Number(input.value);
+              value.textContent = key === 'scale' ? `${details[key].toFixed(2)}×` : `${Math.round(details[key])}%`;
+              applyMediaStyle(media, details);
+            });
+            row.append(input, value);
+            controls.append(row);
+          });
+          const resetMedia = document.createElement('button');
+          resetMedia.className = 'media-reset';
+          resetMedia.type = 'button';
+          resetMedia.textContent = '重設圖片位置與大小';
+          resetMedia.addEventListener('click', () => {
+            details.positionX = 50;
+            details.positionY = 50;
+            details.scale = 1;
+            setImagePreview(entries);
+          });
+          controls.append(resetMedia);
+          card.append(controls);
           preview.append(card);
         });
-        preview.hidden = !urls.length;
+        preview.hidden = !entries.length;
         summary.hidden = !sizedFiles;
-        summary.textContent = sizedFiles ? `Selected ${sizedFiles} file${sizedFiles === 1 ? '' : 's'} · Total ${formatFileSize(totalBytes)}` : '';
+        summary.textContent = sizedFiles ? `已選擇 ${sizedFiles} 個檔案 · 合共 ${formatFileSize(totalBytes)}；圖片發佈時會自動最佳化。` : '';
       }
 
       function slugify(value) {
@@ -323,13 +429,14 @@
 
       function resetForm() {
         editingId = null;
-        existingImageUrls = [];
+        releasePendingMedia(editorMediaEntries);
+        editorMediaEntries = [];
         dateWasChanged = false;
         updateForm.reset();
         fields.publishedAt.value = todayIsoDate();
-        document.getElementById('formMode').textContent = 'New update';
-        document.getElementById('formTitle').innerHTML = '发布<br>新动态。';
-        document.getElementById('publishButton').textContent = '发布动态';
+        document.getElementById('formMode').textContent = '新增動態';
+        document.getElementById('formTitle').innerHTML = '發佈<br>新動態。';
+        document.getElementById('publishButton').textContent = '發佈動態';
         setImagePreview([]);
         setStatus(editorStatus, '');
       }
@@ -339,7 +446,7 @@
         if (!publishedPosts.length) {
           const empty = document.createElement('p');
           empty.className = 'empty-posts';
-          empty.textContent = '尚未发布任何动态。';
+          empty.textContent = '尚未發佈任何動態。';
           postsList.append(empty);
           return;
         }
@@ -348,10 +455,15 @@
           article.className = `admin-post${post.is_pinned ? ' is-pinned' : ''}`;
           const imageBox = document.createElement('div');
           imageBox.className = 'admin-post-image';
-          if (post.cover_url) {
-            const coverMedia = isVideoUrl(post.cover_url) ? document.createElement('video') : document.createElement('img');
-            coverMedia.src = assetUrl(post.cover_url);
+          const coverEntry = normaliseMediaEntries(post)[0];
+          if (coverEntry) {
+            const coverUrl = mediaUrl(coverEntry);
+            const coverMedia = isVideoUrl(coverUrl) ? document.createElement('video') : document.createElement('img');
+            coverMedia.src = assetUrl(coverUrl);
             coverMedia.alt = post.cover_alt_zh || post.title_zh || post.title_en;
+            coverMedia.loading = 'lazy';
+            coverMedia.decoding = 'async';
+            applyMediaStyle(coverMedia, coverEntry);
             if (coverMedia.tagName === 'VIDEO') {
               coverMedia.muted = true;
               coverMedia.loop = true;
@@ -367,7 +479,7 @@
           if (post.is_pinned) {
             const pinState = document.createElement('span');
             pinState.className = 'pin-state';
-            pinState.textContent = '首页置顶';
+            pinState.textContent = '首頁置頂';
             date.append(pinState);
           }
           const title = document.createElement('h3');
@@ -379,17 +491,17 @@
           const edit = document.createElement('button');
           edit.className = 'text-button';
           edit.type = 'button';
-          edit.textContent = '编辑';
+          edit.textContent = '編輯';
           edit.addEventListener('click', () => editPost(post));
           const pin = document.createElement('button');
           pin.className = 'text-button';
           pin.type = 'button';
-          pin.textContent = post.is_pinned ? '取消置顶' : '置顶到首页';
+          pin.textContent = post.is_pinned ? '取消置頂' : '置頂到首頁';
           pin.addEventListener('click', () => togglePin(post, pin));
           const remove = document.createElement('button');
           remove.className = 'text-button';
           remove.type = 'button';
-          remove.textContent = '删除';
+          remove.textContent = '刪除';
           remove.addEventListener('click', () => deletePost(post));
           actions.append(edit, pin, remove);
           copy.append(date, title, excerpt, actions);
@@ -410,7 +522,7 @@
 
       async function togglePin(post, button) {
         button.disabled = true;
-        setStatus(editorStatus, post.is_pinned ? '正在取消置顶...' : '正在置顶到首页...');
+        setStatus(editorStatus, post.is_pinned ? '正在取消置頂...' : '正在置頂到首頁...');
         try {
           if (post.is_pinned) {
             const { error } = await client.from('updates').update({ is_pinned:false }).eq('id', post.id);
@@ -421,17 +533,17 @@
             const { error: pinError } = await client.from('updates').update({ is_pinned:true }).eq('id', post.id);
             if (pinError) throw pinError;
           }
-          setStatus(editorStatus, post.is_pinned ? '已取消首页置顶。' : '已置顶到首页。', 'success');
+          setStatus(editorStatus, post.is_pinned ? '已取消首頁置頂。' : '已置頂到首頁。', 'success');
           await loadPosts();
         } catch (error) {
-          setStatus(editorStatus, error.message || '无法更新置顶状态，请再试一次。', 'error');
+          setStatus(editorStatus, error.message || '無法更新置頂狀態，請再試一次。', 'error');
           button.disabled = false;
         }
       }
 
       function editPost(post) {
         editingId = post.id;
-        existingImageUrls = normaliseImageUrls(post);
+        editorMediaEntries = normaliseMediaEntries(post);
         dateWasChanged = false;
         fields.publishedAt.value = post.published_at || '';
         fields.slug.value = post.slug || '';
@@ -439,16 +551,16 @@
         fields.titleZh.value = post.title_zh || '';
         fields.bodyEn.value = post.body_en || '';
         fields.bodyZh.value = post.body_zh || '';
-        document.getElementById('formMode').textContent = 'Edit update';
-        document.getElementById('formTitle').innerHTML = '编辑<br>动态。';
-        document.getElementById('publishButton').textContent = '储存更新';
-        setImagePreview(existingImageUrls);
-        setStatus(editorStatus, '正在编辑已发布动态。');
+        document.getElementById('formMode').textContent = '編輯動態';
+        document.getElementById('formTitle').innerHTML = '編輯<br>動態。';
+        document.getElementById('publishButton').textContent = '儲存更新';
+        setImagePreview(editorMediaEntries);
+        setStatus(editorStatus, '正在編輯已發佈動態。');
         window.scrollTo({ top:0, behavior:'smooth' });
       }
 
       async function deletePost(post) {
-        if (!window.confirm(`确定删除「${post.title_zh || post.title_en}」？`)) return;
+        if (!window.confirm(`確定刪除「${post.title_zh || post.title_en}」？`)) return;
         const { error } = await client.from('updates').delete().eq('id', post.id);
         if (error) {
           setStatus(editorStatus, error.message, 'error');
@@ -458,12 +570,12 @@
           await deleteStoredImages(post);
         } catch (storageError) {
           if (editingId === post.id) resetForm();
-          setStatus(editorStatus, '动态已删除，但图片档案未能删除。请再试一次或联络管理员。', 'error');
+          setStatus(editorStatus, '動態已刪除，但圖片檔案未能刪除。請再試一次或聯絡管理員。', 'error');
           await loadPosts();
           return;
         }
         if (editingId === post.id) resetForm();
-        setStatus(editorStatus, '动态和专属图片档案已删除。', 'success');
+        setStatus(editorStatus, '動態和專屬圖片檔案已刪除。', 'success');
         await loadPosts();
       }
 
@@ -476,7 +588,7 @@
           videoCompressorLoading = (async () => {
             const FFmpegClass = window.FFmpegWASM?.FFmpeg;
             const toBlobURL = window.FFmpegUtil?.toBlobURL;
-            if (!FFmpegClass || !toBlobURL) throw new Error('影片压缩组件载入失败，请重新整理页面。');
+            if (!FFmpegClass || !toBlobURL) throw new Error('影片壓縮元件載入失敗，請重新整理頁面。');
             const ffmpeg = new FFmpegClass();
             const coreBase = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
             await ffmpeg.load({
@@ -485,7 +597,7 @@
               wasmURL:await toBlobURL(`${coreBase}/ffmpeg-core.wasm`, 'application/wasm')
             });
             ffmpeg.on('progress', ({ progress }) => {
-              if (Number.isFinite(progress)) setStatus(editorStatus, `正在压缩影片 ${Math.round(progress * 100)}%...`);
+            if (Number.isFinite(progress)) setStatus(editorStatus, `正在壓縮影片 ${Math.round(progress * 100)}%...`);
             });
             videoCompressor = ffmpeg;
             return ffmpeg;
@@ -495,7 +607,7 @@
       }
 
       async function compressVideo(file) {
-        if (file.size > 150 * 1024 * 1024) throw new Error('单个影片原档不能超过 150 MB。');
+        if (file.size > 150 * 1024 * 1024) throw new Error('單個影片原檔不能超過 150 MB。');
         const ffmpeg = await getVideoCompressor();
         const inputExtension = file.name.split('.').pop().toLowerCase() || 'mp4';
         const inputName = `input-${crypto.randomUUID()}.${inputExtension}`;
@@ -514,7 +626,7 @@
             outputName
           ]);
           const output = await ffmpeg.readFile(outputName);
-          if (output.byteLength > 50 * 1024 * 1024) throw new Error('影片压缩后仍超过 50 MB，请先降低影片长度或画质。');
+          if (output.byteLength > 50 * 1024 * 1024) throw new Error('影片壓縮後仍超過 50 MB，請先降低影片長度或畫質。');
           const baseName = file.name.replace(/\.[^.]+$/, '') || 'dragon-dance-video';
           return new File([output], `${baseName}.mp4`, { type:'video/mp4' });
         } finally {
@@ -522,23 +634,62 @@
         }
       }
 
+      async function compressImage(file) {
+        if (!String(file?.type || '').startsWith('image/')) return file;
+        const maxDimension = 2400;
+        let source = null;
+        let objectUrl = null;
+        try {
+          if (window.createImageBitmap) {
+            source = await window.createImageBitmap(file);
+          } else {
+            objectUrl = URL.createObjectURL(file);
+            source = await new Promise((resolve, reject) => {
+              const image = new Image();
+              image.onload = () => resolve(image);
+              image.onerror = reject;
+              image.src = objectUrl;
+            });
+          }
+          const sourceWidth = source.width || source.naturalWidth;
+          const sourceHeight = source.height || source.naturalHeight;
+          const ratio = Math.min(1, maxDimension / Math.max(sourceWidth, sourceHeight));
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.max(1, Math.round(sourceWidth * ratio));
+          canvas.height = Math.max(1, Math.round(sourceHeight * ratio));
+          const context = canvas.getContext('2d', { alpha:true });
+          context.drawImage(source, 0, 0, canvas.width, canvas.height);
+          const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/webp', .82));
+          if (!blob || (blob.size >= file.size * .94 && ratio === 1)) return file;
+          const baseName = file.name.replace(/\.[^.]+$/, '') || 'dragon-dance-image';
+          return new File([blob], `${baseName}.webp`, { type:'image/webp', lastModified:Date.now() });
+        } finally {
+          if (source?.close) source.close();
+          if (objectUrl) URL.revokeObjectURL(objectUrl);
+        }
+      }
+
       async function prepareMediaFile(file) {
-        if (!isVideoFile(file)) return file;
+        if (!isVideoFile(file)) {
+          const optimized = await compressImage(file);
+          if (optimized !== file) setStatus(editorStatus, `圖片已最佳化：${formatFileSize(file.size)} → ${formatFileSize(optimized.size)}。`);
+          return optimized;
+        }
         if (canUploadOriginalVideo(file)) {
-          setStatus(editorStatus, `Video ${formatFileSize(file.size)} is within the 50 MB limit; uploading directly.`);
+          setStatus(editorStatus, `影片 ${formatFileSize(file.size)} 未超過 50 MB，直接上載。`);
           return file;
         }
-        setStatus(editorStatus, `Compressing video ${formatFileSize(file.size)}...`);
+        setStatus(editorStatus, `正在壓縮影片 ${formatFileSize(file.size)}...`);
         try {
           return await compressVideo(file);
         } catch (error) {
           videoCompressor = null;
           videoCompressorLoading = null;
           if (canUploadOriginalVideo(file)) {
-            setStatus(editorStatus, 'Video compression failed; uploading the original MP4/WebM file instead.');
+            setStatus(editorStatus, '影片壓縮失敗，改為直接上載原本的 MP4/WebM 檔案。');
             return file;
           }
-          throw new Error(`Video compression failed: ${error?.message || 'use an MP4 or WebM file under 50 MB.'}`);
+          throw new Error(`影片壓縮失敗：${error?.message || '請使用 50 MB 以下的 MP4 或 WebM 檔案。'}`);
         }
       }
 
@@ -558,24 +709,33 @@
         event.preventDefault();
         const submit = document.getElementById('publishButton');
         submit.disabled = true;
-        setStatus(editorStatus, '正在发布...');
+        setStatus(editorStatus, '正在發佈...');
         try {
-          const files = Array.from(fields.imageFiles.files);
-          if (existingImageUrls.length + files.length > 8) throw new Error('每则动态最多可保留 8 个媒体档案。');
-          const preparedFiles = [];
-          for (const file of files) {
-            setStatus(editorStatus, isVideoFile(file) ? '正在准备压缩影片...' : '正在准备图片...');
-            preparedFiles.push(await prepareMediaFile(file));
+          const entries = editorMediaEntries.slice(0, 8);
+          if (editorMediaEntries.length > 8) throw new Error('每則動態最多可保留 8 個媒體檔案。');
+          const uploadedEntries = [];
+          const pendingEntries = entries.filter(entry => entry.file);
+          for (let index = 0; index < pendingEntries.length; index += 1) {
+            const entry = pendingEntries[index];
+            setStatus(editorStatus, `正在處理第 ${index + 1}/${pendingEntries.length} 個媒體...`);
+            const file = await prepareMediaFile(entry.file);
+            setStatus(editorStatus, `正在上載第 ${index + 1}/${pendingEntries.length} 個媒體（${formatFileSize(file.size)}）...`);
+            const url = await uploadMedia(file);
+            uploadedEntries.push({ ...entry, url, type:file.type, name:file.name, size:file.size, file:undefined });
           }
-          const uploadedUrls = [];
-          for (let index = 0; index < preparedFiles.length; index += 1) {
-            const file = preparedFiles[index];
-            setStatus(editorStatus, `Uploading media ${index + 1}/${preparedFiles.length} (${formatFileSize(file.size)})...`);
-            uploadedUrls.push(await uploadMedia(file));
-          }
-          if (uploadedUrls.length) setStatus(editorStatus, 'Media uploaded. Saving update...');
-          const imageUrls = [...existingImageUrls, ...uploadedUrls].slice(0, 8);
-          const coverUrl = imageUrls[0] || null;
+          const finalEntries = [
+            ...entries.filter(entry => !entry.file),
+            ...uploadedEntries
+          ].slice(0, 8);
+          const imageUrls = finalEntries.map(entry => ({
+            url:mediaUrl(entry),
+            type:entry.type || (isVideoUrl(mediaUrl(entry)) ? 'video/mp4' : 'image/*'),
+            positionX:clamp(entry.positionX, 0, 100),
+            positionY:clamp(entry.positionY, 0, 100),
+            scale:clamp(entry.scale, 1, 2.5)
+          }));
+          const coverUrl = imageUrls[0]?.url || null;
+          if (pendingEntries.length) setStatus(editorStatus, '媒體已上載，正在儲存動態...');
           const slug = await resolveSlug();
           const publishDate = editingId
             ? (fields.publishedAt.value || todayIsoDate())
@@ -603,10 +763,10 @@
           const { error } = await request;
           if (error) throw error;
           resetForm();
-          setStatus(editorStatus, '已发布。首页与完整动态页会立即更新。', 'success');
+          setStatus(editorStatus, '已發佈。首頁與完整動態頁會立即更新。', 'success');
           await loadPosts();
         } catch (error) {
-          setStatus(editorStatus, error.message || '发布失败，请再试一次。', 'error');
+          setStatus(editorStatus, error.message || '發佈失敗，請再試一次。', 'error');
         } finally {
           submit.disabled = false;
         }
@@ -618,7 +778,7 @@
         if (currentUser && signedInEmail !== administratorEmail) {
           await client.auth.signOut();
           currentUser = null;
-          setStatus(authStatus, '此帐号没有发布权限。请使用 Dragon Dance 管理电邮登录。', 'error');
+          setStatus(authStatus, '此帳戶沒有發佈權限。請使用 Dragon Dance 管理電郵登入。', 'error');
         }
         authView.hidden = Boolean(currentUser);
         editorView.hidden = !currentUser;
@@ -630,7 +790,7 @@
 
       document.getElementById('signInForm').addEventListener('submit', async event => {
         event.preventDefault();
-        setStatus(authStatus, '正在登录...');
+        setStatus(authStatus, '正在登入...');
         const { error } = await client.auth.signInWithPassword({
           email:document.getElementById('signInEmail').value.trim(),
           password:document.getElementById('signInPassword').value
@@ -641,7 +801,7 @@
       document.getElementById('resetPasswordButton').addEventListener('click', async () => {
         const email = document.getElementById('signInEmail').value.trim().toLowerCase();
         if (email !== administratorEmail) {
-          setStatus(authStatus, '请输入 Dragon Dance 管理电邮，再重设密码。', 'error');
+          setStatus(authStatus, '請輸入 Dragon Dance 管理電郵，再重設密碼。', 'error');
           return;
         }
         const { error } = await client.auth.resetPasswordForEmail(email, {
@@ -649,7 +809,7 @@
         });
         setStatus(
           authStatus,
-          error ? error.message : '重设密码电邮已寄出，请到邮箱继续。',
+          error ? error.message : '重設密碼電郵已寄出，請到電郵繼續。',
           error ? 'error' : 'success'
         );
       });
@@ -659,7 +819,7 @@
         const password = document.getElementById('newPassword').value;
         const confirmation = document.getElementById('confirmPassword').value;
         if (password !== confirmation) {
-          setStatus(editorStatus, '两次输入的密码不一致。', 'error');
+          setStatus(editorStatus, '兩次輸入的密碼不一致。', 'error');
           return;
         }
         const { error } = await client.auth.updateUser({ password });
@@ -669,7 +829,7 @@
         }
         passwordForm.reset();
         passwordForm.hidden = true;
-        setStatus(editorStatus, '密码已更新。', 'success');
+        setStatus(editorStatus, '密碼已更新。', 'success');
       });
 
       fields.titleEn.addEventListener('input', () => {
@@ -679,13 +839,23 @@
         dateWasChanged = true;
       });
       fields.imageFiles.addEventListener('change', () => {
-        const pendingUrls = Array.from(fields.imageFiles.files).map(file => ({
+        releasePendingMedia(editorMediaEntries);
+        const existingEntries = editorMediaEntries.filter(entry => !entry.file);
+        const pendingEntries = Array.from(fields.imageFiles.files).map(file => ({
           url:URL.createObjectURL(file),
+          file,
           type:file.type,
           name:file.name,
-          size:file.size
+          size:file.size,
+          positionX:50,
+          positionY:50,
+          scale:1
         }));
-        setImagePreview([...existingImageUrls, ...pendingUrls].slice(0, 8));
+        editorMediaEntries = [...existingEntries, ...pendingEntries].slice(0, 8);
+        setImagePreview(editorMediaEntries);
+        if (pendingEntries.length + existingEntries.length > 8) {
+          setStatus(editorStatus, '每則動態最多可保留 8 個媒體檔案，超出的檔案不會上載。', 'error');
+        }
       });
       updateForm.addEventListener('submit', savePost);
       document.getElementById('resetButton').addEventListener('click', resetForm);
