@@ -66,8 +66,11 @@
     .media-preview-frame img, .media-preview-frame video { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; transform-origin:center; }
     .media-preview-badge { position:absolute; top:8px; left:8px; z-index:1; padding:4px 6px; background:rgba(8,8,8,.72); color:var(--paper); font-size:9px; font-weight:900; letter-spacing:1px; }
     .media-editor-controls { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .media-card-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:7px; }
     .media-crop-action { min-height:34px; padding:0 12px; border:1px solid #777773; border-radius:0; background:transparent; color:var(--paper); font-size:10px; font-weight:900; letter-spacing:1px; text-transform:uppercase; transition:border-color .2s,background .2s,color .2s; }
     .media-crop-action:hover, .media-crop-action:focus-visible { border-color:var(--red); background:var(--red); color:#fff; outline:0; }
+    .media-remove-action { min-height:34px; padding:0 11px; border:1px solid #7b272b; border-radius:0; background:transparent; color:#ffb1b4; font-size:10px; font-weight:900; letter-spacing:1px; text-transform:uppercase; transition:border-color .2s,background .2s,color .2s; }
+    .media-remove-action:hover, .media-remove-action:focus-visible { border-color:var(--red); background:var(--red); color:#fff; outline:0; }
     .media-crop-note { color:#999994; font-size:10px; line-height:1.35; }
     .image-preview-meta { min-width:0; display:grid; gap:2px; color:#aaa; font-size:10px; line-height:1.35; }
     .image-preview-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -337,19 +340,23 @@
         return decodeURIComponent(String(url).slice(start + marker.length).split('?')[0]);
       }
 
-      async function deleteStoredImages(post) {
+      async function deleteStoredMediaUrls(urls, excludedPostId) {
         const sharedUrls = new Set(
           publishedPosts
-            .filter(candidate => candidate.id !== post.id)
+            .filter(candidate => candidate.id !== excludedPostId)
             .flatMap(normaliseImageUrls)
         );
-        const paths = normaliseImageUrls(post)
+        const paths = [...new Set(urls)]
           .filter(url => !sharedUrls.has(url))
           .map(storagePathFromUrl)
           .filter(Boolean);
         if (!paths.length) return;
         const { error } = await client.storage.from('updates').remove(paths);
         if (error) throw error;
+      }
+
+      async function deleteStoredImages(post) {
+        await deleteStoredMediaUrls(normaliseImageUrls(post), post.id);
       }
 
       function formatFileSize(bytes) {
@@ -512,7 +519,16 @@
           cropButton.type = 'button';
           cropButton.textContent = video ? '調整影片畫面' : '裁剪圖片';
           cropButton.addEventListener('click', () => openCropEditor(details));
-          controls.append(note, cropButton);
+          const removeButton = document.createElement('button');
+          removeButton.className = 'media-remove-action';
+          removeButton.type = 'button';
+          removeButton.textContent = '刪除';
+          removeButton.setAttribute('aria-label', `從這則動態移除${video ? '影片' : '圖片'} ${index + 1}`);
+          removeButton.addEventListener('click', () => removeEditorMedia(details));
+          const actions = document.createElement('div');
+          actions.className = 'media-card-actions';
+          actions.append(cropButton, removeButton);
+          controls.append(note, actions);
           card.append(controls);
           preview.append(card);
         });
@@ -522,6 +538,25 @@
         summary.textContent = sizedFiles
           ? `已選擇 ${sizedFiles} 個檔案 · 合共 ${formatFileSize(totalBytes)}；圖片發佈時會自動最佳化。`
           : '';
+      }
+
+      function removeEditorMedia(entry) {
+        const index = editorMediaEntries.indexOf(entry);
+        if (index < 0) return;
+        const isPending = Boolean(entry.file);
+        const confirmation = isPending
+          ? '確定從待上載清單移除此檔案？'
+          : '確定從這則動態移除此媒體？按「儲存更新」後才會從資料庫刪除原檔。';
+        if (!window.confirm(confirmation)) return;
+        if (cropSession?.entry === entry) closeCropEditor(false);
+        const [removed] = editorMediaEntries.splice(index, 1);
+        if (removed?.file && String(removed.url || '').startsWith('blob:')) URL.revokeObjectURL(removed.url);
+        if (isPending) fields.imageFiles.value = '';
+        setImagePreview();
+        setStatus(
+          editorStatus,
+          isPending ? '檔案已從待上載清單移除。' : '媒體已從目前編輯內容移除；請按「儲存更新」套用刪除。'
+        );
       }
 
       function cropPointFromEvent(event) {
@@ -1059,6 +1094,10 @@
         submit.disabled = true;
         setStatus(editorStatus, '正在發佈...');
         try {
+          const originalPostId = editingId;
+          const originalPost = originalPostId
+            ? publishedPosts.find(post => post.id === originalPostId)
+            : null;
           const entries = editorMediaEntries.slice(0, 8);
           if (editorMediaEntries.length > 8) throw new Error('每則動態最多可保留 8 個媒體檔案。');
           const uploadedEntries = [];
@@ -1083,6 +1122,9 @@
             scale:clamp(entry.scale, 1, 3)
           }));
           const coverUrl = imageUrls[0]?.url || null;
+          const removedStoredUrls = originalPost
+            ? normaliseImageUrls(originalPost).filter(url => !imageUrls.some(entry => entry.url === url))
+            : [];
           if (pendingEntries.length) setStatus(editorStatus, '媒體已上載，正在儲存動態...');
           const slug = await resolveSlug();
           const publishDate = editingId
@@ -1110,8 +1152,22 @@
             : client.from('updates').insert(payload);
           const { error } = await request;
           if (error) throw error;
+          let storageCleanupError = null;
+          if (removedStoredUrls.length) {
+            try {
+              await deleteStoredMediaUrls(removedStoredUrls, originalPostId);
+            } catch (cleanupError) {
+              storageCleanupError = cleanupError;
+            }
+          }
           resetForm();
-          setStatus(editorStatus, '已發佈。首頁與完整動態頁會立即更新。', 'success');
+          setStatus(
+            editorStatus,
+            storageCleanupError
+              ? '內容已儲存，但已移除的媒體未能從資料庫刪除。請稍後重試或聯絡管理員。'
+              : '已發佈。首頁與完整動態頁會立即更新。',
+            storageCleanupError ? 'error' : 'success'
+          );
           await loadPosts();
         } catch (error) {
           setStatus(editorStatus, error.message || '發佈失敗，請再試一次。', 'error');
