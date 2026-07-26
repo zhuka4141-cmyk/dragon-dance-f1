@@ -61,17 +61,14 @@
     .form-actions .button { padding:0 16px; }
     .image-preview-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:3px; }
     .image-preview-card { min-width:0; display:grid; gap:9px; padding:10px; border:1px solid #3e3e3a; background:#111; }
-    .media-preview-frame { position:relative; width:100%; aspect-ratio:4 / 3; overflow:hidden; background:#202020; cursor:grab; touch-action:none; user-select:none; }
+    .media-preview-frame { position:relative; width:100%; aspect-ratio:4 / 3; overflow:hidden; background:#202020; touch-action:pan-y; }
     .media-preview-frame::after { position:absolute; inset:0; content:""; border:1px solid rgba(242,242,239,.5); box-shadow:inset 0 0 0 1px rgba(8,8,8,.32); pointer-events:none; }
-    .media-preview-frame.is-dragging { cursor:grabbing; }
-    .media-preview-frame img, .media-preview-frame video { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; transform-origin:center; transition:transform .12s ease,object-position .12s ease; will-change:transform; }
+    .media-preview-frame img, .media-preview-frame video { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; transform-origin:center; }
     .media-preview-badge { position:absolute; top:8px; left:8px; z-index:1; padding:4px 6px; background:rgba(8,8,8,.72); color:var(--paper); font-size:9px; font-weight:900; letter-spacing:1px; }
-    .media-editor-controls { display:grid; gap:7px; }
-    .media-control { display:grid; grid-template-columns:72px minmax(0,1fr) 42px; gap:8px; align-items:center; color:#c9c9c4; font-size:10px; font-weight:700; }
-    .media-control input[type="range"] { min-width:0; height:18px; padding:0; border:0; background:transparent; accent-color:var(--red); }
-    .media-control-value { color:#ffb1b4; text-align:right; font-variant-numeric:tabular-nums; }
-    .media-reset { justify-self:start; padding:0; border:0; background:transparent; color:#a5a5a0; font-size:10px; text-decoration:underline; text-underline-offset:3px; }
-    .media-reset:hover, .media-reset:focus-visible { color:var(--red); outline:0; }
+    .media-editor-controls { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .media-crop-action { min-height:34px; padding:0 12px; border:1px solid #777773; border-radius:0; background:transparent; color:var(--paper); font-size:10px; font-weight:900; letter-spacing:1px; text-transform:uppercase; transition:border-color .2s,background .2s,color .2s; }
+    .media-crop-action:hover, .media-crop-action:focus-visible { border-color:var(--red); background:var(--red); color:#fff; outline:0; }
+    .media-crop-note { color:#999994; font-size:10px; line-height:1.35; }
     .image-preview-meta { min-width:0; display:grid; gap:2px; color:#aaa; font-size:10px; line-height:1.35; }
     .image-preview-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .image-preview-size { color:#ff9ca1; font-weight:700; letter-spacing:.4px; }
@@ -80,7 +77,7 @@
     .posts-list { display:grid; gap:0; }
     .admin-post { display:grid; grid-template-columns:96px minmax(0,1fr); gap:14px; padding:15px 0; border-top:1px solid #4c4c48; }
     .admin-post.is-pinned { border-top-color:var(--red); }
-    .admin-post-image { width:96px; aspect-ratio:1; overflow:hidden; background:#292929; }
+    .admin-post-image { position:relative; width:96px; aspect-ratio:1; overflow:hidden; background:#292929; }
     .admin-post-image img, .admin-post-image video { width:100%; height:100%; object-fit:cover; transform-origin:center; }
     .admin-post-date { color:var(--red); font-size:10px; font-weight:700; letter-spacing:1px; }
     .pin-state { display:inline-block; margin-left:7px; padding:2px 5px; border:1px solid var(--red); color:#ffb1b4; font-size:9px; font-weight:900; letter-spacing:1px; text-transform:uppercase; vertical-align:middle; }
@@ -90,7 +87,41 @@
     .text-button { padding:0; border:0; background:transparent; color:var(--paper); font-size:11px; font-weight:700; letter-spacing:.8px; text-decoration:underline; text-underline-offset:4px; }
     .text-button:hover, .text-button:focus-visible { color:var(--red); outline:0; }
     .empty-posts { padding:23px 0; border-top:1px solid #4c4c48; color:#bdbdb8; font-size:13px; }
-    @media (max-width:800px) { header { min-height:63px; } main { width:88vw; padding:54px 0 64px; } .auth-grid, .admin-content, .field-columns { grid-template-columns:1fr; } .auth-panel, .editor-panel, .posts-panel, .password-panel { padding:22px; } .admin-bar { align-items:start; flex-direction:column; } .admin-actions { width:100%; } .admin-actions .button { flex:1; } }
+    .crop-modal { position:fixed; z-index:200; inset:0; display:grid; place-items:center; padding:20px; visibility:hidden; opacity:0; pointer-events:none; transition:opacity .22s ease,visibility 0s linear .22s; }
+    .crop-modal.is-open { visibility:visible; opacity:1; pointer-events:auto; transition-delay:0s; }
+    .crop-backdrop { position:absolute; inset:0; border:0; background:rgba(0,0,0,.88); }
+    .crop-dialog { position:relative; display:grid; width:min(860px,94vw); max-height:calc(100dvh - 40px); gap:15px; padding:18px; border:1px solid rgba(242,242,239,.32); background:#111; box-shadow:0 28px 90px rgba(0,0,0,.7); opacity:0; transform:translateY(16px) scale(.985); transition:opacity .26s ease,transform .32s cubic-bezier(.22,.8,.24,1); }
+    .crop-modal.is-open .crop-dialog { opacity:1; transform:translateY(0) scale(1); }
+    .crop-dialog-header { display:flex; align-items:start; justify-content:space-between; gap:18px; }
+    .crop-dialog-kicker { display:block; color:var(--red); font-size:10px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; }
+    .crop-dialog-title { margin:4px 0 0; color:var(--paper); font-size:16px; font-weight:800; }
+    .crop-dialog-help { margin:5px 0 0; color:#a8a8a3; font-size:11px; line-height:1.45; }
+    .crop-close { width:34px; height:34px; border:1px solid #686864; border-radius:50%; background:transparent; color:var(--paper); font-size:24px; line-height:1; transition:border-color .2s,color .2s,transform .2s; }
+    .crop-close:hover, .crop-close:focus-visible { border-color:var(--red); color:var(--red); outline:0; transform:rotate(90deg); }
+    .crop-stage { position:relative; width:100%; aspect-ratio:4 / 3; max-height:calc(100dvh - 244px); overflow:hidden; background:#050505; box-shadow:inset 0 0 0 1px rgba(255,255,255,.15); touch-action:none; user-select:none; }
+    .crop-stage-media { position:absolute; display:block; max-width:none; max-height:none; pointer-events:none; user-select:none; }
+    .crop-grid { position:absolute; z-index:2; inset:0; pointer-events:none; }
+    .crop-grid::before, .crop-grid::after, .crop-grid span::before, .crop-grid span::after { position:absolute; content:""; background:rgba(255,255,255,.42); box-shadow:0 0 1px rgba(0,0,0,.75); }
+    .crop-grid::before, .crop-grid::after { top:0; bottom:0; width:1px; }
+    .crop-grid::before { left:33.333%; }
+    .crop-grid::after { left:66.666%; }
+    .crop-grid span::before, .crop-grid span::after { right:0; left:0; height:1px; }
+    .crop-grid span::before { top:33.333%; }
+    .crop-grid span::after { top:66.666%; }
+    .crop-stage.is-dragging { cursor:grabbing; }
+    .crop-controls { display:grid; grid-template-columns:auto minmax(0,1fr) 48px; align-items:center; gap:12px; min-height:36px; }
+    .crop-controls label { color:#d5d5d0; font-size:11px; font-weight:800; letter-spacing:.6px; white-space:nowrap; }
+    .crop-controls input[type="range"] { min-width:0; height:20px; padding:0; border:0; background:transparent; accent-color:var(--red); }
+    .crop-controls output { color:#ffb1b4; font-size:11px; font-weight:800; font-variant-numeric:tabular-nums; text-align:right; }
+    .crop-state { min-height:15px; margin:0; color:#aaa; font-size:10px; line-height:1.35; }
+    .crop-actions { display:flex; justify-content:flex-end; gap:9px; }
+    .crop-button { min-height:40px; padding:0 14px; border:1px solid #777773; border-radius:0; background:transparent; color:var(--paper); font-size:10px; font-weight:900; letter-spacing:1px; text-transform:uppercase; }
+    .crop-button:hover, .crop-button:focus-visible { border-color:var(--red); color:var(--red); outline:0; }
+    .crop-button.primary { border-color:var(--paper); background:var(--paper); color:var(--ink); }
+    .crop-button.primary:hover, .crop-button.primary:focus-visible { border-color:var(--red); background:var(--red); color:#fff; }
+    .crop-button:disabled, .crop-controls input:disabled { cursor:not-allowed; opacity:.45; }
+    body.has-crop-modal { overflow:hidden; }
+    @media (max-width:800px) { header { min-height:63px; } main { width:88vw; padding:54px 0 64px; } .auth-grid, .admin-content, .field-columns { grid-template-columns:1fr; } .auth-panel, .editor-panel, .posts-panel, .password-panel { padding:22px; } .admin-bar { align-items:start; flex-direction:column; } .admin-actions { width:100%; } .admin-actions .button { flex:1; } .crop-modal { padding:10px; } .crop-dialog { width:100%; padding:14px; gap:12px; } .crop-stage { max-height:calc(100dvh - 230px); } .crop-dialog-help { max-width:260px; } .crop-actions { justify-content:stretch; } .crop-actions .crop-button { flex:1; padding:0 8px; } }
   </style>
 </head>
 <body>
@@ -145,7 +176,7 @@
             </div>
             <input id="slug" type="hidden" />
             <label>圖片或影片（可多選；首個會作首頁封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple /></label>
-            <p class="media-edit-hint">像手機相簿裁切一樣直接拖動圖片，並用縮放控制調整畫面；儲存後會同步到首頁及完整動態頁。</p>
+            <p class="media-edit-hint">每張媒體可開啟獨立裁剪工具；拖動定位、兩指縮放，完成後才會套用構圖。原始檔案不會被改動。</p>
             <div class="image-preview-grid" id="imagePreviewGrid" hidden></div>
             <div class="image-preview-summary" id="imagePreviewSummary" hidden></div>
             <label>標題（English）<input id="titleEn" type="text" required /></label>
@@ -168,6 +199,33 @@
       </div>
     </section>
   </main>
+  <div class="crop-modal" id="cropModal" hidden>
+    <button class="crop-backdrop" id="cropBackdrop" type="button" aria-label="取消裁剪"></button>
+    <section class="crop-dialog" role="dialog" aria-modal="true" aria-labelledby="cropDialogTitle">
+      <div class="crop-dialog-header">
+        <div>
+          <span class="crop-dialog-kicker">Media Crop</span>
+          <h2 class="crop-dialog-title" id="cropDialogTitle">裁剪畫面</h2>
+          <p class="crop-dialog-help">一指拖動圖片，兩指縮放；完成後會套用到首頁和動態頁。</p>
+        </div>
+        <button class="crop-close" id="cropClose" type="button" aria-label="關閉裁剪工具">×</button>
+      </div>
+      <div class="crop-stage" id="cropStage" aria-label="4 比 3 裁剪預覽">
+        <div class="crop-grid" aria-hidden="true"><span></span></div>
+      </div>
+      <div class="crop-controls">
+        <label for="cropZoom">縮放</label>
+        <input id="cropZoom" type="range" min="1" max="3" step="0.01" value="1" disabled />
+        <output id="cropZoomValue" for="cropZoom">1.00×</output>
+      </div>
+      <p class="crop-state" id="cropState" aria-live="polite">正在載入媒體…</p>
+      <div class="crop-actions">
+        <button class="crop-button" id="cropReset" type="button" disabled>重設</button>
+        <button class="crop-button" id="cropCancel" type="button">取消</button>
+        <button class="crop-button primary" id="cropApply" type="button" disabled>完成裁剪</button>
+      </div>
+    </section>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -195,11 +253,21 @@
         bodyEn:document.getElementById('bodyEn'),
         bodyZh:document.getElementById('bodyZh')
       };
+      const cropModal = document.getElementById('cropModal');
+      const cropStage = document.getElementById('cropStage');
+      const cropGrid = cropStage.querySelector('.crop-grid');
+      const cropZoom = document.getElementById('cropZoom');
+      const cropZoomValue = document.getElementById('cropZoomValue');
+      const cropStateMessage = document.getElementById('cropState');
+      const cropReset = document.getElementById('cropReset');
+      const cropApply = document.getElementById('cropApply');
       let currentUser = null;
       let editingId = null;
       let editorMediaEntries = [];
       let publishedPosts = [];
       let dateWasChanged = false;
+      let cropSession = null;
+      let cropHideTimer = null;
 
       function setStatus(element, message, type = '') {
         element.textContent = message;
@@ -235,7 +303,7 @@
             type:value.type || (isVideoUrl(value.url) ? 'video/mp4' : 'image/*'),
             positionX:clamp(value.positionX ?? value.position_x ?? 50, 0, 100),
             positionY:clamp(value.positionY ?? value.position_y ?? 50, 0, 100),
-            scale:clamp(value.scale ?? 1, 1, 2.5)
+            scale:clamp(value.scale ?? 1, 1, 3)
           };
         }).filter(Boolean);
         if (!entries.length && post?.cover_url) {
@@ -290,67 +358,88 @@
         return `${(size / (1024 * 1024)).toFixed(2)} MB`;
       }
 
-      function cropTranslation(position, scale) {
-        return ((50 - clamp(position, 0, 100)) / 50) * (clamp(scale, 1, 2.5) - 1) * 50;
+      function mediaNaturalSize(media) {
+        const isVideo = media?.tagName === 'VIDEO';
+        const width = isVideo ? media.videoWidth : media.naturalWidth;
+        const height = isVideo ? media.videoHeight : media.naturalHeight;
+        return width > 0 && height > 0 ? { width, height } : null;
+      }
+
+      function mediaCropMetrics(media, entry, frame = media?.parentElement) {
+        const natural = mediaNaturalSize(media);
+        const frameWidth = frame?.clientWidth || 0;
+        const frameHeight = frame?.clientHeight || 0;
+        if (!natural || !frameWidth || !frameHeight) return null;
+        const zoom = clamp(entry?.scale ?? 1, 1, 3);
+        const baseScale = Math.max(frameWidth / natural.width, frameHeight / natural.height);
+        const width = natural.width * baseScale * zoom;
+        const height = natural.height * baseScale * zoom;
+        const overflowX = Math.max(0, width - frameWidth);
+        const overflowY = Math.max(0, height - frameHeight);
+        const positionX = clamp(entry?.positionX ?? 50, 0, 100);
+        const positionY = clamp(entry?.positionY ?? 50, 0, 100);
+        return {
+          frameWidth,
+          frameHeight,
+          width,
+          height,
+          overflowX,
+          overflowY,
+          positionX,
+          positionY,
+          left:overflowX ? -(overflowX * positionX / 100) : (frameWidth - width) / 2,
+          top:overflowY ? -(overflowY * positionY / 100) : (frameHeight - height) / 2
+        };
+      }
+
+      function positionCropFromOffsets(entry, metrics, left, top) {
+        entry.positionX = metrics.overflowX > .5
+          ? clamp((-clamp(left, -metrics.overflowX, 0) / metrics.overflowX) * 100, 0, 100)
+          : 50;
+        entry.positionY = metrics.overflowY > .5
+          ? clamp((-clamp(top, -metrics.overflowY, 0) / metrics.overflowY) * 100, 0, 100)
+          : 50;
+      }
+
+      function layoutCroppedMedia(media, entry, frame = media?.parentElement) {
+        const metrics = mediaCropMetrics(media, entry, frame);
+        if (!metrics) return null;
+        media.style.position = 'absolute';
+        media.style.inset = 'auto';
+        media.style.left = `${metrics.left}px`;
+        media.style.top = `${metrics.top}px`;
+        media.style.width = `${metrics.width}px`;
+        media.style.height = `${metrics.height}px`;
+        media.style.maxWidth = 'none';
+        media.style.maxHeight = 'none';
+        media.style.objectFit = 'fill';
+        media.style.objectPosition = '50% 50%';
+        media.style.transform = 'none';
+        return metrics;
       }
 
       function applyMediaStyle(media, entry) {
-        const positionX = clamp(entry.positionX, 0, 100);
-        const positionY = clamp(entry.positionY, 0, 100);
-        const scale = clamp(entry.scale, 1, 2.5);
-        media.style.objectPosition = `${positionX}% ${positionY}%`;
-        media.style.transform = `translate(${cropTranslation(positionX, scale)}%, ${cropTranslation(positionY, scale)}%) scale(${scale})`;
+        media._cropEntry = entry;
+        media.dataset.croppedMedia = 'true';
+        const layout = () => layoutCroppedMedia(media, media._cropEntry);
+        if (!media._cropLayoutBound) {
+          const readyEvent = media.tagName === 'VIDEO' ? 'loadedmetadata' : 'load';
+          media.addEventListener(readyEvent, layout);
+          media._cropLayoutBound = true;
+        }
+        window.requestAnimationFrame(layout);
       }
 
-      function attachCropDrag(frame, media, entry, sync) {
-        let activePointerId = null;
-        let startX = 0;
-        let startY = 0;
-        let startPositionX = 50;
-        let startPositionY = 50;
-
-        function movePosition(startPosition, delta, size) {
-          const scale = clamp(entry.scale, 1, 2.5);
-          const maxOffset = (scale - 1) * size / 2;
-          if (maxOffset < .5) return startPosition;
-          const startOffset = ((50 - startPosition) / 50) * maxOffset;
-          const offset = clamp(startOffset + delta, -maxOffset, maxOffset);
-          return clamp(50 - offset / maxOffset * 50, 0, 100);
-        }
-
-        function endDrag(event) {
-          if (event.pointerId !== activePointerId) return;
-          activePointerId = null;
-          frame.classList.remove('is-dragging');
-          if (frame.hasPointerCapture(event.pointerId)) frame.releasePointerCapture(event.pointerId);
-        }
-
-        frame.addEventListener('pointerdown', event => {
-          if (event.button !== 0) return;
-          if (entry.scale < 1.12) entry.scale = 1.12;
-          activePointerId = event.pointerId;
-          startX = event.clientX;
-          startY = event.clientY;
-          startPositionX = entry.positionX;
-          startPositionY = entry.positionY;
-          frame.setPointerCapture(event.pointerId);
-          frame.classList.add('is-dragging');
-          sync();
-          event.preventDefault();
+      let cropResizeFrame = 0;
+      window.addEventListener('resize', () => {
+        window.cancelAnimationFrame(cropResizeFrame);
+        cropResizeFrame = window.requestAnimationFrame(() => {
+          document.querySelectorAll('[data-cropped-media="true"]').forEach(media => {
+            layoutCroppedMedia(media, media._cropEntry);
+          });
+          if (cropSession) renderCropPreview();
         });
-
-        frame.addEventListener('pointermove', event => {
-          if (event.pointerId !== activePointerId) return;
-          const rect = frame.getBoundingClientRect();
-          entry.positionX = movePosition(startPositionX, event.clientX - startX, rect.width);
-          entry.positionY = movePosition(startPositionY, event.clientY - startY, rect.height);
-          sync();
-          event.preventDefault();
-        });
-
-        frame.addEventListener('pointerup', endDrag);
-        frame.addEventListener('pointercancel', endDrag);
-      }
+      });
 
       function releasePendingMedia(entries) {
         entries.filter(entry => entry?.file && String(entry.url || '').startsWith('blob:')).forEach(entry => URL.revokeObjectURL(entry.url));
@@ -362,24 +451,27 @@
         let totalBytes = 0;
         let sizedFiles = 0;
         preview.replaceChildren();
+
         entries.forEach((entry, index) => {
           const details = typeof entry === 'object' ? entry : { url:entry };
           details.positionX = clamp(details.positionX ?? 50, 0, 100);
           details.positionY = clamp(details.positionY ?? 50, 0, 100);
-          details.scale = clamp(details.scale ?? 1, 1, 2.5);
+          details.scale = clamp(details.scale ?? 1, 1, 3);
           const url = mediaUrl(details);
+          if (!url) return;
           const video = details.type?.startsWith('video/') || isVideoUrl(url);
           const media = video ? document.createElement('video') : document.createElement('img');
           media.src = details.file ? url : assetUrl(url);
-          media.alt = index === 0 ? '封面預覽' : '動態圖片預覽';
+          media.alt = index === 0 ? '首頁封面預覽' : '動態圖片預覽';
           media.decoding = 'async';
           if (video) {
             media.muted = true;
             media.loop = true;
             media.playsInline = true;
             media.autoplay = true;
+            media.preload = 'metadata';
           }
-          applyMediaStyle(media, details);
+
           const card = document.createElement('div');
           card.className = 'image-preview-card';
           const frame = document.createElement('div');
@@ -391,7 +483,9 @@
             frame.append(badge);
           }
           frame.append(media);
+          applyMediaStyle(media, details);
           card.append(frame);
+
           if (details?.size) {
             totalBytes += details.size;
             sizedFiles += 1;
@@ -407,64 +501,247 @@
             meta.append(name, size);
             card.append(meta);
           }
+
           const controls = document.createElement('div');
           controls.className = 'media-editor-controls';
-          const controlDefinitions = [
-            ['positionX', '左右移動', 0, 100, 1],
-            ['positionY', '上下移動', 0, 100, 1],
-            ['scale', '圖片縮放', 1, 2.5, .05]
-          ];
-          const controlsByKey = {};
-          const syncCropControls = () => {
-            applyMediaStyle(media, details);
-            controlDefinitions.forEach(([key, , min, max]) => {
-              const control = controlsByKey[key];
-              if (!control) return;
-              control.input.value = String(clamp(details[key], min, max));
-              control.value.textContent = key === 'scale' ? `${Number(details[key]).toFixed(2)}×` : `${Math.round(details[key])}%`;
-            });
-          };
-          controlDefinitions.forEach(([key, labelText, min, max, step]) => {
-            const row = document.createElement('label');
-            row.className = 'media-control';
-            row.textContent = labelText;
-            const input = document.createElement('input');
-            input.type = 'range';
-            input.min = String(min);
-            input.max = String(max);
-            input.step = String(step);
-            input.value = String(clamp(details[key], min, max));
-            const value = document.createElement('span');
-            value.className = 'media-control-value';
-            value.textContent = key === 'scale' ? `${Number(details[key]).toFixed(2)}×` : `${Math.round(details[key])}%`;
-            input.addEventListener('input', () => {
-              details[key] = Number(input.value);
-              syncCropControls();
-            });
-            row.append(input, value);
-            controls.append(row);
-            controlsByKey[key] = { input, value };
-          });
-          const resetMedia = document.createElement('button');
-          resetMedia.className = 'media-reset';
-          resetMedia.type = 'button';
-          resetMedia.textContent = '重設圖片位置與大小';
-          resetMedia.addEventListener('click', () => {
-            details.positionX = 50;
-            details.positionY = 50;
-            details.scale = 1;
-            syncCropControls();
-          });
-          controls.append(resetMedia);
+          const note = document.createElement('span');
+          note.className = 'media-crop-note';
+          note.textContent = `4:3 構圖 · ${Number(details.scale).toFixed(2)}×`;
+          const cropButton = document.createElement('button');
+          cropButton.className = 'media-crop-action';
+          cropButton.type = 'button';
+          cropButton.textContent = video ? '調整影片畫面' : '裁剪圖片';
+          cropButton.addEventListener('click', () => openCropEditor(details));
+          controls.append(note, cropButton);
           card.append(controls);
-          attachCropDrag(frame, media, details, syncCropControls);
-          syncCropControls();
           preview.append(card);
         });
+
         preview.hidden = !entries.length;
         summary.hidden = !sizedFiles;
-        summary.textContent = sizedFiles ? `已選擇 ${sizedFiles} 個檔案 · 合共 ${formatFileSize(totalBytes)}；圖片發佈時會自動最佳化。` : '';
+        summary.textContent = sizedFiles
+          ? `已選擇 ${sizedFiles} 個檔案 · 合共 ${formatFileSize(totalBytes)}；圖片發佈時會自動最佳化。`
+          : '';
       }
+
+      function cropPointFromEvent(event) {
+        const rect = cropStage.getBoundingClientRect();
+        return {
+          x:clamp(event.clientX - rect.left, 0, rect.width),
+          y:clamp(event.clientY - rect.top, 0, rect.height)
+        };
+      }
+
+      function updateCropControls() {
+        if (!cropSession) return;
+        const zoom = clamp(cropSession.draft.scale, 1, 3);
+        cropZoom.value = String(zoom);
+        cropZoomValue.textContent = `${zoom.toFixed(2)}×`;
+      }
+
+      function renderCropPreview() {
+        if (!cropSession?.ready) return null;
+        const metrics = layoutCroppedMedia(cropSession.media, cropSession.draft, cropStage);
+        updateCropControls();
+        return metrics;
+      }
+
+      function updateCropPositionFromZoom(nextScale, focalPoint, startingMetrics) {
+        if (!cropSession?.ready) return;
+        const currentMetrics = startingMetrics || mediaCropMetrics(cropSession.media, cropSession.draft, cropStage);
+        if (!currentMetrics) return;
+        const nextDraft = { ...cropSession.draft, scale:clamp(nextScale, 1, 3) };
+        const nextMetrics = mediaCropMetrics(cropSession.media, nextDraft, cropStage);
+        if (!nextMetrics) return;
+        const focus = focalPoint || {
+          x:currentMetrics.frameWidth / 2,
+          y:currentMetrics.frameHeight / 2
+        };
+        const sourceX = clamp((focus.x - currentMetrics.left) / currentMetrics.width, 0, 1);
+        const sourceY = clamp((focus.y - currentMetrics.top) / currentMetrics.height, 0, 1);
+        cropSession.draft.scale = nextDraft.scale;
+        positionCropFromOffsets(
+          cropSession.draft,
+          nextMetrics,
+          focus.x - sourceX * nextMetrics.width,
+          focus.y - sourceY * nextMetrics.height
+        );
+        renderCropPreview();
+      }
+
+      function startCropDrag(pointerId) {
+        if (!cropSession?.ready) return;
+        const point = cropSession.pointers.get(pointerId);
+        const metrics = mediaCropMetrics(cropSession.media, cropSession.draft, cropStage);
+        if (!point || !metrics) return;
+        cropSession.drag = { pointerId, point, metrics };
+        cropSession.pinch = null;
+      }
+
+      function startCropPinch() {
+        if (!cropSession?.ready || cropSession.pointers.size < 2) return;
+        const points = Array.from(cropSession.pointers.values()).slice(0, 2);
+        const metrics = mediaCropMetrics(cropSession.media, cropSession.draft, cropStage);
+        if (!metrics) return;
+        const distance = Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
+        if (distance < 1) return;
+        cropSession.drag = null;
+        cropSession.pinch = {
+          distance,
+          scale:cropSession.draft.scale,
+          metrics,
+          focus:{ x:(points[0].x + points[1].x) / 2, y:(points[0].y + points[1].y) / 2 }
+        };
+      }
+
+      function openCropEditor(entry) {
+        if (!entry) return;
+        if (cropHideTimer) window.clearTimeout(cropHideTimer);
+        const draft = {
+          positionX:clamp(entry.positionX ?? 50, 0, 100),
+          positionY:clamp(entry.positionY ?? 50, 0, 100),
+          scale:clamp(entry.scale ?? 1, 1, 3)
+        };
+        const url = mediaUrl(entry);
+        const video = entry.type?.startsWith('video/') || isVideoUrl(url);
+        const media = video ? document.createElement('video') : document.createElement('img');
+        media.className = 'crop-stage-media';
+        media.alt = '';
+        if (video) {
+          media.muted = true;
+          media.loop = true;
+          media.autoplay = true;
+          media.playsInline = true;
+          media.preload = 'metadata';
+        }
+        cropStage.querySelector('.crop-stage-media')?.remove();
+        cropStage.insertBefore(media, cropGrid);
+        cropSession = {
+          entry,
+          draft,
+          media,
+          ready:false,
+          pointers:new Map(),
+          drag:null,
+          pinch:null
+        };
+        cropZoom.disabled = true;
+        cropReset.disabled = true;
+        cropApply.disabled = true;
+        cropStateMessage.textContent = '正在載入媒體…';
+        cropModal.hidden = false;
+        document.body.classList.add('has-crop-modal');
+        window.requestAnimationFrame(() => cropModal.classList.add('is-open'));
+        document.addEventListener('keydown', onCropKeydown);
+
+        const readyEvent = video ? 'loadedmetadata' : 'load';
+        const onReady = () => {
+          if (!cropSession || cropSession.media !== media || !mediaNaturalSize(media)) return;
+          cropSession.ready = true;
+          cropZoom.disabled = false;
+          cropReset.disabled = false;
+          cropApply.disabled = false;
+          cropStateMessage.textContent = '拖動調整位置，使用兩指或下方滑桿縮放。';
+          renderCropPreview();
+        };
+        media.addEventListener(readyEvent, onReady, { once:true });
+        media.addEventListener('error', () => {
+          if (!cropSession || cropSession.media !== media) return;
+          cropStateMessage.textContent = '媒體無法載入，請關閉後重新選擇檔案。';
+        }, { once:true });
+        media.src = entry.file ? url : assetUrl(url);
+        window.requestAnimationFrame(onReady);
+      }
+
+      function closeCropEditor(applyChanges = false) {
+        const session = cropSession;
+        if (!session) return;
+        if (applyChanges && session.ready) {
+          session.entry.positionX = clamp(session.draft.positionX, 0, 100);
+          session.entry.positionY = clamp(session.draft.positionY, 0, 100);
+          session.entry.scale = clamp(session.draft.scale, 1, 3);
+          setImagePreview();
+        }
+        cropSession = null;
+        cropStage.classList.remove('is-dragging');
+        cropModal.classList.remove('is-open');
+        document.body.classList.remove('has-crop-modal');
+        document.removeEventListener('keydown', onCropKeydown);
+        cropHideTimer = window.setTimeout(() => {
+          if (!cropSession) {
+            cropModal.hidden = true;
+            session.media.remove();
+          }
+        }, 260);
+      }
+
+      function onCropKeydown(event) {
+        if (event.key === 'Escape') closeCropEditor(false);
+      }
+
+      function onCropPointerDown(event) {
+        if (!cropSession?.ready || (event.pointerType === 'mouse' && event.button !== 0)) return;
+        event.preventDefault();
+        cropSession.pointers.set(event.pointerId, cropPointFromEvent(event));
+        cropStage.setPointerCapture(event.pointerId);
+        if (cropSession.pointers.size === 1) startCropDrag(event.pointerId);
+        if (cropSession.pointers.size === 2) startCropPinch();
+        cropStage.classList.add('is-dragging');
+      }
+
+      function onCropPointerMove(event) {
+        if (!cropSession?.ready || !cropSession.pointers.has(event.pointerId)) return;
+        event.preventDefault();
+        cropSession.pointers.set(event.pointerId, cropPointFromEvent(event));
+        if (cropSession.pointers.size >= 2) {
+          if (!cropSession.pinch) startCropPinch();
+          const pinch = cropSession.pinch;
+          const points = Array.from(cropSession.pointers.values()).slice(0, 2);
+          if (!pinch || points.length < 2) return;
+          const distance = Math.hypot(points[1].x - points[0].x, points[1].y - points[0].y);
+          updateCropPositionFromZoom(pinch.scale * distance / pinch.distance, pinch.focus, pinch.metrics);
+          return;
+        }
+        const drag = cropSession.drag;
+        const point = cropSession.pointers.get(event.pointerId);
+        if (!drag || drag.pointerId !== event.pointerId || !point) return;
+        positionCropFromOffsets(
+          cropSession.draft,
+          drag.metrics,
+          drag.metrics.left + point.x - drag.point.x,
+          drag.metrics.top + point.y - drag.point.y
+        );
+        renderCropPreview();
+      }
+
+      function onCropPointerEnd(event) {
+        if (!cropSession || !cropSession.pointers.has(event.pointerId)) return;
+        cropSession.pointers.delete(event.pointerId);
+        if (cropStage.hasPointerCapture(event.pointerId)) cropStage.releasePointerCapture(event.pointerId);
+        if (cropSession.pointers.size === 1) startCropDrag(cropSession.pointers.keys().next().value);
+        if (!cropSession.pointers.size) {
+          cropSession.drag = null;
+          cropSession.pinch = null;
+          cropStage.classList.remove('is-dragging');
+        }
+      }
+
+      cropStage.addEventListener('pointerdown', onCropPointerDown);
+      cropStage.addEventListener('pointermove', onCropPointerMove);
+      cropStage.addEventListener('pointerup', onCropPointerEnd);
+      cropStage.addEventListener('pointercancel', onCropPointerEnd);
+      cropZoom.addEventListener('input', () => updateCropPositionFromZoom(Number(cropZoom.value)));
+      cropReset.addEventListener('click', () => {
+        if (!cropSession?.ready) return;
+        cropSession.draft.positionX = 50;
+        cropSession.draft.positionY = 50;
+        cropSession.draft.scale = 1;
+        renderCropPreview();
+      });
+      document.getElementById('cropBackdrop').addEventListener('click', () => closeCropEditor(false));
+      document.getElementById('cropClose').addEventListener('click', () => closeCropEditor(false));
+      document.getElementById('cropCancel').addEventListener('click', () => closeCropEditor(false));
+      cropApply.addEventListener('click', () => closeCropEditor(true));
 
       function slugify(value) {
         return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 72);
@@ -803,7 +1080,7 @@
             type:entry.type || (isVideoUrl(mediaUrl(entry)) ? 'video/mp4' : 'image/*'),
             positionX:clamp(entry.positionX, 0, 100),
             positionY:clamp(entry.positionY, 0, 100),
-            scale:clamp(entry.scale, 1, 2.5)
+            scale:clamp(entry.scale, 1, 3)
           }));
           const coverUrl = imageUrls[0]?.url || null;
           if (pendingEntries.length) setStatus(editorStatus, '媒體已上載，正在儲存動態...');

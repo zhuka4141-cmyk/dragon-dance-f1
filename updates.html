@@ -63,7 +63,7 @@
     .gallery-nav.next { right:12px; }
     .gallery-close:hover, .gallery-close:focus-visible, .gallery-nav:hover, .gallery-nav:focus-visible { border-color:var(--red); background:var(--red); outline:0; }
     .gallery-thumbnails { display:flex; gap:8px; overflow:auto; padding-bottom:3px; }
-    .gallery-thumb { flex:0 0 72px; height:54px; overflow:hidden; border:1px solid transparent; border-radius:0; padding:0; background:#202020; }
+    .gallery-thumb { position:relative; flex:0 0 72px; height:54px; overflow:hidden; border:1px solid transparent; border-radius:0; padding:0; background:#202020; }
     .gallery-thumb.is-active { border-color:var(--red); }
     .gallery-thumb img, .gallery-thumb video { width:100%; height:100%; object-fit:cover; }
     body.has-gallery { overflow:hidden; }
@@ -149,10 +149,6 @@
         return Number.isFinite(number) ? Math.min(100, Math.max(0, number)) : 50;
       }
 
-      function cropTranslation(position, scale) {
-        return ((50 - normaliseMediaPosition(position)) / 50) * (Math.min(2.5, Math.max(1, Number(scale) || 1)) - 1) * 50;
-      }
-
       function normaliseMediaEntries(row) {
         const raw = Array.isArray(row?.image_urls) ? row.image_urls : [];
         const entries = raw.map(value => {
@@ -162,7 +158,7 @@
             ...value,
             positionX:normaliseMediaPosition(value.positionX ?? value.position_x ?? 50),
             positionY:normaliseMediaPosition(value.positionY ?? value.position_y ?? 50),
-            scale:Math.min(2.5, Math.max(1, Number(value.scale ?? 1) || 1))
+            scale:Math.min(3, Math.max(1, Number(value.scale ?? 1) || 1))
           };
         }).filter(Boolean);
         if (!entries.length && row?.cover_url) entries.push({ url:row.cover_url, positionX:50, positionY:50, scale:1 });
@@ -175,14 +171,60 @@
         });
       }
 
-      function applyMediaLayout(media, entry) {
-        if (!entry) return;
+      function mediaNaturalSize(media) {
+        const video = media?.tagName === 'VIDEO';
+        const width = video ? media.videoWidth : media.naturalWidth;
+        const height = video ? media.videoHeight : media.naturalHeight;
+        return width > 0 && height > 0 ? { width, height } : null;
+      }
+
+      function layoutCroppedMedia(media, entry, frame = media?.parentElement) {
+        const natural = mediaNaturalSize(media);
+        const frameWidth = frame?.clientWidth || 0;
+        const frameHeight = frame?.clientHeight || 0;
+        if (!entry || !natural || !frameWidth || !frameHeight) return;
+        const scale = Math.min(3, Math.max(1, Number(entry.scale) || 1));
+        const baseScale = Math.max(frameWidth / natural.width, frameHeight / natural.height);
+        const width = natural.width * baseScale * scale;
+        const height = natural.height * baseScale * scale;
+        const overflowX = Math.max(0, width - frameWidth);
+        const overflowY = Math.max(0, height - frameHeight);
         const positionX = normaliseMediaPosition(entry.positionX);
         const positionY = normaliseMediaPosition(entry.positionY);
-        const scale = Math.min(2.5, Math.max(1, Number(entry.scale) || 1));
-        media.style.objectPosition = `${positionX}% ${positionY}%`;
-        media.style.transform = `translate(${cropTranslation(positionX, scale)}%, ${cropTranslation(positionY, scale)}%) scale(${scale})`;
+        media.style.position = 'absolute';
+        media.style.inset = 'auto';
+        media.style.left = `${overflowX ? -(overflowX * positionX / 100) : (frameWidth - width) / 2}px`;
+        media.style.top = `${overflowY ? -(overflowY * positionY / 100) : (frameHeight - height) / 2}px`;
+        media.style.width = `${width}px`;
+        media.style.height = `${height}px`;
+        media.style.maxWidth = 'none';
+        media.style.maxHeight = 'none';
+        media.style.objectFit = 'fill';
+        media.style.objectPosition = '50% 50%';
+        media.style.transform = 'none';
       }
+
+      function applyMediaLayout(media, entry) {
+        if (!entry) return;
+        media._cropEntry = entry;
+        media.dataset.croppedMedia = 'true';
+        const layout = () => layoutCroppedMedia(media, media._cropEntry);
+        if (!media._cropLayoutBound) {
+          media.addEventListener(media.tagName === 'VIDEO' ? 'loadedmetadata' : 'load', layout);
+          media._cropLayoutBound = true;
+        }
+        window.requestAnimationFrame(layout);
+      }
+
+      let mediaLayoutResizeFrame = 0;
+      window.addEventListener('resize', () => {
+        window.cancelAnimationFrame(mediaLayoutResizeFrame);
+        mediaLayoutResizeFrame = window.requestAnimationFrame(() => {
+          document.querySelectorAll('[data-cropped-media="true"]').forEach(media => {
+            layoutCroppedMedia(media, media._cropEntry);
+          });
+        });
+      });
 
       function clearCarousels() {
         carouselTimers.forEach(timer => window.clearInterval(timer));
