@@ -61,8 +61,10 @@
     .form-actions .button { padding:0 16px; }
     .image-preview-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:3px; }
     .image-preview-card { min-width:0; display:grid; gap:9px; padding:10px; border:1px solid #3e3e3a; background:#111; }
-    .media-preview-frame { position:relative; width:100%; aspect-ratio:4 / 3; overflow:hidden; background:#202020; }
-    .media-preview-frame img, .media-preview-frame video { display:block; width:100%; height:100%; object-fit:cover; transform-origin:center; transition:transform .12s ease,object-position .12s ease; }
+    .media-preview-frame { position:relative; width:100%; aspect-ratio:4 / 3; overflow:hidden; background:#202020; cursor:grab; touch-action:none; user-select:none; }
+    .media-preview-frame::after { position:absolute; inset:0; content:""; border:1px solid rgba(242,242,239,.5); box-shadow:inset 0 0 0 1px rgba(8,8,8,.32); pointer-events:none; }
+    .media-preview-frame.is-dragging { cursor:grabbing; }
+    .media-preview-frame img, .media-preview-frame video { position:absolute; inset:0; display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; transform-origin:center; transition:transform .12s ease,object-position .12s ease; will-change:transform; }
     .media-preview-badge { position:absolute; top:8px; left:8px; z-index:1; padding:4px 6px; background:rgba(8,8,8,.72); color:var(--paper); font-size:9px; font-weight:900; letter-spacing:1px; }
     .media-editor-controls { display:grid; gap:7px; }
     .media-control { display:grid; grid-template-columns:72px minmax(0,1fr) 42px; gap:8px; align-items:center; color:#c9c9c4; font-size:10px; font-weight:700; }
@@ -143,7 +145,7 @@
             </div>
             <input id="slug" type="hidden" />
             <label>圖片或影片（可多選；首個會作首頁封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple /></label>
-            <p class="media-edit-hint">可在下方調整每張圖片的水平位置、垂直位置與縮放；儲存後會同步到首頁及完整動態頁。</p>
+            <p class="media-edit-hint">像手機相簿裁切一樣直接拖動圖片，並用縮放控制調整畫面；儲存後會同步到首頁及完整動態頁。</p>
             <div class="image-preview-grid" id="imagePreviewGrid" hidden></div>
             <div class="image-preview-summary" id="imagePreviewSummary" hidden></div>
             <label>標題（English）<input id="titleEn" type="text" required /></label>
@@ -288,9 +290,66 @@
         return `${(size / (1024 * 1024)).toFixed(2)} MB`;
       }
 
+      function cropTranslation(position, scale) {
+        return ((50 - clamp(position, 0, 100)) / 50) * (clamp(scale, 1, 2.5) - 1) * 50;
+      }
+
       function applyMediaStyle(media, entry) {
-        media.style.objectPosition = `${clamp(entry.positionX, 0, 100)}% ${clamp(entry.positionY, 0, 100)}%`;
-        media.style.transform = `scale(${clamp(entry.scale, 1, 2.5)})`;
+        const positionX = clamp(entry.positionX, 0, 100);
+        const positionY = clamp(entry.positionY, 0, 100);
+        const scale = clamp(entry.scale, 1, 2.5);
+        media.style.objectPosition = `${positionX}% ${positionY}%`;
+        media.style.transform = `translate(${cropTranslation(positionX, scale)}%, ${cropTranslation(positionY, scale)}%) scale(${scale})`;
+      }
+
+      function attachCropDrag(frame, media, entry, sync) {
+        let activePointerId = null;
+        let startX = 0;
+        let startY = 0;
+        let startPositionX = 50;
+        let startPositionY = 50;
+
+        function movePosition(startPosition, delta, size) {
+          const scale = clamp(entry.scale, 1, 2.5);
+          const maxOffset = (scale - 1) * size / 2;
+          if (maxOffset < .5) return startPosition;
+          const startOffset = ((50 - startPosition) / 50) * maxOffset;
+          const offset = clamp(startOffset + delta, -maxOffset, maxOffset);
+          return clamp(50 - offset / maxOffset * 50, 0, 100);
+        }
+
+        function endDrag(event) {
+          if (event.pointerId !== activePointerId) return;
+          activePointerId = null;
+          frame.classList.remove('is-dragging');
+          if (frame.hasPointerCapture(event.pointerId)) frame.releasePointerCapture(event.pointerId);
+        }
+
+        frame.addEventListener('pointerdown', event => {
+          if (event.button !== 0) return;
+          if (entry.scale < 1.12) entry.scale = 1.12;
+          activePointerId = event.pointerId;
+          startX = event.clientX;
+          startY = event.clientY;
+          startPositionX = entry.positionX;
+          startPositionY = entry.positionY;
+          frame.setPointerCapture(event.pointerId);
+          frame.classList.add('is-dragging');
+          sync();
+          event.preventDefault();
+        });
+
+        frame.addEventListener('pointermove', event => {
+          if (event.pointerId !== activePointerId) return;
+          const rect = frame.getBoundingClientRect();
+          entry.positionX = movePosition(startPositionX, event.clientX - startX, rect.width);
+          entry.positionY = movePosition(startPositionY, event.clientY - startY, rect.height);
+          sync();
+          event.preventDefault();
+        });
+
+        frame.addEventListener('pointerup', endDrag);
+        frame.addEventListener('pointercancel', endDrag);
       }
 
       function releasePendingMedia(entries) {
@@ -351,11 +410,21 @@
           const controls = document.createElement('div');
           controls.className = 'media-editor-controls';
           const controlDefinitions = [
-            ['positionX', '水平位置', 0, 100, 1, `${Math.round(details.positionX)}%`],
-            ['positionY', '垂直位置', 0, 100, 1, `${Math.round(details.positionY)}%`],
-            ['scale', '圖片縮放', 1, 2.5, .05, `${Number(details.scale).toFixed(2)}×`]
+            ['positionX', '左右移動', 0, 100, 1],
+            ['positionY', '上下移動', 0, 100, 1],
+            ['scale', '圖片縮放', 1, 2.5, .05]
           ];
-          controlDefinitions.forEach(([key, labelText, min, max, step, initialValue]) => {
+          const controlsByKey = {};
+          const syncCropControls = () => {
+            applyMediaStyle(media, details);
+            controlDefinitions.forEach(([key, , min, max]) => {
+              const control = controlsByKey[key];
+              if (!control) return;
+              control.input.value = String(clamp(details[key], min, max));
+              control.value.textContent = key === 'scale' ? `${Number(details[key]).toFixed(2)}×` : `${Math.round(details[key])}%`;
+            });
+          };
+          controlDefinitions.forEach(([key, labelText, min, max, step]) => {
             const row = document.createElement('label');
             row.className = 'media-control';
             row.textContent = labelText;
@@ -367,14 +436,14 @@
             input.value = String(clamp(details[key], min, max));
             const value = document.createElement('span');
             value.className = 'media-control-value';
-            value.textContent = initialValue;
+            value.textContent = key === 'scale' ? `${Number(details[key]).toFixed(2)}×` : `${Math.round(details[key])}%`;
             input.addEventListener('input', () => {
               details[key] = Number(input.value);
-              value.textContent = key === 'scale' ? `${details[key].toFixed(2)}×` : `${Math.round(details[key])}%`;
-              applyMediaStyle(media, details);
+              syncCropControls();
             });
             row.append(input, value);
             controls.append(row);
+            controlsByKey[key] = { input, value };
           });
           const resetMedia = document.createElement('button');
           resetMedia.className = 'media-reset';
@@ -384,10 +453,12 @@
             details.positionX = 50;
             details.positionY = 50;
             details.scale = 1;
-            setImagePreview(entries);
+            syncCropControls();
           });
           controls.append(resetMedia);
           card.append(controls);
+          attachCropDrag(frame, media, details, syncCropControls);
+          syncCropControls();
           preview.append(card);
         });
         preview.hidden = !entries.length;
