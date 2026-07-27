@@ -532,6 +532,112 @@
     @media (prefers-reduced-motion:reduce) {
       .hero-pages, .about-page, .feature-page, .update-preview-card, .update-preview-media img, .update-preview-media video { transition:none; }
     }
+    /* Persistent page navigation and the Dragon Dance mark's paired orbit. */
+    .dragon-orbit {
+      position:absolute;
+      z-index:0;
+      width:76%;
+      aspect-ratio:1;
+      border:2px solid rgba(0,0,0,.94);
+      box-shadow:0 0 0 1px rgba(244,244,240,.18),0 0 26px rgba(0,0,0,.42);
+      pointer-events:none;
+      transform-origin:center;
+    }
+    .dragon-orbit-one {
+      top:7%;
+      left:9%;
+      animation:dragon-orbit-clockwise 22s linear infinite;
+    }
+    .dragon-orbit-two {
+      top:19%;
+      left:20%;
+      width:60%;
+      animation:dragon-orbit-counterclockwise 29s linear infinite;
+    }
+    @keyframes dragon-orbit-clockwise {
+      to { transform:rotate(360deg); }
+    }
+    @keyframes dragon-orbit-counterclockwise {
+      to { transform:rotate(-360deg); }
+    }
+    .hero-pager-controls {
+      position:fixed;
+      z-index:70;
+      inset:0;
+      display:block;
+      pointer-events:none;
+    }
+    .hero-pager-controls::before { content:none; display:none; }
+    .pager-arrow {
+      position:absolute;
+      top:50dvh;
+      width:84px;
+      min-height:84px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:0;
+      border:0;
+      border-radius:0;
+      background:transparent;
+      box-shadow:none;
+      color:#fff;
+      cursor:pointer;
+      opacity:.82;
+      pointer-events:auto;
+      mix-blend-mode:difference;
+      transform:translateY(-50%) scale(1);
+      transition:opacity .38s ease,transform .38s cubic-bezier(.22,.8,.24,1),visibility 0s linear 0s;
+      touch-action:manipulation;
+      backdrop-filter:none;
+    }
+    .pager-arrow:hover, .pager-arrow:focus-visible {
+      background:transparent;
+      color:#fff;
+      opacity:1;
+      outline:0;
+      transform:translateY(-50%) scale(1.06);
+    }
+    .pager-arrow.is-hidden {
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(-50%) scale(.82);
+      visibility:hidden;
+      transition:opacity .38s ease,transform .38s cubic-bezier(.22,.8,.24,1),visibility 0s linear .38s;
+    }
+    .pager-prev { left:max(10px, env(safe-area-inset-left)); }
+    .pager-next { right:max(10px, env(safe-area-inset-right)); }
+    .pager-line {
+      width:38px;
+      height:1px;
+      background:currentColor;
+      animation:pager-line-fade 2.7s linear infinite;
+    }
+    .pager-next .pager-line, .pager-prev .pager-line { background:currentColor; }
+    .pager-label {
+      display:block;
+      color:currentColor;
+      font-family:var(--sans);
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:.16em;
+      line-height:1;
+      text-shadow:none;
+    }
+    @media (max-width:800px) {
+      .dragon-orbit { border-width:1px; }
+      .pager-arrow { width:61px; min-height:74px; gap:9px; }
+      .pager-prev { left:max(2px, env(safe-area-inset-left)); }
+      .pager-next { right:max(2px, env(safe-area-inset-right)); }
+      .pager-line { width:29px; }
+      .pager-label { display:block; font-size:7px; letter-spacing:.13em; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .dragon-orbit, .pager-line { animation:none; }
+      .pager-arrow, .pager-arrow.is-hidden { transition:none; }
+    }
   </style>
 </head>
 <body>
@@ -556,6 +662,8 @@
           <h1 data-i18n-html="heroTitle">Born to<br><i>Move.</i></h1>
           <p class="hero-copy" data-i18n="heroCopy">We are Dragon Dance. Built on speed and shaped by imagination, we move from the design desk to the track and fight for every thousandth of a second.</p>
           <div class="dragon-stage" id="dragonStage" aria-label="Interactive Dragon Dance dragon symbol">
+            <div class="dragon-orbit dragon-orbit-one" aria-hidden="true"></div>
+            <div class="dragon-orbit dragon-orbit-two" aria-hidden="true"></div>
             <div class="dragon-halo"></div>
             <div class="dragon-mist dragon-mist-one"></div>
             <div class="dragon-mist dragon-mist-two"></div>
