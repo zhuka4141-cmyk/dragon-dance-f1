@@ -11,7 +11,7 @@
   <meta name="application-name" content="F1 Dragon Dance" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+TC:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet" />
   <link rel="canonical" href="https://lstc-dragon-dance.vercel.app/" />
   <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
   <link rel="icon" type="image/png" sizes="48x48" href="assets/dragon-icon-48.png" />
@@ -342,13 +342,186 @@
       .deadline-date { font-size:64px; }
       .deadline-copy strong { font-size:35px; }
     }
+    /* 2026 motorsport editorial refresh */
+    :root { --ink:#090909; --paper:#f4f4f0; --line:#33332f; --muted:#a6a6a1; --red:#e01823; --steel:#d7d7d1; --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif; --sans:"Inter",Arial,"Microsoft JhengHei","PingFang TC",sans-serif; }
+    body { font-family:var(--sans); font-size:15px; }
+    html[lang="zh-Hant"] body { font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; }
+    .topline { height:4px; background:repeating-linear-gradient(90deg,var(--paper) 0 16px,var(--ink) 16px 32px); }
+    nav { position:sticky; top:0; z-index:40; height:72px; padding:0 4.2vw; border-bottom-color:rgba(244,244,240,.13); background:rgba(9,9,9,.94); backdrop-filter:blur(16px); }
+    nav:after { content:""; position:absolute; right:4.2vw; bottom:-1px; width:68px; height:2px; background:var(--red); }
+    .wordmark { font-family:var(--display); font-size:30px; font-weight:800; letter-spacing:.035em; line-height:.73; }
+    .wordmark span { margin-top:5px; font-family:var(--sans); font-size:8px; font-weight:700; letter-spacing:.29em; }
+    .nav-tagline { max-width:none; color:#c5c5bf; font-family:var(--sans); font-size:9px; font-weight:600; letter-spacing:.2em; line-height:1.2; text-transform:uppercase; }
+    .nav-tools { min-width:148px; gap:18px; }
+    .nav-tools .eyebrow { color:#cbcbca; font-size:9px; letter-spacing:.18em; }
+    .language-switch { font-family:var(--sans); font-size:9px; }
+    .language-switch button { padding:9px 1px 7px; }
+    .hero { min-height:max(640px,calc(100svh - 76px)); border-bottom-color:rgba(244,244,240,.18); background:#090909; }
+    .hero:before { background:linear-gradient(90deg,#090909 0%,rgba(9,9,9,.94) 42%,rgba(9,9,9,.36) 100%),repeating-linear-gradient(90deg,transparent 0 calc(12.5% - 1px),rgba(244,244,240,.055) calc(12.5% - 1px) 12.5%); }
+    .hero-pages, .hero-page { min-height:max(640px,calc(100svh - 76px)); }
+    .hero-page-intro { padding:clamp(74px,9vw,132px) 4.2vw 88px; }
+    .hero-kicker { max-width:560px; color:#ef535b; font-size:10px; font-weight:700; letter-spacing:.2em; }
+    h1, .title-page h2, .about h2, .machine-copy h2, .feature-copy h2, .race-deadlines h2, .racing-context h2, .updates-preview-header h2, footer strong, .contact-dialog h2 { font-family:var(--display); font-weight:800; letter-spacing:.02em; }
+    h1 { max-width:800px; margin:19px 0 28px; font-size:clamp(84px,11.8vw,184px); line-height:.74; }
+    .hero-copy { max-width:405px; color:#d4d4ce; font-size:15px; line-height:1.75; }
+    .hero-footer { left:4.2vw; right:4.2vw; bottom:20px; align-items:center; border-top-color:rgba(244,244,240,.25); padding-top:13px; color:#aaa9a4; font-size:9px; font-weight:600; letter-spacing:.16em; }
+    .hero-footer span:first-child { color:var(--paper); }
+    .scroll-indicator { color:var(--red); font-weight:700; }
+    .dragon-stage { right:4.2vw; top:auto; bottom:48px; width:min(43vw,590px); height:min(62vw,540px); }
+    .dragon-stage:before { content:""; position:absolute; inset:13% 6%; border:1px solid rgba(244,244,240,.18); transform:skewY(-8deg); }
+    .dragon-halo { inset:6% 8%; border-color:rgba(244,244,240,.12); border-radius:0; transform:rotate(-7deg); }
+    .dragon-mist { display:none; }
+    .dragon { filter:grayscale(1) contrast(1.22) invert(1) drop-shadow(0 16px 28px rgba(0,0,0,.48)); opacity:.94; }
+    .pager-hint { top:22px; color:#c7c7c1; font-size:9px; letter-spacing:.2em; opacity:.75; }
+    .hero-pager-controls { position:absolute; z-index:8; right:4.2vw; bottom:48px; display:flex; align-items:center; gap:8px; }
+    .pager-arrow { position:static; width:auto; min-height:28px; display:inline-flex; flex-direction:row; gap:8px; padding:0 7px; border:0; border-radius:0; background:transparent; box-shadow:none; color:var(--paper); opacity:.78; transform:none; backdrop-filter:none; }
+    .pager-arrow:hover, .pager-arrow:focus-visible { color:var(--red); background:transparent; opacity:1; }
+    .pager-arrow.is-hidden { transform:none; }
+    .pager-line { width:29px; height:1px; animation:none; }
+    .pager-next .pager-line, .pager-prev .pager-line { background:currentColor; animation:none; }
+    .pager-line:after { width:8px; height:8px; border-width:1px; }
+    .pager-label { font-size:8px; font-weight:700; letter-spacing:.16em; text-shadow:none; }
+    .title-page { gap:27px; padding:clamp(88px,11vw,152px) 12vw 92px; background:#111; }
+    .title-page:after { position:absolute; right:7vw; bottom:-.1em; color:rgba(244,244,240,.055); font-family:var(--display); font-size:min(42vw,540px); font-weight:800; line-height:.72; pointer-events:none; }
+    .title-page-crew:after { content:"02"; }
+    .title-page-partners:after { content:"03"; color:rgba(9,9,9,.075); }
+    .title-page-index { color:var(--red); font-size:10px; letter-spacing:.2em; }
+    .title-page h2 { max-width:760px; font-size:clamp(74px,11vw,164px); line-height:.73; }
+    .title-page p { max-width:430px; font-size:15px; line-height:1.7; }
+    .title-page-partners { background:var(--paper); }
+    .about-page { grid-template-columns:minmax(150px,.28fr) minmax(0,1fr); gap:clamp(42px,10vw,176px); padding:clamp(78px,9vw,132px) 4.2vw; background:linear-gradient(90deg,rgba(9,9,9,.035) 0 1px,transparent 1px) 4.2vw 0 / 12.5% 100%,var(--paper); }
+    .section-label { position:relative; padding-top:12px; color:#3f3f3b; font-size:10px; letter-spacing:.17em; }
+    .section-label:before { content:""; position:absolute; top:0; left:0; width:38px; height:3px; background:var(--red); }
+    .about h2 { max-width:720px; margin-bottom:30px; font-size:clamp(52px,7.5vw,112px); line-height:.75; }
+    .about p { max-width:650px; font-size:clamp(17px,1.65vw,21px); line-height:1.62; }
+    .fact-row { max-width:690px; border-color:#797975; }
+    .fact { padding:17px 16px 19px 0; border-right-color:#a4a4a0; }
+    .fact b { color:#676762; font-size:9px; letter-spacing:.16em; }
+    .fact span { font-size:13px; }
+    .feature-page { min-height:0; }
+    .machine { grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr); }
+    .car-photo { min-height:clamp(480px,53vw,720px); background:#151515; }
+    .car-photo img { filter:saturate(.86) contrast(1.06); opacity:.96; object-position:center 40%; }
+    .car-photo:before { content:""; position:absolute; inset:0; z-index:1; background:linear-gradient(90deg,rgba(9,9,9,.08),transparent 42%,rgba(9,9,9,.34)); pointer-events:none; }
+    .car-photo:after { z-index:2; left:24px; bottom:24px; padding:8px 10px; font-size:9px; letter-spacing:.16em; }
+    .machine-copy { min-height:clamp(480px,53vw,720px); padding:clamp(46px,6.4vw,96px) 4.2vw; background:#111; }
+    .machine-copy h2, .feature-copy h2 { font-size:clamp(54px,6.3vw,94px); line-height:.75; }
+    .machine-copy p, .feature-copy p { font-size:14px; line-height:1.72; }
+    .specs { border-top-color:#44443f; }
+    .spec { padding:14px 0; border-bottom-color:#44443f; font-size:10px; letter-spacing:.13em; }
+    .team-showcase, .sponsor-showcase { gap:clamp(46px,8vw,146px); padding:clamp(76px,9vw,126px) 4.2vw; }
+    .team-showcase { background:#101010; }
+    .sponsor-showcase { position:relative; background:var(--paper); }
+    .sponsor-showcase:before { content:""; position:absolute; top:0; right:0; left:0; height:5px; background:var(--red); }
+    .member-grid { gap:10px; margin-bottom:36px; }
+    .member-card { border-color:#4a4a45; background:#171717; }
+    .member-card img { aspect-ratio:4 / 5; object-position:center 19%; filter:saturate(.72) contrast(1.07); }
+    .member-card-copy { padding:13px 14px 15px; border-top:1px solid #3f3f3b; }
+    .member-card-role { color:#ff5960; font-size:8px; letter-spacing:.15em; }
+    .member-card strong { font-family:var(--display); font-size:18px; font-weight:700; letter-spacing:.03em; }
+    .role-list { border-top-color:#494944; }
+    .role-item { grid-template-columns:38px minmax(0,1fr); gap:16px; padding:16px 0; border-bottom-color:#494944; }
+    .role-item strong { font-family:var(--display); font-size:17px; font-weight:700; letter-spacing:.04em; }
+    .role-item p { color:#aaa9a4; font-size:12px; }
+    .partner-grid { border-color:#9b9b95; }
+    .partner-item { min-height:170px; padding:25px; border-color:#9b9b95; }
+    .partner-item span { margin-bottom:38px; font-size:9px; letter-spacing:.16em; }
+    .partner-item strong { font-family:var(--display); font-size:22px; font-weight:700; letter-spacing:.025em; }
+    .proposal-cta { margin-top:34px; margin-left:0; border-top-width:3px; }
+    .proposal-cta strong { font-family:var(--display); font-size:clamp(32px,3.5vw,50px); font-weight:800; letter-spacing:.02em; line-height:.78; }
+    .proposal-link { min-height:44px; padding:0 17px; }
+    .race-deadlines { padding:clamp(78px,9vw,126px) 4.2vw; background:#e4e4de; }
+    .race-deadlines-header { margin-bottom:40px; }
+    .race-deadlines-header h2 { font-size:clamp(54px,7vw,104px); line-height:.76; }
+    .deadline-grid { gap:10px; }
+    .deadline-card { min-height:232px; gap:26px; border-top:4px solid var(--red); background:#101010; color:var(--paper); padding:26px 28px; }
+    .deadline-date { color:var(--paper); font-family:var(--display); font-weight:800; }
+    .deadline-date span { color:#a6a6a1; font-family:var(--sans); }
+    .deadline-copy strong { font-family:var(--display); font-weight:800; }
+    .deadline-copy p { color:#cacac5; }
+    .deadline-countdown { border-bottom-color:#666660; color:#ff5a61; }
+    .latest-updates { padding:clamp(78px,9vw,126px) 4.2vw; background:#101010; }
+    .updates-preview-header h2 { font-size:clamp(58px,7.4vw,112px); line-height:.75; }
+    .updates-preview-feed { gap:10px; }
+    .update-preview-card { border-top-color:#555550; background:#181818; }
+    .update-preview-card:hover { background:#20201e; transform:translateY(-2px); }
+    .update-preview-card.is-featured { grid-template-columns:minmax(0,1.22fr) minmax(260px,.78fr); }
+    .update-preview-media img, .update-preview-media video { filter:saturate(.8) contrast(1.06); }
+    .update-preview-card:hover .update-preview-media img, .update-preview-card:hover .update-preview-media video { filter:saturate(.96) contrast(1.06); transform:scale(1.015); }
+    .update-preview-copy { padding:26px 27px 29px; }
+    .update-preview-heading { font-family:var(--display); font-size:clamp(30px,3vw,48px); font-weight:800; line-height:.79; }
+    .racing-context { padding:clamp(56px,6vw,84px) 4.2vw; background:#d8d8d2; }
+    .racing-context h2 { font-size:clamp(38px,4.6vw,68px); line-height:.77; }
+    footer { position:relative; padding:52px 4.2vw 28px; border-top:5px solid var(--red); background:#f1f1ec; }
+    footer strong { font-size:clamp(46px,6.4vw,90px); line-height:.74; }
+    .footer-label, .footer-meta { font-size:9px; letter-spacing:.16em; }
+    .contact-item { border-top-color:#999994; }
+    .contact-copy b { font-family:var(--display); font-size:15px; font-weight:700; letter-spacing:.04em; }
+    .contact-copy span, .contact-detail { font-size:10px; }
+    .contact-dialog { border-radius:8px; }
+    .contact-dialog h2 { font-size:clamp(42px,7vw,70px); line-height:.76; }
+    @media (max-width:800px) {
+      nav { height:64px; padding:0 6vw; }
+      nav:after { right:6vw; width:46px; }
+      .wordmark { font-size:25px; }
+      .wordmark span { font-size:7px; }
+      .nav-tools .eyebrow { display:none; }
+      .hero, .hero-pages, .hero-page { min-height:max(620px,calc(100svh - 68px)); }
+      .hero-page-intro { padding:74px 6vw 105px; }
+      .hero-kicker { max-width:300px; font-size:8px; letter-spacing:.15em; }
+      h1 { margin-top:16px; font-size:clamp(74px,20vw,118px); line-height:.76; }
+      .hero-copy { max-width:285px; font-size:13px; line-height:1.68; }
+      .dragon-stage { right:-2vw; bottom:58px; width:83vw; height:340px; opacity:.76; }
+      .hero-footer { right:6vw; bottom:15px; left:6vw; font-size:8px; letter-spacing:.11em; }
+      .hero-footer span:nth-child(2) { display:none; }
+      .hero-pager-controls { right:6vw; bottom:43px; gap:0; }
+      .pager-arrow { min-height:26px; padding:0 5px; }
+      .pager-label { display:none; }
+      .pager-line { width:20px; }
+      .pager-hint { top:17px; font-size:8px; }
+      .title-page { padding:96px 9vw 86px; }
+      .title-page h2 { font-size:clamp(68px,19vw,114px); }
+      .title-page p { max-width:315px; font-size:14px; }
+      .about-page { grid-template-columns:1fr; gap:24px; padding:70px 6vw; }
+      .about-pages, .feature-stack { display:block; }
+      .about-page, .feature-page { display:none; }
+      .about-page.is-active, .feature-page.is-active { display:grid; }
+      .about h2 { font-size:clamp(54px,15vw,88px); }
+      .about p { font-size:16px; }
+      .fact { padding:14px 10px 15px 0; }
+      .fact:not(:last-child) + .fact, .fact:last-child { padding-left:10px; }
+      .fact span { font-size:10px; }
+      .machine { grid-template-columns:1fr; }
+      .car-photo { min-height:58vw; aspect-ratio:16 / 10; }
+      .machine-copy { min-height:0; padding:54px 6vw 64px; }
+      .machine-copy h2, .feature-copy h2 { font-size:clamp(54px,15vw,82px); }
+      .team-showcase, .sponsor-showcase { gap:38px; padding:70px 6vw; }
+      .member-grid { grid-template-columns:1fr; }
+      .member-card img { aspect-ratio:4 / 3; object-position:center 21%; }
+      .member-card strong { font-size:20px; }
+      .role-item { grid-template-columns:32px minmax(0,1fr); }
+      .partner-item { min-height:132px; padding:20px; }
+      .proposal-cta { margin-left:0; }
+      .race-deadlines, .latest-updates { padding:70px 6vw; }
+      .race-deadlines-header h2, .updates-preview-header h2 { font-size:clamp(56px,15vw,86px); }
+      .deadline-card { min-height:172px; padding:21px; }
+      .deadline-date { font-size:66px; }
+      .update-preview-card.is-featured { grid-template-columns:1fr; }
+      .update-preview-card.is-featured .update-preview-media { min-height:0; height:auto; aspect-ratio:16 / 10; }
+      .update-preview-copy { padding:21px; }
+      .racing-context { padding:48px 6vw; }
+      footer { padding:38px 6vw 24px; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .hero-pages, .about-page, .feature-page, .update-preview-card, .update-preview-media img, .update-preview-media video { transition:none; }
+    }
   </style>
 </head>
 <body>
   <div class="topline"></div>
   <nav>
     <a class="wordmark" href="#top">Dragon Dance<span>STEM Racing</span></a>
-    <div class="navlinks"><span class="nav-tagline">𝓘𝓰𝓷𝓲𝓽𝓮 𝓽𝓱𝓮 𝓢𝓹𝓮𝓮𝓭. 𝓢𝓱𝓲𝓷𝓮 𝓽𝓱𝓮 𝓒𝓾𝓵𝓽𝓾𝓻𝓮</span></div>
+    <div class="navlinks"><span class="nav-tagline">Ignite the speed. Shine the culture.</span></div>
     <div class="nav-tools">
       <div class="language-switch" role="group" aria-label="Language selector">
         <button id="langEnglish" type="button" aria-pressed="true">EN</button><span class="language-divider" aria-hidden="true">/</span><button id="langChinese" type="button" aria-pressed="false">中文</button>
@@ -380,14 +553,16 @@
           <p data-i18n="crewIntro">From project management and engineering to brand and sponsorship, every member brings their expertise to keep Dragon Dance moving as one.</p>
         </article>
         <article class="hero-page title-page title-page-partners" aria-label="Page 3">
-          <div class="title-page-index" data-i18n="partnersIndex">03 / Our Partners</div>
-          <h2 data-i18n-html="partnersTitle">Driven<br>By Support</h2>
+          <div class="title-page-index" data-i18n="partnersIndex">03 / Partnership</div>
+          <h2 data-i18n-html="partnersTitle">Build<br>With Us.</h2>
           <p data-i18n="partnersIntro">We work with partners who value innovation, education and youth development to take engineering in practice and brand storytelling to a bigger stage.</p>
         </article>
       </div>
+      <div class="hero-pager-controls" aria-label="Homepage pages">
+        <button class="pager-arrow pager-prev" id="pagerPrev" type="button" aria-label="Previous page" title="Previous page"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerPrevLabel" aria-hidden="true"></span></button>
+        <button class="pager-arrow pager-next" id="pagerNext" type="button" aria-label="Next page" title="Next page"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerNextLabel" aria-hidden="true"></span></button>
+      </div>
     </section>
-    <button class="pager-arrow pager-prev" id="pagerPrev" type="button" aria-label="Previous page" title="Previous page"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerPrevLabel" aria-hidden="true"></span></button>
-    <button class="pager-arrow pager-next" id="pagerNext" type="button" aria-label="Next page" title="Next page"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerNextLabel" aria-hidden="true"></span></button>
 
     <section class="about" id="about" data-scroll-reveal>
       <div class="about-pages" id="aboutPages" aria-live="polite">
@@ -408,9 +583,9 @@
           </div>
         </article>
         <article class="about-page" aria-label="Page 3 overview">
-          <div><div class="section-label" data-i18n="partnersIndex">03 / Our Partners</div></div>
+          <div><div class="section-label" data-i18n="partnersIndex">03 / Partnership</div></div>
           <div>
-            <h2 data-i18n-html="partnersTitle">Driven<br>By Support</h2>
+            <h2 data-i18n-html="partnersTitle">Build<br>With Us.</h2>
             <p data-i18n="partnersOverview">Every contribution helps Dragon Dance go further. We welcome partners who care about innovation, education and youth development to bring engineering in practice and brand stories to a bigger stage.</p>
             <div class="fact-row"><div class="fact"><b data-i18n="partnershipLabel">Partnership</b><span data-i18n="openLabel">Open</span></div><div class="fact"><b data-i18n="reachLabel">Reach</b><span>Hong Kong</span></div><div class="fact"><b data-i18n="contactLabel">Contact</b><span data-i18n="emailUs">Email Us</span></div></div>
           </div>
@@ -655,7 +830,7 @@
         scrollExplore:'向下探索 ↓',
         crewIndex:'02 / 隊員',
         crewIntro:'從專案管理、工程設計到品牌與贊助，隊員各自發揮專長，讓 Dragon Dance 同步前進。',
-        partnersIndex:'03 / 贊助商',
+        partnersIndex:'03 / 合作',
         partnersIntro:'與重視創新、教育與青年發展的夥伴並肩，把工程實踐與品牌故事推上更大的舞台。',
         teamLabel:'01 / 車隊',
         teamOverview:'Dragon Dance 是一隊來自博愛醫院歷屆總理聯誼會梁省德中學的 STEM Racing 車隊。我們把工程思維、視覺設計與賽事策略放在同一條起跑線，打造一支有速度、也有態度的隊伍。',
@@ -723,24 +898,24 @@
         teamDevelopment:'車隊發展',
         teamDevelopmentCopy:'支持設計、製造、測試與下一代創意人才。',
         racingCopy:'F1 Dragon Dance 是 Dragon Dance 在香港的 STEM Racing 身分。STEM Racing 是前稱 F1 in Schools 的學生賽車挑戰，我們在其中結合工程、設計、品牌與賽事策略。',
-        footerTitle:'與龍<br>共舞。',
+        footerTitle:'與龍<br>共舞',
         emailLabel:'電郵',
         projectManagerContact:'專案經理 · 91639154',
         sponsorshipContact:'贊助及推廣經理 · 60116515',
         schoolWebsite:'學校網站'
       };
       const chineseHtml = {
-        deadlinesTitle:'兩個日期。<br>同一條終點線。',
-        updatesTitle:'持續<br>前進。',
+        deadlinesTitle:'兩個日期<br>同一條終點線',
+        updatesTitle:'持續<br>前進',
         heroTitle:'為速度<br><i>而生</i>',
         crewTitle:'認識<br>隊員',
-        partnersTitle:'支持<br>驅動。',
-        machineTitle:'為起跑<br>而生。',
-        rolesTitle:'一隊夥伴。<br>多種<br>專長。',
+        partnersTitle:'與我們<br>同行',
+        machineTitle:'為起跑<br>而生',
+        rolesTitle:'一隊夥伴<br>多種<br>專長',
         sponsorTitle:'與我們<br>同行。',
         partnershipModalTitle:'與我們<br>合作。',
-        racingTitle:'STEM Racing，<br><em>前稱 F1 in Schools。</em>',
-        footerTitle:'與龍<br>共舞。',
+        racingTitle:'STEM Racing<br><em>前稱 F1 in Schools</em>',
+        footerTitle:'與龍<br>共舞',
         footerMeta:'博愛醫院歷屆總理聯誼會梁省德中學<br>香港'
       };
 
