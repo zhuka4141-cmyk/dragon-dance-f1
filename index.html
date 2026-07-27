@@ -145,7 +145,7 @@
     @keyframes pager-line-fade { 0%,100% { opacity:.1; } 50% { opacity:.92; } }
     @keyframes pager-nudge-right { 0%,100% { transform:translateX(0); } 50% { transform:translateX(4px); } }
     @keyframes pager-nudge-left { 0%,100% { transform:translateX(0); } 50% { transform:translateX(-4px); } }
-    .fog-field { display:none; }
+    .fog-field { position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; touch-action:auto; opacity:.9; contain:paint; will-change:opacity; }
     .hero-kicker, .eyebrow { color:var(--red); font-size:11px; letter-spacing:2.2px; font-weight:700; text-transform:uppercase; }
     .hero-kicker { position:relative; z-index:2; max-width:min(72vw,760px); line-height:1.55; letter-spacing:1.4px; }
     h1 { font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:1px; font-size:clamp(76px,13vw,190px); line-height:.78; margin:21px 0 25px; max-width:950px; }
@@ -157,7 +157,7 @@
     .cta:hover { background:var(--paper); color:var(--ink); }
     .dragon-stage { position:absolute; right:1vw; top:66px; width:min(46vw,620px); height:545px; pointer-events:none; z-index:1; }
     .dragon-halo { display:none; }
-    .dragon-mist { --mist-rgb:225,232,227; position:absolute; width:120%; height:21%; border-radius:50%; background:radial-gradient(ellipse 56% 120% at center,rgba(var(--mist-rgb),.42) 0%,rgba(var(--mist-rgb),.24) 36%,rgba(var(--mist-rgb),0) 78%); opacity:.2; -webkit-mask-image:radial-gradient(ellipse 52% 130% at center,#000 0%,rgba(0,0,0,.82) 43%,transparent 84%); mask-image:radial-gradient(ellipse 52% 130% at center,#000 0%,rgba(0,0,0,.82) 43%,transparent 84%); animation:mist-drift 6.4s linear infinite; }
+    .dragon-mist { --mist-rgb:225,232,227; position:absolute; width:120%; height:21%; border-radius:50%; background:radial-gradient(ellipse 56% 120% at center,rgba(var(--mist-rgb),.42) 0%,rgba(var(--mist-rgb),.24) 36%,rgba(var(--mist-rgb),0) 78%); opacity:.34; -webkit-mask-image:radial-gradient(ellipse 52% 130% at center,#000 0%,rgba(0,0,0,.82) 43%,transparent 84%); mask-image:radial-gradient(ellipse 52% 130% at center,#000 0%,rgba(0,0,0,.82) 43%,transparent 84%); animation:mist-drift 6.4s linear infinite; }
     .dragon-mist-one { left:-72%; bottom:23%; animation-delay:-1.5s; }
     .dragon-mist-two { --mist-rgb:171,194,188; left:-50%; bottom:39%; width:108%; animation-duration:8.8s; animation-delay:-6s; }
     .dragon-mist-three { --mist-rgb:240,242,237; left:-66%; bottom:9%; width:136%; animation-duration:11.2s; animation-delay:-9s; }
@@ -373,7 +373,7 @@
             <div class="dragon-mist dragon-mist-two"></div>
             <div class="dragon-mist dragon-mist-three"></div>
             <div class="dragon-mist dragon-mist-four"></div>
-          <img class="dragon" id="dragon" src="assets/dragon-mark-cutout-cropped.png" alt="Dragon Dance dragon symbol" />
+            <img class="dragon" id="dragon" src="assets/dragon-mark.png" alt="Dragon Dance dragon symbol" />
           </div>
           <div class="hero-footer"><span data-i18n="f1StemLabel">F1 Dragon Dance / STEM Racing</span><span data-i18n="heroMantra">Precision. Teamwork. Momentum.</span><a class="scroll-indicator" href="#about" data-i18n="scrollExplore">Scroll to explore ↓</a></div>
         </article>
@@ -607,7 +607,6 @@
         ]
       };
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const fogEnabled = false;
       const wisps = [
         { x:.02, y:.18, radius:72, speed:8.75, wave:.42, alpha:.13 },
         { x:.28, y:.34, radius:82, speed:12.5, wave:.31, alpha:.12 },
@@ -1211,7 +1210,6 @@
       }
 
       function resizeFog() {
-        if (!fogEnabled) return;
         width = hero.clientWidth;
         height = hero.clientHeight;
         if (width < 1 || height < 1) return;
@@ -1294,7 +1292,7 @@
       }
 
       function drawFog(now) {
-        if (!fogEnabled || !visible || fogScrollPaused || width < 1 || height < 1) {
+        if (!visible || fogScrollPaused || width < 1 || height < 1) {
           frame = 0;
           return;
         }
@@ -1308,7 +1306,7 @@
       }
 
       function disperseFog(event) {
-        if (!fogEnabled || pageIndex !== 0) return;
+        if (pageIndex !== 0) return;
         const bounds = hero.getBoundingClientRect();
         const x = event.clientX - bounds.left;
         const y = event.clientY - bounds.top;
@@ -1364,7 +1362,7 @@
           visible = entries[0].isIntersecting;
           cancelAnimationFrame(frame);
           frame = 0;
-          if (fogEnabled && visible && !fogScrollPaused) frame = requestAnimationFrame(drawFog);
+          if (visible && !fogScrollPaused) frame = requestAnimationFrame(drawFog);
         }, { threshold:.01 }).observe(hero);
       } else {
         frame = requestAnimationFrame(drawFog);
