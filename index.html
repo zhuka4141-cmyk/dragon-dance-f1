@@ -156,12 +156,12 @@
     .cta:after { content:"↘"; font-size:18px; line-height:0; color:var(--red); }
     .cta:hover { background:var(--paper); color:var(--ink); }
     .dragon-stage { position:absolute; right:1vw; top:66px; width:min(46vw,620px); height:545px; pointer-events:none; z-index:1; }
-    .dragon-halo { display:none; }
-    .dragon-mist { --mist-rgb:225,232,227; position:absolute; width:120%; height:21%; border-radius:50%; background:radial-gradient(ellipse 56% 120% at center,rgba(var(--mist-rgb),.42) 0%,rgba(var(--mist-rgb),.24) 36%,rgba(var(--mist-rgb),0) 78%); opacity:.34; -webkit-mask-image:radial-gradient(ellipse 52% 130% at center,#000 0%,rgba(0,0,0,.82) 43%,transparent 84%); mask-image:radial-gradient(ellipse 52% 130% at center,#000 0%,rgba(0,0,0,.82) 43%,transparent 84%); animation:mist-drift 6.4s linear infinite; }
+    .dragon-halo { position:absolute; inset:8% 2%; border:1px solid #383838; border-radius:50%; transform:rotate(-21deg); }
+    .dragon-mist { position:absolute; width:120%; height:15%; border-radius:50%; background:linear-gradient(90deg,transparent 0%,rgba(225,232,227,.04) 27%,rgba(225,232,227,.42) 44%,rgba(225,232,227,.2) 66%,transparent 100%); box-shadow:0 0 28px 9px rgba(206,219,213,.13); opacity:.31; animation:mist-drift 6.4s linear infinite; }
     .dragon-mist-one { left:-72%; bottom:23%; animation-delay:-1.5s; }
-    .dragon-mist-two { --mist-rgb:171,194,188; left:-50%; bottom:39%; width:108%; animation-duration:8.8s; animation-delay:-6s; }
-    .dragon-mist-three { --mist-rgb:240,242,237; left:-66%; bottom:9%; width:136%; animation-duration:11.2s; animation-delay:-9s; }
-    .dragon-mist-four { --mist-rgb:197,211,205; left:-84%; bottom:55%; width:112%; animation-duration:9.6s; animation-delay:-4s; }
+    .dragon-mist-two { left:-50%; bottom:39%; width:108%; background:linear-gradient(90deg,transparent 0%,rgba(171,194,188,.04) 27%,rgba(171,194,188,.33) 44%,rgba(213,223,217,.16) 66%,transparent 100%); animation-duration:8.8s; animation-delay:-6s; }
+    .dragon-mist-three { left:-66%; bottom:9%; width:136%; background:linear-gradient(90deg,transparent 0%,rgba(240,242,237,.03) 27%,rgba(240,242,237,.29) 44%,rgba(223,230,223,.15) 66%,transparent 100%); animation-duration:11.2s; animation-delay:-9s; }
+    .dragon-mist-four { left:-84%; bottom:55%; width:112%; background:linear-gradient(90deg,transparent 0%,rgba(197,211,205,.03) 27%,rgba(197,211,205,.25) 44%,rgba(220,230,226,.13) 66%,transparent 100%); animation-duration:9.6s; animation-delay:-4s; }
     body.is-fog-scrolling .dragon-mist { animation-play-state:paused; }
     @keyframes mist-drift { 0% { opacity:.04; transform:translate3d(-10%,14%,0) scale(.9); } 38% { opacity:.4; } 70% { opacity:.16; } 100% { opacity:.03; transform:translate3d(132%,-20%,0) scale(1.17); } }
     .dragon { position:relative; z-index:1; width:100%; height:100%; object-fit:contain; filter:grayscale(1) contrast(1.35) invert(1) drop-shadow(0 0 16px rgba(255,255,255,.22)); opacity:.96; user-select:none; -webkit-user-drag:none; }
@@ -1212,7 +1212,6 @@
       function resizeFog() {
         width = hero.clientWidth;
         height = hero.clientHeight;
-        if (width < 1 || height < 1) return;
         const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
         canvas.width = Math.round(width * ratio);
         canvas.height = Math.round(height * ratio);
@@ -1288,7 +1287,7 @@
       }
 
       function drawFog(now) {
-        if (!visible || fogScrollPaused || width < 1 || height < 1) {
+        if (!visible || fogScrollPaused) {
           frame = 0;
           return;
         }
