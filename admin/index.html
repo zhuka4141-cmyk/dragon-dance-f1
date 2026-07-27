@@ -290,13 +290,29 @@
         return Math.min(maximum, Math.max(minimum, Number(value) || minimum));
       }
 
+      function parseMediaEntry(value) {
+        if (typeof value !== 'string') return value;
+        const trimmed = value.trim();
+        if (!trimmed.startsWith('{')) return value;
+        try {
+          const parsed = JSON.parse(trimmed);
+          return parsed && typeof parsed.url === 'string' ? parsed : value;
+        } catch {
+          return value;
+        }
+      }
+
       function mediaUrl(entry) {
-        return typeof entry === 'string' ? entry : entry?.url || '';
+        const value = parseMediaEntry(entry);
+        if (typeof value === 'string') return value;
+        const url = parseMediaEntry(value?.url);
+        return typeof url === 'string' ? url : url?.url || '';
       }
 
       function normaliseMediaEntries(post) {
         const rawEntries = Array.isArray(post?.image_urls) ? post.image_urls : [];
         const entries = rawEntries.map(value => {
+          value = parseMediaEntry(value);
           if (typeof value === 'string') {
             return { url:value, type:isVideoUrl(value) ? 'video/mp4' : 'image/*', positionX:50, positionY:50, scale:1 };
           }
@@ -309,8 +325,9 @@
             scale:clamp(value.scale ?? 1, 1, 3)
           };
         }).filter(Boolean);
-        if (!entries.length && post?.cover_url) {
-          entries.push({ url:post.cover_url, type:isVideoUrl(post.cover_url) ? 'video/mp4' : 'image/*', positionX:50, positionY:50, scale:1 });
+        const coverUrl = mediaUrl(post?.cover_url);
+        if (!entries.length && coverUrl) {
+          entries.push({ url:coverUrl, type:isVideoUrl(coverUrl) ? 'video/mp4' : 'image/*', positionX:50, positionY:50, scale:1 });
         }
         const seen = new Set();
         return entries.filter(entry => {
