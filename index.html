@@ -145,7 +145,7 @@
     @keyframes pager-line-fade { 0%,100% { opacity:.1; } 50% { opacity:.92; } }
     @keyframes pager-nudge-right { 0%,100% { transform:translateX(0); } 50% { transform:translateX(4px); } }
     @keyframes pager-nudge-left { 0%,100% { transform:translateX(0); } 50% { transform:translateX(-4px); } }
-    .fog-field { position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; touch-action:auto; opacity:.78; filter:blur(7px) saturate(.7); mix-blend-mode:screen; }
+    .fog-field { position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; touch-action:auto; opacity:.9; contain:paint; will-change:opacity; }
     .hero-kicker, .eyebrow { color:var(--red); font-size:11px; letter-spacing:2.2px; font-weight:700; text-transform:uppercase; }
     .hero-kicker { position:relative; z-index:2; max-width:min(72vw,760px); line-height:1.55; letter-spacing:1.4px; }
     h1 { font-family:Impact,"Arial Narrow",sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:1px; font-size:clamp(76px,13vw,190px); line-height:.78; margin:21px 0 25px; max-width:950px; }
@@ -157,10 +157,12 @@
     .cta:hover { background:var(--paper); color:var(--ink); }
     .dragon-stage { position:absolute; right:1vw; top:66px; width:min(46vw,620px); height:545px; pointer-events:none; z-index:1; }
     .dragon-halo { position:absolute; inset:8% 2%; border:1px solid #383838; border-radius:50%; transform:rotate(-21deg); }
-    .dragon-mist { position:absolute; width:120%; height:15%; border-radius:50%; background:linear-gradient(90deg,transparent,rgba(225,232,227,.34) 42%,rgba(225,232,227,.18) 62%,transparent); filter:blur(21px); opacity:.23; mix-blend-mode:screen; animation:mist-drift 8s linear infinite; }
+    .dragon-mist { position:absolute; width:120%; height:15%; border-radius:50%; background:linear-gradient(90deg,transparent 0%,rgba(225,232,227,.04) 27%,rgba(225,232,227,.42) 44%,rgba(225,232,227,.2) 66%,transparent 100%); box-shadow:0 0 28px 9px rgba(206,219,213,.13); opacity:.31; animation:mist-drift 6.4s linear infinite; }
     .dragon-mist-one { left:-72%; bottom:23%; animation-delay:-1.5s; }
-    .dragon-mist-two { left:-50%; bottom:39%; width:108%; background:linear-gradient(90deg,transparent,rgba(171,194,188,.27) 43%,rgba(213,223,217,.14) 65%,transparent); animation-duration:11s; animation-delay:-6s; }
-    .dragon-mist-three { left:-66%; bottom:9%; width:136%; background:linear-gradient(90deg,transparent,rgba(240,242,237,.22) 44%,rgba(223,230,223,.12) 66%,transparent); animation-duration:14s; animation-delay:-9s; }
+    .dragon-mist-two { left:-50%; bottom:39%; width:108%; background:linear-gradient(90deg,transparent 0%,rgba(171,194,188,.04) 27%,rgba(171,194,188,.33) 44%,rgba(213,223,217,.16) 66%,transparent 100%); animation-duration:8.8s; animation-delay:-6s; }
+    .dragon-mist-three { left:-66%; bottom:9%; width:136%; background:linear-gradient(90deg,transparent 0%,rgba(240,242,237,.03) 27%,rgba(240,242,237,.29) 44%,rgba(223,230,223,.15) 66%,transparent 100%); animation-duration:11.2s; animation-delay:-9s; }
+    .dragon-mist-four { left:-84%; bottom:55%; width:112%; background:linear-gradient(90deg,transparent 0%,rgba(197,211,205,.03) 27%,rgba(197,211,205,.25) 44%,rgba(220,230,226,.13) 66%,transparent 100%); animation-duration:9.6s; animation-delay:-4s; }
+    body.is-fog-scrolling .dragon-mist { animation-play-state:paused; }
     @keyframes mist-drift { 0% { opacity:.04; transform:translate3d(-10%,14%,0) scale(.9); } 38% { opacity:.4; } 70% { opacity:.16; } 100% { opacity:.03; transform:translate3d(132%,-20%,0) scale(1.17); } }
     .dragon { position:relative; z-index:1; width:100%; height:100%; object-fit:contain; filter:grayscale(1) contrast(1.35) invert(1) drop-shadow(0 0 16px rgba(255,255,255,.22)); opacity:.96; user-select:none; -webkit-user-drag:none; }
     @media (prefers-reduced-motion:reduce) { .dragon-mist, .pager-line { animation:none; opacity:.32; } .hero-pages, .contact-modal, .contact-dialog { transition:none; } body.is-language-switching .hero-page[aria-hidden="false"], body.is-language-switching .about-page.is-active, body.is-language-switching .feature-page.is-active, body.is-language-switching .racing-context, body.is-language-switching footer { animation:none; } }
@@ -370,6 +372,7 @@
             <div class="dragon-mist dragon-mist-one"></div>
             <div class="dragon-mist dragon-mist-two"></div>
             <div class="dragon-mist dragon-mist-three"></div>
+            <div class="dragon-mist dragon-mist-four"></div>
             <img class="dragon" id="dragon" src="assets/dragon-mark.png" alt="Dragon Dance dragon symbol" />
           </div>
           <div class="hero-footer"><span data-i18n="f1StemLabel">F1 Dragon Dance / STEM Racing</span><span data-i18n="heroMantra">Precision. Teamwork. Momentum.</span><a class="scroll-indicator" href="#about" data-i18n="scrollExplore">Scroll to explore ↓</a></div>
@@ -605,13 +608,15 @@
       };
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const wisps = [
-        { x:.02, y:.18, radius:110, stretch:2.8, speed:7, wave:.42, alpha:.13 },
-        { x:.28, y:.34, radius:145, stretch:3.2, speed:10, wave:.31, alpha:.11 },
-        { x:.58, y:.2, radius:125, stretch:2.5, speed:8, wave:.38, alpha:.12 },
-        { x:.78, y:.48, radius:170, stretch:3.4, speed:6, wave:.27, alpha:.1 },
-        { x:.12, y:.66, radius:155, stretch:3.1, speed:9, wave:.33, alpha:.12 },
-        { x:.45, y:.78, radius:135, stretch:2.7, speed:11, wave:.4, alpha:.1 },
-        { x:.72, y:.82, radius:180, stretch:3.5, speed:5, wave:.25, alpha:.09 }
+        { x:.02, y:.18, radius:110, stretch:2.8, speed:8.75, wave:.42, alpha:.17 },
+        { x:.28, y:.34, radius:145, stretch:3.2, speed:12.5, wave:.31, alpha:.15 },
+        { x:.58, y:.2, radius:125, stretch:2.5, speed:10, wave:.38, alpha:.16 },
+        { x:.78, y:.48, radius:170, stretch:3.4, speed:7.5, wave:.27, alpha:.14 },
+        { x:.12, y:.66, radius:155, stretch:3.1, speed:11.25, wave:.33, alpha:.16 },
+        { x:.45, y:.78, radius:135, stretch:2.7, speed:13.75, wave:.4, alpha:.14 },
+        { x:.72, y:.82, radius:180, stretch:3.5, speed:6.25, wave:.25, alpha:.12 },
+        { x:.37, y:.52, radius:128, stretch:2.9, speed:10.5, wave:.36, alpha:.12 },
+        { x:.87, y:.71, radius:150, stretch:3.15, speed:8.25, wave:.29, alpha:.11 }
       ];
       let width = 0;
       let height = 0;
@@ -619,6 +624,9 @@
       let visible = true;
       let clearPoints = [];
       let lastDraw = 0;
+      let fogScrollPaused = false;
+      let fogScrollResumeTimer = 0;
+      let fogResizeTimer = 0;
       let lastSample = { time:0, x:-1000, y:-1000 };
       let pageIndex = 0;
       let swipeStart = null;
@@ -1208,6 +1216,28 @@
         canvas.width = Math.round(width * ratio);
         canvas.height = Math.round(height * ratio);
         context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        paintFog(performance.now());
+      }
+
+      function pauseFogForScroll() {
+        fogScrollPaused = true;
+        document.body.classList.add('is-fog-scrolling');
+        if (frame) {
+          cancelAnimationFrame(frame);
+          frame = 0;
+        }
+        window.clearTimeout(fogScrollResumeTimer);
+        fogScrollResumeTimer = window.setTimeout(() => {
+          fogScrollPaused = false;
+          document.body.classList.remove('is-fog-scrolling');
+          if (visible && !frame) frame = requestAnimationFrame(drawFog);
+        }, 150);
+      }
+
+      function queueFogResize() {
+        pauseFogForScroll();
+        window.clearTimeout(fogResizeTimer);
+        fogResizeTimer = window.setTimeout(resizeFog, 90);
       }
 
       function drawWisp(wisp, index, seconds) {
@@ -1249,17 +1279,24 @@
         context.globalCompositeOperation = 'source-over';
       }
 
+      function paintFog(now) {
+        context.clearRect(0, 0, width, height);
+        const seconds = now / 1000;
+        wisps.forEach((wisp, index) => drawWisp(wisp, index, seconds));
+        clearFog(now);
+      }
+
       function drawFog(now) {
-        if (!visible) return;
+        if (!visible || fogScrollPaused) {
+          frame = 0;
+          return;
+        }
         if (now - lastDraw < 32) {
           frame = requestAnimationFrame(drawFog);
           return;
         }
         lastDraw = now;
-        context.clearRect(0, 0, width, height);
-        const seconds = now / 1000;
-        wisps.forEach((wisp, index) => drawWisp(wisp, index, seconds));
-        clearFog(now);
+        paintFog(now);
         frame = requestAnimationFrame(drawFog);
       }
 
@@ -1283,7 +1320,8 @@
       applyLanguage(savedLanguage === 'zh' ? 'zh' : 'en', false);
       loadUpdates();
       resizeFog();
-      window.addEventListener('resize', resizeFog, { passive:true });
+      window.addEventListener('resize', queueFogResize, { passive:true });
+      window.addEventListener('scroll', pauseFogForScroll, { passive:true });
       window.addEventListener('pointerdown', disperseFog, { passive:true });
       window.addEventListener('pointermove', disperseFog, { passive:true });
       document.addEventListener('pointerdown', beginSwipe, { passive:true });
@@ -1318,7 +1356,8 @@
         new IntersectionObserver(entries => {
           visible = entries[0].isIntersecting;
           cancelAnimationFrame(frame);
-          if (visible) frame = requestAnimationFrame(drawFog);
+          frame = 0;
+          if (visible && !fogScrollPaused) frame = requestAnimationFrame(drawFog);
         }, { threshold:.01 }).observe(hero);
       } else {
         frame = requestAnimationFrame(drawFog);
