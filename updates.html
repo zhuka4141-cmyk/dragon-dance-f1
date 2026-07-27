@@ -12,7 +12,7 @@
   <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="assets/dragon-icon-180.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
   <title>Latest Updates | Dragon Dance STEM Racing</title>
   <style>
     :root { --ink:#080808; --paper:#f2f2ef; --line:#30302e; --muted:#a6a6a1; --red:#e01823; }
@@ -72,61 +72,6 @@
     footer strong { font-family:Impact,"Arial Narrow",sans-serif; font-size:clamp(30px,4vw,52px); font-weight:400; line-height:.8; letter-spacing:1px; text-transform:uppercase; }
     footer span { color:#555; font-size:10px; letter-spacing:1.2px; text-transform:uppercase; }
     @media (max-width:800px) { nav { min-height:63px; } .back-home { font-size:10px; } .updates-hero { grid-template-columns:1fr; min-height:0; gap:28px; padding:75px 6vw 54px; } .updates-hero p { font-size:15px; } .updates-archive { padding:60px 6vw; } .update-entry { grid-template-columns:1fr; gap:26px; padding:45px 0; } .update-excerpt { font-size:17px; } footer { align-items:start; flex-direction:column; padding:30px 6vw 22px; } }
-    /* Shared motorsport editorial system */
-    :root { --ink:#090909; --paper:#f4f4f0; --line:#353530; --red:#e01823; --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif; --sans:"Inter",Arial,"Microsoft JhengHei","PingFang TC",sans-serif; }
-    body { font-family:var(--sans); }
-    html[lang="zh-Hant"] body { font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; }
-    .topline { height:4px; background:repeating-linear-gradient(90deg,var(--paper) 0 16px,var(--ink) 16px 32px); }
-    nav { position:sticky; top:0; z-index:20; min-height:72px; padding:0 4.2vw; border-bottom-color:rgba(244,244,240,.13); background:rgba(9,9,9,.94); backdrop-filter:blur(16px); }
-    nav:after { content:""; position:absolute; right:4.2vw; bottom:-1px; width:68px; height:2px; background:var(--red); }
-    .wordmark { font-family:var(--display); font-size:30px; font-weight:800; letter-spacing:.035em; line-height:.73; }
-    .wordmark span { margin-top:5px; font-family:var(--sans); font-size:8px; font-weight:700; letter-spacing:.29em; }
-    .back-home { font-size:9px; letter-spacing:.18em; }
-    .language-switch { font-family:var(--sans); font-size:9px; }
-    .updates-hero { position:relative; grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr); gap:clamp(44px,8vw,130px); min-height:clamp(420px,52vw,620px); padding:clamp(86px,11vw,154px) 4.2vw 62px; overflow:hidden; border-bottom-color:rgba(244,244,240,.18); background:linear-gradient(90deg,#090909 0 58%,#111 58% 100%); }
-    .updates-hero:before { content:"DD"; position:absolute; top:-.26em; right:3vw; color:rgba(244,244,240,.035); font-family:var(--display); font-size:min(43vw,570px); font-weight:900; letter-spacing:-.06em; line-height:1; pointer-events:none; }
-    .updates-hero:after { content:""; position:absolute; inset:0; background:repeating-linear-gradient(90deg,transparent 0 calc(12.5% - 1px),rgba(244,244,240,.05) calc(12.5% - 1px) 12.5%); pointer-events:none; }
-    .updates-hero > * { position:relative; z-index:1; }
-    .eyebrow { font-size:10px; letter-spacing:.2em; }
-    h1, .update-entry h2, footer strong { font-family:var(--display); font-weight:800; letter-spacing:.02em; }
-    h1 { max-width:760px; margin-top:17px; font-size:clamp(78px,11vw,172px); line-height:.74; }
-    .updates-hero p { max-width:390px; color:#d1d1cb; font-size:15px; line-height:1.75; }
-    .updates-archive { padding:clamp(76px,9vw,126px) 4.2vw; background:var(--paper); }
-    .update-entry { gap:clamp(38px,7vw,126px); padding:clamp(48px,6vw,92px) 0; border-top-color:#9c9c96; }
-    .update-entry.is-target { background:linear-gradient(90deg,rgba(224,24,35,.08),transparent 44%); }
-    .update-media { border-top:4px solid var(--red); background:#d9d9d3; }
-    .update-slide { filter:saturate(.82) contrast(1.06); }
-    .update-entry:hover .update-slide.is-active { filter:saturate(.98) contrast(1.06); }
-    .carousel-count { right:0; bottom:0; padding:7px 10px; background:var(--ink); font-size:9px; letter-spacing:.16em; }
-    .update-pin { margin-bottom:14px; padding:5px 7px; font-size:8px; letter-spacing:.16em; }
-    .update-date { margin-bottom:20px; font-size:9px; letter-spacing:.18em; }
-    .update-entry h2 { font-size:clamp(50px,6.3vw,92px); line-height:.76; }
-    .update-body { max-width:610px; margin-top:26px; }
-    .update-body p { color:#4e4e49; font-size:14px; line-height:1.76; }
-    .gallery-overlay { background:rgba(9,9,9,.94); }
-    .gallery-dialog { width:min(1180px,100%); gap:12px; }
-    .gallery-image { height:min(74vh,800px); border-top:3px solid var(--red); }
-    .gallery-close, .gallery-nav { border-radius:0; border-color:rgba(244,244,240,.55); }
-    .gallery-close:hover, .gallery-close:focus-visible, .gallery-nav:hover, .gallery-nav:focus-visible { background:var(--red); }
-    .gallery-thumb.is-active { border-color:var(--red); }
-    .updates-status { padding:50px 0; border-top-color:#a1a19b; }
-    footer { position:relative; padding:43px 4.2vw 27px; border-top:5px solid var(--red); background:#f1f1ec; }
-    footer strong { font-size:clamp(40px,5.4vw,76px); line-height:.74; }
-    footer span { font-size:9px; letter-spacing:.16em; }
-    @media (max-width:800px) {
-      nav { min-height:64px; padding:0 6vw; }
-      nav:after { right:6vw; width:46px; }
-      .wordmark { font-size:25px; }
-      .wordmark span { font-size:7px; }
-      .updates-hero { grid-template-columns:1fr; min-height:max(430px,calc(100svh - 68px)); gap:28px; padding:82px 6vw 56px; }
-      h1 { font-size:clamp(72px,19vw,116px); }
-      .updates-hero p { font-size:14px; }
-      .updates-archive { padding:64px 6vw; }
-      .update-entry { gap:27px; padding:50px 0; }
-      .update-entry h2 { font-size:clamp(48px,14vw,78px); }
-      .update-body p { font-size:14px; }
-      footer { padding:36px 6vw 23px; }
-    }
   </style>
 </head>
 <body>
@@ -156,9 +101,9 @@
       const english = Object.fromEntries(Array.from(document.querySelectorAll('[data-i18n]')).map(element => [element.dataset.i18n, element.textContent]));
       const englishHtml = Object.fromEntries(Array.from(document.querySelectorAll('[data-i18n-html]')).map(element => [element.dataset.i18nHtml, element.innerHTML]));
       const chinese = {
-        backHome:'首頁', updatesLabel:'最新 / 動態', updatesIntro:'分享隊伍消息、備賽進度，以及推動 Dragon Dance 前進的每一個時刻。', loading:'正在載入動態...', empty:'暫時未有動態，請稍後再回來看看。', footerTitle:'與龍<br>共舞'
+        backHome:'首頁', updatesLabel:'最新 / 動態', updatesIntro:'分享隊伍消息、備賽進度，以及推動 Dragon Dance 前進的每一個時刻。', loading:'正在載入動態...', empty:'暫時未有動態，請稍後再回來看看。', footerTitle:'與龍<br>共舞。'
       };
-      const chineseHtml = { updatesTitle:'持續<br>前進', footerTitle:'與龍<br>共舞' };
+      const chineseHtml = { updatesTitle:'持續<br>前進。', footerTitle:'與龍<br>共舞。' };
       const langEnglish = document.getElementById('langEnglish');
       const langChinese = document.getElementById('langChinese');
       const updatesDatabase = window.supabase.createClient(window.DRAGON_DANCE_SUPABASE.url, window.DRAGON_DANCE_SUPABASE.publishableKey);
