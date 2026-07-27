@@ -608,15 +608,15 @@
       };
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const wisps = [
-        { x:.02, y:.18, radius:72, speed:8.75, wave:.42, alpha:.13 },
-        { x:.28, y:.34, radius:82, speed:12.5, wave:.31, alpha:.12 },
-        { x:.58, y:.2, radius:76, speed:10, wave:.38, alpha:.13 },
-        { x:.78, y:.48, radius:88, speed:7.5, wave:.27, alpha:.11 },
-        { x:.12, y:.66, radius:84, speed:11.25, wave:.33, alpha:.13 },
-        { x:.45, y:.78, radius:78, speed:13.75, wave:.4, alpha:.12 },
-        { x:.72, y:.82, radius:92, speed:6.25, wave:.25, alpha:.1 },
-        { x:.37, y:.52, radius:76, speed:10.5, wave:.36, alpha:.11 },
-        { x:.87, y:.71, radius:82, speed:8.25, wave:.29, alpha:.1 }
+        { x:.02, y:.18, radius:110, stretch:2.8, speed:8.75, wave:.42, alpha:.17 },
+        { x:.28, y:.34, radius:145, stretch:3.2, speed:12.5, wave:.31, alpha:.15 },
+        { x:.58, y:.2, radius:125, stretch:2.5, speed:10, wave:.38, alpha:.16 },
+        { x:.78, y:.48, radius:170, stretch:3.4, speed:7.5, wave:.27, alpha:.14 },
+        { x:.12, y:.66, radius:155, stretch:3.1, speed:11.25, wave:.33, alpha:.16 },
+        { x:.45, y:.78, radius:135, stretch:2.7, speed:13.75, wave:.4, alpha:.14 },
+        { x:.72, y:.82, radius:180, stretch:3.5, speed:6.25, wave:.25, alpha:.12 },
+        { x:.37, y:.52, radius:128, stretch:2.9, speed:10.5, wave:.36, alpha:.12 },
+        { x:.87, y:.71, radius:150, stretch:3.15, speed:8.25, wave:.29, alpha:.11 }
       ];
       let width = 0;
       let height = 0;
@@ -1242,27 +1242,23 @@
       }
 
       function drawWisp(wisp, index, seconds) {
-        const travel = width * 1.2;
+        const travel = width * 1.55;
         const drift = reduceMotion ? 0 : seconds * wisp.speed;
-        const originX = ((wisp.x * travel + drift) % travel) - width * .12;
-        const originY = wisp.y * height + (reduceMotion ? 0 : Math.sin(seconds * wisp.wave + index) * 15);
-        const cloudParts = 5;
-        for (let part = 0; part < cloudParts; part += 1) {
-          const phase = seconds * (wisp.wave + .14) + index * 1.71 + part * 1.23;
-          const spread = part - (cloudParts - 1) / 2;
-          const x = originX + spread * wisp.radius * .48 + Math.sin(phase) * wisp.radius * .38;
-          const y = originY + Math.cos(phase * 1.17) * wisp.radius * .34 + Math.sin(phase * .55) * 14;
-          const radius = wisp.radius * (.56 + ((part + index) % 3) * .09);
-          const alpha = wisp.alpha * (.42 + (part % 2) * .08);
-          const gradient = context.createRadialGradient(x, y, 0, x, y, radius);
-          gradient.addColorStop(0, `rgba(214,224,219,${alpha})`);
-          gradient.addColorStop(.56, `rgba(191,205,201,${alpha * .54})`);
-          gradient.addColorStop(1, 'rgba(170,188,184,0)');
-          context.fillStyle = gradient;
-          context.beginPath();
-          context.arc(x, y, radius, 0, Math.PI * 2);
-          context.fill();
-        }
+        const x = ((wisp.x * travel + drift) % travel) - width * .22;
+        const y = wisp.y * height + (reduceMotion ? 0 : Math.sin(seconds * wisp.wave + index) * 15);
+        const gradient = context.createRadialGradient(x, y, 0, x, y, wisp.radius);
+        gradient.addColorStop(0, `rgba(214,224,219,${wisp.alpha})`);
+        gradient.addColorStop(.48, `rgba(191,205,201,${wisp.alpha * .58})`);
+        gradient.addColorStop(1, 'rgba(170,188,184,0)');
+        context.save();
+        context.translate(x, y);
+        context.scale(wisp.stretch, 1);
+        context.translate(-x, -y);
+        context.fillStyle = gradient;
+        context.beginPath();
+        context.arc(x, y, wisp.radius, 0, Math.PI * 2);
+        context.fill();
+        context.restore();
       }
 
       function clearFog(now) {
