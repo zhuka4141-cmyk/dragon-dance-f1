@@ -278,14 +278,11 @@
     .contact-copy b { display:block; font-size:11px; letter-spacing:.8px; text-transform:uppercase; }
     .contact-copy span, .contact-detail { display:block; overflow-wrap:anywhere; color:#4e4e4b; font-size:11px; line-height:1.45; }
     .contact-detail { margin-top:3px; text-decoration:underline; text-decoration-color:#aaa; text-underline-offset:3px; transition:color .2s; }
-    .copy-email-button { width:36px; height:36px; display:grid; place-items:center; align-self:start; border:1px solid #a1a19c; border-radius:0; padding:0; background:transparent; color:#2d2d2a; cursor:pointer; transition:border-color .2s,background .2s,color .2s,transform .2s; }
+    .copy-email-button { width:36px; height:36px; display:grid; place-items:center; align-self:start; border:1px solid #a1a19c; border-radius:7px; padding:0; background:transparent; color:#2d2d2a; cursor:pointer; transition:border-color .2s,background .2s,color .2s,transform .2s; }
     .copy-email-button:hover, .copy-email-button.is-copied { border-color:var(--red); background:var(--red); color:var(--paper); }
     .copy-email-button:active { transform:scale(.94); }
     .copy-email-button:focus-visible { outline:2px solid var(--red); outline-offset:2px; border-color:var(--red); }
-    .copy-email-icon { position:relative; display:block; width:15px; height:16px; }
-    .copy-email-icon:before, .copy-email-icon:after { content:""; position:absolute; width:9px; height:11px; border:1.5px solid currentColor; }
-    .copy-email-icon:before { top:0; right:0; }
-    .copy-email-icon:after { bottom:0; left:0; background:inherit; }
+    .copy-email-icon { display:block; width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
     .copy-email-status { position:absolute; width:1px; height:1px; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; }
     .footer-meta { align-self:end; text-align:right; font-size:10px; line-height:1.9; letter-spacing:1.2px; text-transform:uppercase; }
     .racing-context { display:grid; grid-template-columns:minmax(260px,.8fr) minmax(0,1.2fr); gap:clamp(36px,8vw,130px); align-items:end; padding:46px 4.2vw; border-top:1px solid #8e8e89; background:#e7e7e2; color:var(--ink); }
@@ -541,7 +538,7 @@
             <span class="contact-icon"><img src="assets/contact-email.svg" alt="" /></span>
             <span class="contact-copy"><b data-i18n="emailLabel">Email</b><span>dragondance@lstc.edu.hk</span></span>
           </a>
-          <button class="copy-email-button" type="button" data-copy-email="dragondance@lstc.edu.hk" aria-label="Copy email address" title="Copy email address"><span class="copy-email-icon" aria-hidden="true"></span></button>
+          <button class="copy-email-button" type="button" data-copy-email="dragondance@lstc.edu.hk" aria-label="Copy email address" title="Copy email address"><svg class="copy-email-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="8" y="8" width="14" height="14" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg></button>
           <span class="copy-email-status" data-copy-email-status aria-live="polite"></span>
         </div>
         <div class="contact-item">
@@ -573,7 +570,7 @@
             <img src="assets/contact-email.svg" alt="" />
             <span class="modal-contact-copy"><b data-i18n="emailLabel">Email</b><span>dragondance@lstc.edu.hk</span></span>
           </a>
-          <button class="copy-email-button" type="button" data-copy-email="dragondance@lstc.edu.hk" aria-label="Copy email address" title="Copy email address"><span class="copy-email-icon" aria-hidden="true"></span></button>
+          <button class="copy-email-button" type="button" data-copy-email="dragondance@lstc.edu.hk" aria-label="Copy email address" title="Copy email address"><svg class="copy-email-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="8" y="8" width="14" height="14" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg></button>
           <span class="copy-email-status" data-copy-email-status aria-live="polite"></span>
         </div>
         <a class="modal-contact-link" href="https://wa.me/85260116515" target="_blank" rel="noopener">
