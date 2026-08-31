@@ -13,6 +13,6 @@ Read `PROJECT_HANDOVER.md` before making changes. It is the current project memo
 
 ## Important compatibility rules
 
-- Preserve the current homepage dragon and fog behaviour unless the owner specifically asks to change it. The owner rejected broad oval/elliptical fog effects and later chose the earlier, flickering fog version.
+- The current production homepage uses the approved Fire-Dragon dark theme: rising ember particles, a gradient dragon mark, and the fog canvas layered together. Keep this visual direction; do not revert it or add broad oval/elliptical fog rings without asking the owner.
 - Supabase `updates.image_urls` may contain either normal URLs or JSON strings that describe `{ url, type, positionX, positionY, scale }`. Keep `parseMediaEntry`, `mediaUrl`, and `normaliseMediaEntries` compatible with both forms in `index.html`, `updates.html`, and `admin/index.html`.
 - Do not put passwords, recovery codes, service-role keys, or private account credentials into Git.

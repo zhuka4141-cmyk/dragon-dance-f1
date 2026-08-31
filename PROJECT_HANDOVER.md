@@ -1,6 +1,6 @@
 # Dragon Dance Website Handover
 
-Last updated: 2026-07-29
+Last updated: 2026-08-31
 
 This file is the durable project memory for a new computer or a new Codex session. Read it before changing the website.
 
@@ -37,7 +37,7 @@ The complete source code, static assets, Git history, and the latest bug fixes a
 ## Copy-Ready Prompt For A New Codex
 
 ```text
-Take over the Dragon Dance STEM Racing website. Read AGENTS.md and PROJECT_HANDOVER.md first, then inspect the current Git status before editing. Keep the existing visual direction and publish verified website changes to GitHub main so Vercel deploys automatically. Do not expose credentials or replace the current homepage fog/dragon behaviour without asking.
+Take over the Dragon Dance STEM Racing website. Read AGENTS.md and PROJECT_HANDOVER.md first, then inspect the current Git status before editing. Keep the approved Fire-Dragon dark theme and publish verified website changes to GitHub main so Vercel deploys automatically. Do not expose credentials or revert the Fire-Dragon visual direction without asking.
 ```
 
 ## Architecture
@@ -57,7 +57,7 @@ There is no package manager, build command, or server-side app. Vercel serves th
 ## Current Website Features
 
 - English by default with Traditional Chinese switching and transition animation.
-- Homepage hero with the Dragon Dance logo, fog interaction, and left/right page navigation.
+- Homepage hero with the Fire-Dragon dark theme, Dragon Dance logo, rising ember particles, fog interaction, gradient dragon mark, and left/right page navigation.
 - Team and sponsor pages in the horizontal homepage flow.
 - Contact footer for email, WhatsApp, Instagram, and the school website.
 - SEO metadata, sitemap, robots file, favicon, Open Graph image, and Google Search Console verification markup.
@@ -97,10 +97,10 @@ Media limits implemented by the dashboard:
 ## Visual Decisions Already Made
 
 - The team name used publicly is Dragon Dance STEM Racing. "F1 in Schools" may appear only as historical/SEO context; the public category is STEM Racing.
-- The user intentionally reverted a later motorsport-style redesign and wants the earlier site structure retained.
-- The homepage fog should be visibly present and dynamic. The user dislikes clear oval or elliptical smoke rings. The current code intentionally matches the earlier version in which the fog can flicker during vertical scrolling.
+- The current production design is the approved "Fire-Dragon" dark theme (deployed 2026-08-31, commit `fa39854`): a dark theme with CSS variables, rising ember particles over the hero, a gradient-text dragon mark, the fog canvas retained, and modern rounded cards/pills/glass surfaces. This replaced the earlier plain high-contrast look. Treat this as the current visual direction; do not revert to older styles without asking.
+- The homepage fog should still be visibly present and dynamic, layered under the ember field. The user dislikes clear oval or elliptical smoke rings.
 - Mobile controls should not prevent normal vertical page scrolling.
-- Keep the website dense and professional rather than making it look like a generic marketing landing page.
+- Keep the website dense and professional; the Fire-Dragon theme's rounded cards/pills/glass styling is the approved modern look.
 
 ## Useful Verification
 
@@ -122,7 +122,7 @@ Then manually check:
 ## Current Git State
 
 - Branch: `main`
-- Latest relevant commit: `14bf8d8 Fix saved update media rendering`
+- Latest relevant commit: `fa39854 Apply Fire-Dragon dark theme redesign`
 - The working tree was clean when this handover was written.
 
 ## How To Work With The Owner
