@@ -413,9 +413,175 @@
 
     /* ==== Fire-Dragon theme ==== */
     .ember-field{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}    .ember{position:absolute;bottom:-14px;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle,#ffe08a 0%,#ff8a3c 45%,#ff3b2e 70%,transparent 78%);box-shadow:0 0 14px 2px rgba(255,120,40,.5);opacity:0;animation:ember-rise linear infinite;}    @keyframes ember-rise{0%{transform:translate3d(0,0,0) scale(1);opacity:0;}10%{opacity:.85;}60%{opacity:.5;}100%{transform:translate3d(var(--dx,20px),-72vh,0) scale(.3);opacity:0;}}    h1 i{background:linear-gradient(100deg,#ffd27a 0%,#ff7a2f 40%,#e01823 80%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}    .dragon-halo{box-shadow:0 0 90px rgba(224,24,35,.30),0 0 44px rgba(255,140,60,.24), inset 0 0 70px rgba(224,24,35,.18);border-color:rgba(255,255,255,.16);}    .dragon-stage:before{content:"";position:absolute;inset:8% 0;border-radius:50%;background:radial-gradient(circle,rgba(255,120,40,.18),rgba(224,24,35,.10) 55%,transparent 72%);filter:blur(12px);}    .eyebrow{background:linear-gradient(90deg,#ff9a4d,#ff5a1f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}    @media (prefers-reduced-motion:reduce){ .ember{display:none;} }
-</style>
-</head>
+
+    /* ==== Fire Dragon Dance extras ==== */
+    /* incense dots (香火龍) */
+    .incense-field{position:absolute;inset:-8% -6%;z-index:0;pointer-events:none;}
+    .incense-dot{position:absolute;width:var(--s,5px);height:var(--s,5px);border-radius:50%;
+      background:radial-gradient(circle,rgba(255,216,140,.95) 0%,rgba(255,122,44,.78) 42%,rgba(224,24,35,.32) 68%,transparent 82%);
+      box-shadow:0 0 8px 1px rgba(255,132,52,.55),0 0 18px 2px rgba(255,92,32,.26);
+      animation:incense-twinkle var(--t,4.2s) ease-in-out infinite;animation-delay:var(--d,0s);}
+    @keyframes incense-twinkle{
+      0%,100%{opacity:.3;transform:translate3d(0,0,0) scale(.88);}
+      50%{opacity:.95;transform:translate3d(var(--dx,0),-3px,0) scale(1.12);}
+    }
+    /* dragon undulation (蜿蜒舞动) */
+    @keyframes dragon-undulate{
+      0%,100%{transform:translate3d(0,0,0) rotate(-1.1deg) scale(1);}
+      25%{transform:translate3d(4px,-7px,0) rotate(1deg) scale(1.02);}
+      50%{transform:translate3d(-2px,-13px,0) rotate(-1deg) scale(.985);}
+      75%{transform:translate3d(-5px,-5px,0) rotate(1.3deg) scale(1.01);}
+    }
+    #dragon{animation:dragon-undulate 7s ease-in-out infinite;transform-origin:50% 72%;will-change:transform;}
+    /* meteor sparks: add trailing tail to existing embers */
+    .ember{box-shadow:0 0 12px 2px rgba(255,120,40,.6),0 6px 16px 1px rgba(255,90,30,.42);}
+    .ember::before{content:"";position:absolute;left:50%;top:100%;width:2px;height:18px;margin-left:-1px;
+      background:linear-gradient(180deg,rgba(255,172,84,.95),transparent);border-radius:2px;opacity:.85;}
+    @keyframes ember-rise{
+      0%{transform:translate3d(0,0,0);opacity:0;}
+      12%{opacity:.9;}
+      60%{opacity:.55;}
+      100%{transform:translate3d(calc(var(--dx,20px)*2.2),-80vh,0);opacity:0;}
+    }
+    /* dragon fire-trail (S-shaped flowing light) */
+    .dragon-trail{position:absolute;right:-4%;top:-4%;width:110%;height:112%;z-index:0;pointer-events:none;opacity:.72;}
+    .dragon-trail path{fill:none;stroke:url(#dragonTrailGrad);stroke-width:1.2;stroke-linecap:round;
+      filter:drop-shadow(0 0 5px rgba(255,110,40,.55));stroke-dasharray:2px 9px;animation:trail-flow 3.4s linear infinite;}
+    @keyframes trail-flow{from{stroke-dashoffset:0;}to{stroke-dashoffset:-32px;}}
+    .dragon-stage{z-index:1;}
+    @media (prefers-reduced-motion:reduce){
+      #dragon,.incense-dot,.dragon-trail path{animation:none;}
+      .incense-dot{opacity:.7;}
+      .ember::before{display:none;}
+    }
+
+    /* ==== page-wide ambient sparks + fire dividers ==== */
+    .spark-field{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;mix-blend-mode:screen;opacity:.72;}
+    .spark{position:absolute;bottom:-8px;width:var(--s,3px);height:var(--s,3px);border-radius:50%;
+      background:radial-gradient(circle,#ffe3a8 0%,#ff9a4d 45%,#ff5a1f 72%,transparent 84%);
+      box-shadow:0 0 8px 1px rgba(255,130,45,.5),0 5px 12px 1px rgba(255,90,30,.28);
+      animation:spark-rise var(--t,11s) linear infinite;animation-delay:var(--d,0s);opacity:0;}
+    @keyframes spark-rise{
+      0%{transform:translate3d(0,0,0) scale(.55);opacity:0;}
+      7%{opacity:.8;}
+      55%{opacity:.5;}
+      100%{transform:translate3d(var(--dx,16px),-104vh,0) scale(.95);opacity:0;}
+    }
+    /* lift page content above the ambient spark layer */
+    main :is(h1,h2,h3,h4,p,strong,li,blockquote,a),
+    .member-card,.deadline-card,.update-preview-card,.partner-item,.contact-item,
+    .role-item,.proposal-cta,.feature-copy,.machine-copy,.fact-row{position:relative;z-index:2;}
+    .hero,.about-page,.feature-page{position:relative;z-index:3;isolation:isolate;}
+    /* winding fire-line divider */
+    .fire-divider{position:relative;height:30px;background:transparent;pointer-events:none;}
+    .fire-divider::before{content:"";position:absolute;left:0;right:0;top:50%;height:3px;transform:translateY(-50%);
+      background:linear-gradient(90deg,transparent,rgba(255,90,30,.55) 18%,rgba(255,214,140,.9) 50%,rgba(255,90,30,.55) 82%,transparent);
+      border-radius:2px;filter:blur(.6px);opacity:.8;}
+    .fire-divider::after{content:"";position:absolute;left:50%;top:50%;width:130px;height:130px;transform:translate(-50%,-50%);
+      background:radial-gradient(circle,rgba(255,110,40,.26),transparent 68%);filter:blur(7px);pointer-events:none;}
+    @media (prefers-reduced-motion:reduce){.spark{animation:none;opacity:.35;}.fire-divider::after{display:none;}}
+
+  </style>
+  </head>
 <body>
+  <div class="spark-field" aria-hidden="true">
+    <span class="spark" style="left:24.2%;--s:3.7px;--t:7.6s;--d:0.2s;--dx:20px"></span>
+    <span class="spark" style="left:6.2%;--s:3.1px;--t:13.9s;--d:8.9s;--dx:15px"></span>
+    <span class="spark" style="left:47.7%;--s:3.4px;--t:11.8s;--d:3.0s;--dx:20px"></span>
+    <span class="spark" style="left:55.7%;--s:3.9px;--t:15.8s;--d:10.4s;--dx:-25px"></span>
+    <span class="spark" style="left:78.2%;--s:2.9px;--t:15.7s;--d:13.8s;--dx:9px"></span>
+    <span class="spark" style="left:82.8%;--s:2.8px;--t:10.5s;--d:13.4s;--dx:-24px"></span>
+    <span class="spark" style="left:77.3%;--s:2.9px;--t:10.4s;--d:15.1s;--dx:9px"></span>
+    <span class="spark" style="left:43.6%;--s:3.0px;--t:12.7s;--d:1.4s;--dx:-17px"></span>
+    <span class="spark" style="left:26.2%;--s:2.4px;--t:7.1s;--d:2.2s;--dx:-14px"></span>
+    <span class="spark" style="left:49%;--s:2.6px;--t:7.6s;--d:11.8s;--dx:17px"></span>
+    <span class="spark" style="left:22.4%;--s:3.4px;--t:8.1s;--d:14.6s;--dx:12px"></span>
+    <span class="spark" style="left:22.2%;--s:2.8px;--t:10.2s;--d:10.9s;--dx:-18px"></span>
+    <span class="spark" style="left:51.8%;--s:2.3px;--t:7.5s;--d:15.6s;--dx:-9px"></span>
+    <span class="spark" style="left:86.8%;--s:2.7px;--t:12.9s;--d:14.9s;--dx:11px"></span>
+    <span class="spark" style="left:7.8%;--s:2.2px;--t:11.5s;--d:15.7s;--dx:-25px"></span>
+    <span class="spark" style="left:59.1%;--s:3.8px;--t:9.0s;--d:6.3s;--dx:21px"></span>
+    <span class="spark" style="left:37.9%;--s:2.1px;--t:12.7s;--d:12.8s;--dx:-8px"></span>
+    <span class="spark" style="left:78.5%;--s:3.3px;--t:13.7s;--d:5.3s;--dx:-9px"></span>
+    <span class="spark" style="left:25.7%;--s:4.2px;--t:12.6s;--d:6.2s;--dx:-24px"></span>
+    <span class="spark" style="left:31.3%;--s:2.1px;--t:11.1s;--d:4.6s;--dx:-15px"></span>
+    <span class="spark" style="left:81.4%;--s:3.6px;--t:9.6s;--d:3.3s;--dx:-11px"></span>
+    <span class="spark" style="left:96.5%;--s:2.3px;--t:8.8s;--d:10.1s;--dx:-24px"></span>
+    <span class="spark" style="left:47.9%;--s:3.1px;--t:10.5s;--d:15.2s;--dx:11px"></span>
+    <span class="spark" style="left:94.4%;--s:2.3px;--t:11.2s;--d:2.4s;--dx:-14px"></span>
+    <span class="spark" style="left:76%;--s:4.1px;--t:13.8s;--d:10.3s;--dx:-15px"></span>
+    <span class="spark" style="left:56.9%;--s:3.5px;--t:10.5s;--d:3.1s;--dx:11px"></span>
+    <span class="spark" style="left:2.5%;--s:2.7px;--t:14.9s;--d:15.7s;--dx:-16px"></span>
+    <span class="spark" style="left:43.1%;--s:3.0px;--t:12.7s;--d:1.5s;--dx:-17px"></span>
+    <span class="spark" style="left:15.6%;--s:2.5px;--t:8.6s;--d:12.9s;--dx:22px"></span>
+    <span class="spark" style="left:37.7%;--s:4.2px;--t:7.2s;--d:4.6s;--dx:-14px"></span>
+    <span class="spark" style="left:46.2%;--s:3.2px;--t:13.4s;--d:13.1s;--dx:26px"></span>
+    <span class="spark" style="left:57.7%;--s:2.0px;--t:11.5s;--d:5.7s;--dx:-14px"></span>
+    <span class="spark" style="left:43.5%;--s:2.7px;--t:8.6s;--d:15.3s;--dx:-12px"></span>
+    <span class="spark" style="left:6.6%;--s:2.1px;--t:12.8s;--d:14.1s;--dx:16px"></span>
+    <span class="spark" style="left:84.2%;--s:2.4px;--t:10.1s;--d:13.5s;--dx:13px"></span>
+    <span class="spark" style="left:81.4%;--s:2.0px;--t:7.3s;--d:6.7s;--dx:-10px"></span>
+    <span class="spark" style="left:81.1%;--s:2.7px;--t:9.9s;--d:15.6s;--dx:18px"></span>
+    <span class="spark" style="left:6.7%;--s:2.3px;--t:13.2s;--d:9.2s;--dx:18px"></span>
+    <span class="spark" style="left:10.9%;--s:3.2px;--t:14.7s;--d:3.0s;--dx:-10px"></span>
+    <span class="spark" style="left:90.5%;--s:2.5px;--t:7.1s;--d:0.5s;--dx:21px"></span>
+    <span class="spark" style="left:63.2%;--s:2.0px;--t:9.8s;--d:4.5s;--dx:-9px"></span>
+    <span class="spark" style="left:50.4%;--s:3.8px;--t:11.9s;--d:4.5s;--dx:24px"></span>
+    <span class="spark" style="left:77.2%;--s:3.1px;--t:14.2s;--d:11.1s;--dx:-10px"></span>
+    <span class="spark" style="left:27.2%;--s:2.3px;--t:15.8s;--d:13.1s;--dx:12px"></span>
+    <span class="spark" style="left:23.9%;--s:3.7px;--t:11.3s;--d:8.7s;--dx:-23px"></span>
+    <span class="spark" style="left:7%;--s:3.5px;--t:14.6s;--d:10.2s;--dx:-21px"></span>
+    <span class="spark" style="left:17.2%;--s:3.8px;--t:14.8s;--d:10.7s;--dx:-11px"></span>
+    <span class="spark" style="left:27.2%;--s:3.3px;--t:8.2s;--d:11.3s;--dx:-21px"></span>
+    <span class="spark" style="left:80.1%;--s:2.7px;--t:12.5s;--d:9.0s;--dx:-26px"></span>
+    <span class="spark" style="left:98.1%;--s:3.9px;--t:7.8s;--d:8.9s;--dx:20px"></span>
+    <span class="spark" style="left:41.6%;--s:3.9px;--t:11.2s;--d:6.1s;--dx:-21px"></span>
+    <span class="spark" style="left:67.8%;--s:2.7px;--t:6.4s;--d:9.1s;--dx:10px"></span>
+    <span class="spark" style="left:9.6%;--s:2.5px;--t:14.8s;--d:15.8s;--dx:-21px"></span>
+    <span class="spark" style="left:26.8%;--s:2.7px;--t:6.1s;--d:12.9s;--dx:27px"></span>
+    <span class="spark" style="left:13%;--s:2.2px;--t:13.8s;--d:1.8s;--dx:-23px"></span>
+    <span class="spark" style="left:92.6%;--s:3.7px;--t:13.2s;--d:6.4s;--dx:11px"></span>
+    <span class="spark" style="left:82.6%;--s:3.3px;--t:9.3s;--d:9.3s;--dx:-13px"></span>
+    <span class="spark" style="left:26.5%;--s:3.5px;--t:14.4s;--d:3.8s;--dx:-20px"></span>
+    <span class="spark" style="left:53.6%;--s:2.3px;--t:14.0s;--d:10.7s;--dx:12px"></span>
+    <span class="spark" style="left:11.6%;--s:2.8px;--t:8.2s;--d:2.0s;--dx:20px"></span>
+    <span class="spark" style="left:38.6%;--s:2.0px;--t:7.1s;--d:5.2s;--dx:8px"></span>
+    <span class="spark" style="left:47.9%;--s:3.2px;--t:11.8s;--d:1.9s;--dx:-26px"></span>
+    <span class="spark" style="left:57.7%;--s:3.0px;--t:7.5s;--d:1.0s;--dx:12px"></span>
+    <span class="spark" style="left:77.3%;--s:2.6px;--t:14.7s;--d:10.1s;--dx:-19px"></span>
+    <span class="spark" style="left:43.7%;--s:2.6px;--t:9.5s;--d:10.7s;--dx:-25px"></span>
+    <span class="spark" style="left:84.6%;--s:3.7px;--t:10.4s;--d:14.0s;--dx:-17px"></span>
+    <span class="spark" style="left:76.6%;--s:3.6px;--t:7.9s;--d:6.0s;--dx:8px"></span>
+    <span class="spark" style="left:68.3%;--s:4.0px;--t:14.4s;--d:14.9s;--dx:-9px"></span>
+    <span class="spark" style="left:76.2%;--s:2.3px;--t:12.3s;--d:8.6s;--dx:-21px"></span>
+    <span class="spark" style="left:95.6%;--s:2.2px;--t:10.8s;--d:11.2s;--dx:-23px"></span>
+    <span class="spark" style="left:21.7%;--s:2.6px;--t:6.3s;--d:1.6s;--dx:21px"></span>
+    <span class="spark" style="left:27.5%;--s:3.5px;--t:8.2s;--d:12.6s;--dx:-19px"></span>
+    <span class="spark" style="left:57%;--s:2.9px;--t:11.7s;--d:0.1s;--dx:26px"></span>
+    <span class="spark" style="left:92.6%;--s:2.4px;--t:10.0s;--d:4.9s;--dx:-14px"></span>
+    <span class="spark" style="left:99%;--s:3.1px;--t:14.1s;--d:10.5s;--dx:-13px"></span>
+    <span class="spark" style="left:59.3%;--s:3.0px;--t:8.3s;--d:3.7s;--dx:-14px"></span>
+    <span class="spark" style="left:95.1%;--s:2.9px;--t:10.6s;--d:11.5s;--dx:9px"></span>
+    <span class="spark" style="left:55.2%;--s:3.9px;--t:7.7s;--d:12.6s;--dx:-21px"></span>
+    <span class="spark" style="left:33.2%;--s:2.7px;--t:7.9s;--d:12.3s;--dx:-23px"></span>
+    <span class="spark" style="left:17.9%;--s:1.9px;--t:12.4s;--d:14.9s;--dx:11px"></span>
+    <span class="spark" style="left:43.8%;--s:3.9px;--t:13.5s;--d:12.8s;--dx:19px"></span>
+    <span class="spark" style="left:97.2%;--s:2.6px;--t:6.7s;--d:0.2s;--dx:15px"></span>
+    <span class="spark" style="left:10.9%;--s:3.8px;--t:13.7s;--d:3.7s;--dx:26px"></span>
+    <span class="spark" style="left:12.9%;--s:2.8px;--t:11.1s;--d:6.6s;--dx:-24px"></span>
+    <span class="spark" style="left:67.5%;--s:2.1px;--t:8.2s;--d:7.4s;--dx:25px"></span>
+    <span class="spark" style="left:9.3%;--s:2.9px;--t:10.7s;--d:11.2s;--dx:19px"></span>
+    <span class="spark" style="left:66.2%;--s:3.8px;--t:8.4s;--d:2.2s;--dx:-20px"></span>
+    <span class="spark" style="left:91.5%;--s:1.8px;--t:8.8s;--d:8.3s;--dx:24px"></span>
+    <span class="spark" style="left:52%;--s:2.2px;--t:6.2s;--d:7.4s;--dx:-8px"></span>
+    <span class="spark" style="left:30.9%;--s:3.6px;--t:13.7s;--d:9.4s;--dx:-27px"></span>
+    <span class="spark" style="left:6.2%;--s:3.2px;--t:7.5s;--d:3.9s;--dx:9px"></span>
+    <span class="spark" style="left:61.3%;--s:3.1px;--t:15.0s;--d:7.0s;--dx:-24px"></span>
+    <span class="spark" style="left:47.8%;--s:3.0px;--t:12.9s;--d:8.9s;--dx:12px"></span>
+    <span class="spark" style="left:62.2%;--s:2.3px;--t:9.7s;--d:14.8s;--dx:11px"></span>
+    <span class="spark" style="left:88.1%;--s:3.2px;--t:7.8s;--d:8.7s;--dx:-11px"></span>
+    <span class="spark" style="left:20%;--s:2.9px;--t:9.7s;--d:10.9s;--dx:-21px"></span>
+  </div>
   <div class="topline"></div>
   <nav>
     <a class="wordmark" href="#top">Dragon Dance<span>STEM Racing</span></a>
@@ -438,6 +604,44 @@
           <h1 data-i18n-html="heroTitle">Born to<br><i>Move.</i></h1>
           <p class="hero-copy" data-i18n="heroCopy">We are Dragon Dance. Built on speed and shaped by imagination, we move from the design desk to the track and fight for every thousandth of a second.</p>
           <div class="dragon-stage" id="dragonStage" aria-label="Interactive Dragon Dance dragon symbol">
+            <svg class="dragon-trail" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="dragonTrailGrad" x1="0" y1="1" x2="1" y2="0">
+                  <stop offset="0" stop-color="#ff5a1f"/>
+                  <stop offset=".55" stop-color="#ffd27a"/>
+                  <stop offset="1" stop-color="#e01823"/>
+                </linearGradient>
+              </defs>
+              <path d="M 6 88 C 22 74, 40 90, 58 66 S 84 34, 94 16"/>
+            </svg>
+            <div class="incense-field" aria-hidden="true">
+            <span class="incense-dot" style="left:14%;top:16%;--s:5px;--t:4.2s;--d:0s;--dx:8px"></span>
+            <span class="incense-dot" style="left:26%;top:30%;--s:4px;--t:5s;--d:1.1s;--dx:-9px"></span>
+            <span class="incense-dot" style="left:38%;top:22%;--s:6px;--t:3.8s;--d:.5s;--dx:7px"></span>
+            <span class="incense-dot" style="left:52%;top:40%;--s:5px;--t:4.6s;--d:1.8s;--dx:-6px"></span>
+            <span class="incense-dot" style="left:63%;top:26%;--s:4px;--t:5.4s;--d:2.4s;--dx:10px"></span>
+            <span class="incense-dot" style="left:74%;top:44%;--s:6px;--t:4s;--d:3.1s;--dx:-8px"></span>
+            <span class="incense-dot" style="left:84%;top:30%;--s:5px;--t:4.8s;--d:.9s;--dx:6px"></span>
+            <span class="incense-dot" style="left:30%;top:52%;--s:4px;--t:5.6s;--d:2.7s;--dx:-5px"></span>
+            <span class="incense-dot" style="left:46%;top:36%;--s:6px;--t:4.4s;--d:3.6s;--dx:9px"></span>
+            <span class="incense-dot" style="left:60%;top:50%;--s:5px;--t:5.2s;--d:1.4s;--dx:-10px"></span>
+            <span class="incense-dot" style="left:72%;top:22%;--s:4px;--t:4s;--d:2.1s;--dx:7px"></span>
+            <span class="incense-dot" style="left:20%;top:40%;--s:5px;--t:5.8s;--d:.4s;--dx:-7px"></span>
+            <span class="incense-dot" style="left:42%;top:56%;--s:4px;--t:4.6s;--d:3.3s;--dx:6px"></span>
+            <span class="incense-dot" style="left:58%;top:26%;--s:6px;--t:5s;--d:2.9s;--dx:-6px"></span>
+            <span class="incense-dot" style="left:70%;top:36%;--s:4px;--t:4.2s;--d:1.7s;--dx:8px"></span>
+            <span class="incense-dot" style="left:82%;top:18%;--s:5px;--t:5s;--d:3.9s;--dx:-4px"></span>
+            <span class="incense-dot" style="left:8%;top:12%;--s:4px;--t:5.2s;--d:2s;--dx:7px"></span>
+            <span class="incense-dot" style="left:35%;top:12%;--s:5px;--t:4s;--d:1.2s;--dx:-6px"></span>
+            <span class="incense-dot" style="left:68%;top:12%;--s:4px;--t:5.4s;--d:2.6s;--dx:6px"></span>
+            <span class="incense-dot" style="left:12%;top:64%;--s:5px;--t:4.6s;--d:3s;--dx:-7px"></span>
+            <span class="incense-dot" style="left:52%;top:64%;--s:4px;--t:5s;--d:2.2s;--dx:8px"></span>
+            <span class="incense-dot" style="left:78%;top:58%;--s:5px;--t:4.2s;--d:1s;--dx:-6px"></span>
+            <span class="incense-dot" style="left:26%;top:70%;--s:4px;--t:5.4s;--d:3.4s;--dx:6px"></span>
+            <span class="incense-dot" style="left:66%;top:70%;--s:5px;--t:4.8s;--d:1.6s;--dx:-8px"></span>
+            <span class="incense-dot" style="left:40%;top:8%;--s:4px;--t:5.6s;--d:3.8s;--dx:6px"></span>
+            <span class="incense-dot" style="left:88%;top:52%;--s:4px;--t:5s;--d:4s;--dx:-5px"></span>
+            </div>
             <div class="dragon-halo"></div>
             <div class="dragon-mist dragon-mist-one"></div>
             <div class="dragon-mist dragon-mist-two"></div>
@@ -583,6 +787,7 @@
     </div>
 
   </main>
+  <div class="fire-divider" aria-hidden="true"></div>
   <section class="racing-context" aria-labelledby="racing-context-title" data-scroll-reveal>
     <div>
       <span class="racing-context-label">STEM Racing / F1 in Schools</span>
@@ -590,6 +795,7 @@
     </div>
     <p data-i18n="racingCopy">F1 Dragon Dance is Dragon Dance's STEM Racing identity in Hong Kong. STEM Racing is the student racing challenge formerly known as F1 in Schools, where we bring engineering, design, branding and race strategy together.</p>
   </section>
+  <div class="fire-divider" aria-hidden="true"></div>
   <footer data-scroll-reveal>
     <div><strong data-i18n-html="footerTitle">Dance with<br>the dragon.</strong><p>DRAGON DANCE / STEM RACING</p></div>
     <section class="footer-contact" aria-label="Contact">

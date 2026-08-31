@@ -146,9 +146,31 @@
 
     /* ==== Fire-Dragon theme (admin) ==== */
     .kicker{background:linear-gradient(90deg,#ff9a4d,#e01823);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}    .admin-post.is-pinned,.editor-panel,.posts-panel{border-top-color:#ff7a2f;}    @media (prefers-reduced-motion:reduce){ .ember{display:none;} }
-</style>
+
+    /* ==== Fire Dragon Dance accent (admin) ==== */
+    .incense-field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+    .incense-dot{position:absolute;width:var(--s,5px);height:var(--s,5px);border-radius:50%;
+      background:radial-gradient(circle,rgba(255,216,140,.95) 0%,rgba(255,122,44,.7) 42%,rgba(224,24,35,.3) 68%,transparent 82%);
+      box-shadow:0 0 8px 1px rgba(255,132,52,.4),0 0 16px 2px rgba(255,92,32,.2);
+      animation:incense-twinkle var(--t,4.4s) ease-in-out infinite;animation-delay:var(--d,0s);}
+    @keyframes incense-twinkle{0%,100%{opacity:.28;transform:translate3d(0,0,0) scale(.9);}50%{opacity:.85;transform:translate3d(var(--dx,0),-2px,0) scale(1.1);}}
+    @media (prefers-reduced-motion:reduce){.incense-dot{opacity:.6;animation:none;}}
+
+  </style>
 </head>
 <body>
+  <div class="incense-field" aria-hidden="true">
+    <span class="incense-dot" style="left:6%;top:12%;--s:4px;--t:5s;--d:0s;--dx:6px"></span>
+    <span class="incense-dot" style="left:16%;top:28%;--s:5px;--t:4.4s;--d:.8s;--dx:-5px"></span>
+    <span class="incense-dot" style="left:30%;top:18%;--s:4px;--t:5.2s;--d:1.5s;--dx:7px"></span>
+    <span class="incense-dot" style="left:46%;top:10%;--s:5px;--t:4.6s;--d:2.1s;--dx:-6px"></span>
+    <span class="incense-dot" style="left:62%;top:24%;--s:4px;--t:5.4s;--d:.4s;--dx:6px"></span>
+    <span class="incense-dot" style="left:78%;top:16%;--s:5px;--t:4.2s;--d:1.2s;--dx:-5px"></span>
+    <span class="incense-dot" style="left:90%;top:30%;--s:4px;--t:5s;--d:2s;--dx:7px"></span>
+    <span class="incense-dot" style="left:24%;top:44%;--s:4px;--t:5.6s;--d:2.7s;--dx:-6px"></span>
+    <span class="incense-dot" style="left:52%;top:36%;--s:5px;--t:4.8s;--d:1.8s;--dx:6px"></span>
+    <span class="incense-dot" style="left:72%;top:40%;--s:4px;--t:5.2s;--d:3s;--dx:-7px"></span>
+  </div>
   <div class="topline"></div>
   <header>
     <a class="wordmark" href="../index.html">Dragon Dance<span>STEM Racing</span></a>
