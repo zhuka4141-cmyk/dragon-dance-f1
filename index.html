@@ -1610,6 +1610,17 @@
 
       function beginSwipe(event) {
         if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
+        // Ignore swipes that start inside the AR/3D car viewer so page paging
+        // doesn't hijack model rotation / interaction (model-viewer renders in shadow DOM).
+        var insideCar = false;
+        if (event.composedPath) {
+          insideCar = event.composedPath().some(function (el) {
+            return (el && el.tagName === 'MODEL-VIEWER') || (el && el.classList && (el.classList.contains('car-viewer-wrap') || el.classList.contains('car-showcase')));
+          });
+        } else if (event.target && event.target.closest) {
+          insideCar = !!event.target.closest('.car-viewer-wrap, model-viewer, .car-showcase');
+        }
+        if (insideCar) return;
         swipeStart = { id:event.pointerId, x:event.clientX, y:event.clientY, axis:null, moved:false, scrollY:window.scrollY };
         heroPages.classList.add('is-dragging');
       }
