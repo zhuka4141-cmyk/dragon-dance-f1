@@ -504,6 +504,7 @@
     }
 
     /* ==== car 3D / AR showcase ==== */
+    .car-showcase.is-page-hidden{display:none;}
     .car-showcase{position:relative;padding:96px 7vw;background:linear-gradient(180deg,#0b0b0f,#0d0d10);color:var(--text);overflow:hidden;z-index:3;}
     .car-showcase::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 70% 40%,rgba(224,24,35,.12),transparent 60%);pointer-events:none;}
     .car-showcase-inner{position:relative;display:grid;grid-template-columns:minmax(260px,.85fr) minmax(0,1.5fr);gap:clamp(28px,5vw,72px);align-items:center;max-width:1200px;margin:0 auto;}
@@ -806,7 +807,7 @@
           <h2 id="car3dTitle" data-i18n-html="car3dTitle">Spin the<br>Prototype.</h2>
           <p data-i18n="car3dCopy">Drag to rotate, scroll to zoom, or tap the AR button to place the Dragon Dance prototype in your space.</p>
           <div class="car-viewer-actions">
-            <button class="ar-button" slot="ar-button" data-i18n="car3dAR">View in your space</button>
+            <button class="ar-button" id="carArBtn" data-i18n="car3dAR">View in your space</button>
           </div>
           <p class="car-hint" data-i18n="car3dHint">Best with a phone — AR works on Android &amp; iOS.</p>
         </div>
@@ -823,10 +824,17 @@
             shadow-intensity="1"
             exposure="1.2"
             camera-orbit="20deg 78deg 3.2m"
-            environment-image="neutral"></model-viewer>
+            environment-image="neutral"><button slot="ar-button" aria-hidden="true" style="display:none"></button></model-viewer>
         </div>
       </div>
     </section>
+    <script>
+      (function () {
+        var mv = document.querySelector('model-viewer');
+        var btn = document.getElementById('carArBtn');
+        if (btn && mv) btn.addEventListener('click', function () { try { mv.activateAR(); } catch (e) {} });
+      })();
+    </script>
 
     <div class="home-only-content" id="homeOnlyContent">
       <div class="home-only-inner">
@@ -1553,6 +1561,8 @@
         pageIndex = Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
         if (pageChanged) window.scrollTo(0, 0);
         renderTrack();
+        const carShowcase = document.getElementById('car3d');
+        if (carShowcase) carShowcase.classList.toggle('is-page-hidden', pageIndex !== 0);
         heroPages.dataset.page = String(pageIndex + 1);
         const prevHidden = pageIndex === 0;
         const nextHidden = pageIndex === heroSlides.length - 1;
