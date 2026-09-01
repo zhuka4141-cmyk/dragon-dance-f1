@@ -503,7 +503,27 @@
       .modal-contact-email .modal-contact-copy > span{white-space:nowrap;overflow-wrap:normal;font-size:clamp(9px,3vw,13px);}
     }
 
+    /* ==== car 3D / AR showcase ==== */
+    .car-showcase{position:relative;padding:96px 7vw;background:linear-gradient(180deg,#0b0b0f,#0d0d10);color:var(--text);overflow:hidden;z-index:3;}
+    .car-showcase::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 70% 40%,rgba(224,24,35,.12),transparent 60%);pointer-events:none;}
+    .car-showcase-inner{position:relative;display:grid;grid-template-columns:minmax(260px,.85fr) minmax(0,1.5fr);gap:clamp(28px,5vw,72px);align-items:center;max-width:1200px;margin:0 auto;}
+    .car-showcase-copy .eyebrow{color:#ff9a4d;}
+    .car-showcase-copy h2{font-size:clamp(34px,5vw,60px);line-height:1.02;letter-spacing:-0.03em;margin:14px 0 18px;}
+    .car-showcase-copy p{font-size:16px;line-height:1.65;color:var(--text-2);max-width:34ch;margin:0;}
+    .car-viewer-wrap{position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--hairline);box-shadow:0 30px 80px -30px rgba(0,0,0,.8);background:radial-gradient(80% 70% at 50% 30%,#16161c,#0a0a0e);min-height:420px;}
+    .car-viewer-wrap model-viewer{width:100%;height:100%;min-height:420px;--poster-color:transparent;}
+    .car-viewer-actions{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap;}
+    .ar-button{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:12px;border:1px solid #ff5a1f;background:linear-gradient(180deg,#ff7a2f,#e01823);color:#fff;font-weight:700;font-size:14px;letter-spacing:.02em;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 10px 30px -12px rgba(224,24,35,.6);}
+    .ar-button:hover{transform:translateY(-2px);box-shadow:0 16px 36px -12px rgba(224,24,35,.7);}
+    .car-hint{color:var(--text-3);font-size:12px;letter-spacing:.04em;margin-top:14px;}
+    @media (max-width:820px){
+      .car-showcase{padding:64px 7vw;}
+      .car-showcase-inner{grid-template-columns:1fr;gap:28px;}
+      .car-viewer-wrap, .car-viewer-wrap model-viewer{min-height:340px;}
+    }
+
   </style>
+  <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
   </head>
 <body>
   <div class="spark-field" aria-hidden="true">
@@ -779,6 +799,35 @@
       </article>
     </section>
 
+    <section class="car-showcase" id="car3d" aria-labelledby="car3dTitle" data-scroll-reveal>
+      <div class="car-showcase-inner">
+        <div class="car-showcase-copy">
+          <div class="eyebrow" data-i18n="car3dLabel">03 / The Car in 3D</div>
+          <h2 id="car3dTitle" data-i18n-html="car3dTitle">Spin the<br>Prototype.</h2>
+          <p data-i18n="car3dCopy">Drag to rotate, scroll to zoom, or tap the AR button to place the Dragon Dance prototype in your space.</p>
+          <div class="car-viewer-actions">
+            <button class="ar-button" slot="ar-button" data-i18n="car3dAR">View in your space</button>
+          </div>
+          <p class="car-hint" data-i18n="car3dHint">Best with a phone — AR works on Android &amp; iOS.</p>
+        </div>
+        <div class="car-viewer-wrap">
+          <model-viewer
+            src="assets/dragon-car.glb"
+            ios-src="assets/dragon-car.usdz"
+            alt="Dragon Dance Professional Class race car 3D model"
+            auto-rotate
+            camera-controls
+            touch-action="pan-y"
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            shadow-intensity="1"
+            exposure="1.2"
+            camera-orbit="20deg 78deg 3.2m"
+            environment-image="neutral"></model-viewer>
+        </div>
+      </div>
+    </section>
+
     <div class="home-only-content" id="homeOnlyContent">
       <div class="home-only-inner">
     <section class="race-deadlines" id="deadlines" aria-labelledby="deadlinesTitle">
@@ -1049,7 +1098,11 @@
         emailLabel:'電郵',
         projectManagerContact:'專案經理 · 91639154',
         sponsorshipContact:'贊助及推廣經理 · 60116515',
-        schoolWebsite:'學校網站'
+        schoolWebsite:'學校網站',
+        car3dLabel:'03 / 車模 3D 展示',
+        car3dCopy:'拖曳旋轉、滾輪縮放，或點按 AR 按鈕，把龍之舞原型放到你的空間。',
+        car3dAR:'放入你的空間',
+        car3dHint:'手機體驗最佳 — AR 支援 Android 與 iOS。'
       };
       const chineseHtml = {
         deadlinesTitle:'兩個日期。<br>同一條終點線。',
@@ -1063,7 +1116,8 @@
         partnershipModalTitle:'與我們<br>合作。',
         racingTitle:'STEM Racing，<br><em>前稱 F1 in Schools。</em>',
         footerTitle:'與龍<br>共舞。',
-        footerMeta:'博愛醫院歷屆總理聯誼會梁省德中學<br>香港'
+        footerMeta:'博愛醫院歷屆總理聯誼會梁省德中學<br>香港',
+        car3dTitle:'旋轉<br>原型。'
       };
 
       function observeScrollReveal(element) {
