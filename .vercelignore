@@ -1,0 +1,7 @@
+# Internal project documentation — never serve publicly
+AGENTS.md
+PROJECT_HANDOVER.md
+
+# Dev / build tooling
+tools/
+.codegraph/
