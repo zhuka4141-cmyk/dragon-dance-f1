@@ -331,6 +331,14 @@
     .update-preview-summary { display:block; color:var(--text-2); font-size:14px; line-height:1.65; }
     .update-preview-more { margin-top:24px; color:var(--text); font-size:11px; font-weight:600; letter-spacing:.04em; text-decoration:underline; text-decoration-color:var(--red); text-underline-offset:4px; }
     .updates-preview-status { grid-column:1 / -1; padding:34px 0; border-top:1px solid var(--hairline); color:var(--text-2); font-size:15px; }
+    /* Desktop: a third update becomes a full-width banner row so the 3-card
+       grid never leaves an empty right area; mobile keeps the stacked list. */
+    @media (min-width:801px) {
+      .update-preview-card.is-last { grid-column:1 / -1; min-height:460px; display:grid; grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr); align-items:stretch; }
+      .update-preview-card.is-last .update-preview-media { height:100%; aspect-ratio:auto; min-height:0; }
+      .update-preview-card.is-last .update-preview-copy { justify-content:center; padding:clamp(28px,3.4vw,52px) clamp(26px,3.4vw,56px); }
+      .update-preview-card.is-last .update-preview-heading { font-size:clamp(28px,3vw,46px); }
+    }
     .home-only-content { height:auto; overflow:hidden; transition:height .72s cubic-bezier(.22,.8,.24,1); }
     .home-only-inner { min-height:0; overflow:hidden; opacity:1; transform:translate3d(0,0,0); transition:opacity .28s ease,transform .62s cubic-bezier(.22,.8,.24,1); }
     .home-only-content.is-collapsed .home-only-inner { opacity:0; transform:translate3d(0,38px,0); pointer-events:none; }
@@ -737,6 +745,14 @@
       </div>
     </section>
 
+    <section class="latest-updates" id="updates" aria-labelledby="updatesPreviewTitle" data-scroll-reveal>
+      <div class="updates-preview-header">
+        <div><div class="eyebrow" data-i18n="updatesLabel">Latest / Updates</div><h2 id="updatesPreviewTitle" data-i18n-html="updatesTitle">On The<br>Move.</h2></div>
+        <a class="updates-preview-link" href="updates.html" data-i18n="viewAllUpdates">View all updates ↗</a>
+      </div>
+      <div class="updates-preview-feed" id="homeUpdates" aria-live="polite"><div class="updates-preview-status" data-i18n="updatesLoading">Loading latest updates...</div></div>
+    </section>
+
     <section class="feature-stack" id="machine" aria-live="polite" data-scroll-reveal>
       <article class="feature-page machine is-active" aria-label="Page 1 feature">
         <div class="car-photo" data-label="01 / DRAGON PROTOTYPE"><img src="assets/race-car.jpg" alt="F1 Dragon Dance race car on a STEM Racing track" /></div>
@@ -840,8 +856,8 @@
       <div class="home-only-inner">
     <section class="race-deadlines" id="deadlines" aria-labelledby="deadlinesTitle">
       <div class="race-deadlines-header" data-scroll-reveal>
-        <div><div class="eyebrow" data-i18n="deadlinesLabel">Race Calendar / 2026</div><h2 id="deadlinesTitle" data-i18n-html="deadlinesTitle">Two Dates.<br>One Finish Line.</h2></div>
-        <p class="race-deadlines-note" data-i18n="deadlinesNote">Keep these hand-in dates close as we move from preparation to the track.</p>
+        <div><div class="eyebrow" data-i18n="deadlinesLabel">Race Calendar / 2026 · Professional Class</div><h2 id="deadlinesTitle" data-i18n-html="deadlinesTitle">Two Dates.<br>One Finish Line.</h2></div>
+        <p class="race-deadlines-note" data-i18n="deadlinesNote">Professional Class hand-in dates for the online file and the car handover.</p>
       </div>
       <div class="deadline-grid">
         <article class="deadline-card" data-scroll-reveal>
@@ -853,14 +869,6 @@
           <div class="deadline-copy"><strong data-i18n="carHandoverTitle">Car Handover</strong><p data-i18n="carHandoverCopy">Hand over the completed race car for inspection.</p><span class="deadline-countdown" data-deadline="2026-11-28"></span></div>
         </article>
       </div>
-    </section>
-
-    <section class="latest-updates" id="updates" aria-labelledby="updatesPreviewTitle" data-scroll-reveal>
-      <div class="updates-preview-header">
-        <div><div class="eyebrow" data-i18n="updatesLabel">Latest / Updates</div><h2 id="updatesPreviewTitle" data-i18n-html="updatesTitle">On The<br>Move.</h2></div>
-        <a class="updates-preview-link" href="updates.html" data-i18n="viewAllUpdates">View all updates ↗</a>
-      </div>
-      <div class="updates-preview-feed" id="homeUpdates" aria-live="polite"><div class="updates-preview-status" data-i18n="updatesLoading">Loading latest updates...</div></div>
     </section>
       </div>
     </div>
@@ -1014,8 +1022,8 @@
       const englishText = Object.fromEntries(textElements.map(element => [element.dataset.i18n, element.textContent]));
       const englishHtml = Object.fromEntries(htmlElements.map(element => [element.dataset.i18nHtml, element.innerHTML]));
       const chineseText = {
-        deadlinesLabel:'賽事日程 / 2026',
-        deadlinesNote:'由準備走向賽道，請記下這兩個重要提交日期。',
+        deadlinesLabel:'賽事日程 / 2026 · Professional Class',
+        deadlinesNote:'Professional Class 線上檔案與賽車交接的提交日期。',
         onlineFileTitle:'提交線上檔案',
         onlineFileCopy:'線上檔案最終提交期限。',
         carHandoverTitle:'交接賽車',
@@ -1357,7 +1365,7 @@
         }
         posts.forEach((post, index) => {
           const card = document.createElement('a');
-          card.className = `update-preview-card${index === 0 ? ' is-featured' : ''}`;
+          card.className = `update-preview-card${index === 0 ? ' is-featured' : ''}${index === 2 ? ' is-last' : ''}`;
           card.dataset.scrollReveal = '';
           card.style.setProperty('--scroll-reveal-delay', `${index * 80}ms`);
           card.href = `updates.html#${encodeURIComponent(post.id || '')}`;
