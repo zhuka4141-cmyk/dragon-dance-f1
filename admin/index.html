@@ -156,6 +156,40 @@
     @keyframes incense-twinkle{0%,100%{opacity:.28;transform:translate3d(0,0,0) scale(.9);}50%{opacity:.85;transform:translate3d(var(--dx,0),-2px,0) scale(1.1);}}
     @media (prefers-reduced-motion:reduce){.incense-dot{opacity:.6;animation:none;}}
 
+    /* ==== Custom publish-date picker ==== */
+    .date-field-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .date-trigger { flex:1; min-width:0; min-height:44px; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:0 14px; border:1px solid var(--hairline-2); border-radius:var(--radius-sm); background:var(--bg); color:var(--text); font-size:13px; font-weight:600; letter-spacing:.02em; text-align:left; transition:border-color .2s,background .2s,box-shadow .2s; }
+    .date-trigger:hover, .date-trigger:focus-visible { border-color:var(--red); background:var(--bg-2); outline:0; }
+    .date-trigger[aria-expanded="true"] { border-color:var(--red); box-shadow:0 0 0 3px rgba(224,24,35,.16); }
+    .date-cal { flex:none; display:grid; place-items:center; width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,.06); color:var(--red); }
+    .date-quick { min-height:44px; padding:0 13px; border:1px solid var(--hairline-2); border-radius:var(--radius-sm); background:transparent; color:var(--text-2); font-size:11px; font-weight:700; letter-spacing:.04em; white-space:nowrap; transition:border-color .2s,color .2s,background .2s; }
+    .date-quick:hover, .date-quick:focus-visible { border-color:var(--red); color:#fff; background:rgba(224,24,35,.14); outline:0; }
+    .date-pop { position:fixed; z-index:300; width:322px; max-width:calc(100vw - 24px); padding:14px; border:1px solid var(--hairline-2); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow); opacity:0; transform:translateY(6px) scale(.985); transition:opacity .16s ease,transform .2s cubic-bezier(.22,.8,.24,1); pointer-events:none; }
+    .date-pop.is-open { opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+    .date-pop-head { display:flex; align-items:center; gap:6px; margin-bottom:10px; }
+    .date-pop-nav { flex:none; width:38px; height:38px; border:1px solid var(--hairline-2); border-radius:var(--radius-sm); background:transparent; color:var(--text); font-size:16px; line-height:1; transition:border-color .2s,color .2s,background .2s; }
+    .date-pop-nav:hover, .date-pop-nav:focus-visible { border-color:var(--red); color:var(--red); outline:0; }
+    .date-pop-title { flex:1; min-width:0; min-height:38px; padding:0 8px; border:0; border-radius:var(--radius-sm); background:transparent; color:var(--text); font-size:13px; font-weight:700; white-space:nowrap; transition:background .2s,color .2s; }
+    .date-pop-title:hover, .date-pop-title:focus-visible { background:rgba(255,255,255,.07); color:var(--red); outline:0; }
+    .date-week { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:4px; }
+    .date-week span { padding:2px 0; color:var(--text-3); font-size:10px; font-weight:700; text-align:center; }
+    .date-week span:nth-child(1) { color:rgba(255,140,120,.8); }
+    .date-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
+    .date-day { min-height:37px; padding:0; border:0; border-radius:var(--radius-sm); background:transparent; color:var(--text); font-size:12px; font-weight:600; transition:background .14s,color .14s,border-color .14s; }
+    .date-day:hover, .date-day:focus-visible { background:rgba(255,255,255,.09); outline:0; }
+    .date-day.is-empty { pointer-events:none; }
+    .date-day.is-today { box-shadow:inset 0 0 0 1px rgba(255,122,47,.6); }
+    .date-day.is-selected { background:var(--red); color:#fff; }
+    .date-day.is-selected:hover { background:var(--red); }
+    .date-month-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+    .date-month-grid button { min-height:46px; border:1px solid var(--hairline-2); border-radius:var(--radius-sm); background:transparent; color:var(--text); font-size:12px; font-weight:600; transition:border-color .15s,color .15s,background .15s; }
+    .date-month-grid button:hover, .date-month-grid button:focus-visible { border-color:var(--red); color:#fff; background:rgba(224,24,35,.14); outline:0; }
+    .date-month-grid button.is-current { border-color:var(--red); color:var(--red); background:rgba(224,24,35,.08); }
+    .date-pop-foot { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid var(--hairline); }
+    .date-pop-back { min-height:34px; padding:0 12px; border:0; border-radius:var(--radius-pill); background:transparent; color:var(--text-2); font-size:11px; font-weight:700; letter-spacing:.05em; }
+    .date-pop-back:hover, .date-pop-back:focus-visible { color:var(--red); background:rgba(224,24,35,.1); outline:0; }
+    @media (max-width:480px) { .date-trigger { font-size:12px; } .date-quick { flex:1; } }
+
   </style>
 </head>
 <body>
@@ -218,7 +252,17 @@
           <p>中英文內容會分別顯示在網站的語言切換版本。發佈日期預設為當天，也可以在發佈前調整；發佈後會立即出現在首頁和完整動態頁。</p>
           <form id="updateForm">
             <div class="field-columns">
-              <label>發佈日期（預設今天，可調整）<input id="publishedAt" type="date" required /></label>
+              <label>發佈日期（預設今天，可調整）
+                <input id="publishedAt" type="hidden" value="" />
+                <span class="date-field-row">
+                  <button class="date-trigger" id="dateTrigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="datePop">
+                    <span id="dateTriggerText">選擇發佈日期</span>
+                    <span class="date-cal" aria-hidden="true"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2.5"></rect><path d="M8 3.2v3.6M16 3.2v3.6M3.5 10.4h17"></path></svg></span>
+                  </button>
+                  <button class="date-quick" id="dateTodayBtn" type="button">今天</button>
+                  <button class="date-quick" id="dateYesterdayBtn" type="button">昨天</button>
+                </span>
+              </label>
             </div>
             <input id="slug" type="hidden" />
             <label>圖片或影片（可多選；首個會作首頁封面）<input id="imageFiles" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple /></label>
@@ -893,6 +937,7 @@
         dateWasChanged = false;
         updateForm.reset();
         fields.publishedAt.value = todayIsoDate();
+        syncDateTrigger();
         document.getElementById('formMode').textContent = '新增動態';
         document.getElementById('formTitle').innerHTML = '發佈<br>新動態。';
         document.getElementById('publishButton').textContent = '發佈動態';
@@ -1005,6 +1050,7 @@
         editorMediaEntries = normaliseMediaEntries(post);
         dateWasChanged = false;
         fields.publishedAt.value = post.published_at || '';
+        syncDateTrigger();
         fields.slug.value = post.slug || '';
         fields.titleEn.value = post.title_en || '';
         fields.titleZh.value = post.title_zh || '';
@@ -1315,9 +1361,201 @@
       fields.titleEn.addEventListener('input', () => {
         if (!editingId && !fields.slug.value) fields.slug.value = slugify(fields.titleEn.value);
       });
-      fields.publishedAt.addEventListener('change', () => {
+      /* ==== Custom publish-date picker ==== */
+      const dateTriggerEl = document.getElementById('dateTrigger');
+      const dateTriggerText = document.getElementById('dateTriggerText');
+      const dateTodayBtn = document.getElementById('dateTodayBtn');
+      const dateYesterdayBtn = document.getElementById('dateYesterdayBtn');
+      let datePopEl = null;
+      let datePopOpen = false;
+      let dateMode = 'days';
+      let dateCursor = null;
+
+      function datePartsFromIso(iso) {
+        const match = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+        return match ? { year:+match[1], month:+match[2] - 1, day:+match[3] } : null;
+      }
+
+      function datePad(value) {
+        return String(value).padStart(2, '0');
+      }
+
+      function dateIso(year, monthIndex, day) {
+        return `${year}-${datePad(monthIndex + 1)}-${datePad(day)}`;
+      }
+
+      function shiftIsoDays(iso, days) {
+        const parts = datePartsFromIso(iso || todayIsoDate());
+        const shifted = new Date(parts.year, parts.month, parts.day + days);
+        return dateIso(shifted.getFullYear(), shifted.getMonth(), shifted.getDate());
+      }
+
+      function syncDateTrigger() {
+        const parts = datePartsFromIso(fields.publishedAt.value);
+        dateTriggerText.textContent = parts
+          ? `${parts.year} 年 ${parts.month + 1} 月 ${parts.day} 日`
+          : '選擇發佈日期';
+      }
+
+      function commitPublishDate(iso) {
+        if (!iso) return;
+        fields.publishedAt.value = iso;
         dateWasChanged = true;
+        syncDateTrigger();
+        closeDatePop();
+      }
+
+      function closeDatePop() {
+        if (!datePopOpen) return;
+        datePopEl.classList.remove('is-open');
+        datePopOpen = false;
+        dateTriggerEl.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('keydown', onDateDocKeydown);
+        window.removeEventListener('resize', closeDatePop);
+      }
+
+      function onDateDocKeydown(event) {
+        if (event.key === 'Escape') closeDatePop();
+      }
+
+      function renderDatePop() {
+        const title = datePopEl.querySelector('#dateTitle');
+        const body = datePopEl.querySelector('#dateBody');
+        const back = datePopEl.querySelector('#dateBack');
+        const navPrev = datePopEl.querySelector('#dateNavPrev');
+        const navNext = datePopEl.querySelector('#dateNavNext');
+        const year = dateCursor.getFullYear();
+        const month = dateCursor.getMonth();
+        if (dateMode === 'months') {
+          title.textContent = `${year} 年`;
+          title.setAttribute('aria-label', '返回日期選擇');
+          navPrev.setAttribute('aria-label', '上一年');
+          navNext.setAttribute('aria-label', '下一年');
+          back.textContent = '返回日期選擇';
+          back.hidden = false;
+          let html = '<div class="date-month-grid">';
+          for (let i = 0; i < 12; i += 1) {
+            const isCurrent = year === dateCursor.getFullYear() && i === dateCursor.getMonth();
+            html += `<button type="button" data-month="${i}"${isCurrent ? ' class="is-current"' : ''}>${i + 1} 月</button>`;
+          }
+          html += '</div>';
+          body.innerHTML = html;
+          body.querySelectorAll('[data-month]').forEach(button => {
+            button.addEventListener('click', () => {
+              dateCursor = new Date(dateCursor.getFullYear(), Number(button.dataset.month), 1);
+              dateMode = 'days';
+              renderDatePop();
+            });
+          });
+        } else {
+          title.textContent = `${year} 年 ${month + 1} 月`;
+          title.setAttribute('aria-label', '切換到月份選擇');
+          navPrev.setAttribute('aria-label', '上一個月');
+          navNext.setAttribute('aria-label', '下一個月');
+          back.textContent = '關閉';
+          back.hidden = false;
+          const todayIso = todayIsoDate();
+          const selectedIso = fields.publishedAt.value;
+          const firstWeekday = new Date(year, month, 1).getDay();
+          const daysInMonth = new Date(year, month + 1, 0).getDate();
+          let html = '<div class="date-week"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>';
+          html += '<div class="date-grid">';
+          for (let i = 0; i < firstWeekday; i += 1) html += '<span class="date-day is-empty"></span>';
+          for (let day = 1; day <= daysInMonth; day += 1) {
+            const iso = dateIso(year, month, day);
+            const classes = ['date-day', iso === todayIso ? 'is-today' : '', iso === selectedIso ? 'is-selected' : ''].filter(Boolean).join(' ');
+            html += `<button type="button" class="${classes}" data-day="${day}">${day}</button>`;
+          }
+          const trailing = (7 - ((firstWeekday + daysInMonth) % 7)) % 7;
+          for (let i = 0; i < trailing; i += 1) html += '<span class="date-day is-empty"></span>';
+          body.innerHTML = html + '</div>';
+          body.querySelectorAll('[data-day]').forEach(button => {
+            button.addEventListener('click', () => commitPublishDate(dateIso(year, month, Number(button.dataset.day))));
+          });
+        }
+      }
+
+      function buildDatePop() {
+        const root = document.createElement('div');
+        root.className = 'date-pop';
+        root.id = 'datePop';
+        root.setAttribute('role', 'dialog');
+        root.setAttribute('aria-label', '選擇發佈日期');
+        root.innerHTML = `
+          <div class="date-pop-head">
+            <button class="date-pop-nav" id="dateNavPrev" type="button" aria-label="上一步">‹</button>
+            <button class="date-pop-title" id="dateTitle" type="button"></button>
+            <button class="date-pop-nav" id="dateNavNext" type="button" aria-label="下一步">›</button>
+          </div>
+          <div class="date-pop-body" id="dateBody"></div>
+          <div class="date-pop-foot">
+            <button class="date-pop-back" id="dateBack" type="button"></button>
+          </div>`;
+        document.body.append(root);
+        root.querySelector('#dateNavPrev').addEventListener('click', () => {
+          if (dateMode === 'months') dateCursor = new Date(dateCursor.getFullYear() - 1, dateCursor.getMonth(), 1);
+          else dateCursor = new Date(dateCursor.getFullYear(), dateCursor.getMonth() - 1, 1);
+          renderDatePop();
+        });
+        root.querySelector('#dateNavNext').addEventListener('click', () => {
+          if (dateMode === 'months') dateCursor = new Date(dateCursor.getFullYear() + 1, dateCursor.getMonth(), 1);
+          else dateCursor = new Date(dateCursor.getFullYear(), dateCursor.getMonth() + 1, 1);
+          renderDatePop();
+        });
+        root.querySelector('#dateTitle').addEventListener('click', () => {
+          if (dateMode === 'days') dateMode = 'months';
+          else dateMode = 'days';
+          renderDatePop();
+        });
+        root.querySelector('#dateBack').addEventListener('click', () => {
+          if (dateMode === 'months') {
+            dateMode = 'days';
+            renderDatePop();
+          } else {
+            closeDatePop();
+          }
+        });
+        return root;
+      }
+
+      function openDatePop() {
+        if (datePopOpen) return;
+        if (!datePopEl) datePopEl = buildDatePop();
+        const parts = datePartsFromIso(fields.publishedAt.value) || datePartsFromIso(todayIsoDate());
+        dateCursor = new Date(parts.year, parts.month, 1);
+        dateMode = 'days';
+        renderDatePop();
+        datePopEl.classList.remove('is-open');
+        datePopEl.style.left = '-9999px';
+        datePopEl.style.top = '-9999px';
+        const popWidth = datePopEl.offsetWidth;
+        const popHeight = datePopEl.offsetHeight;
+        const rect = dateTriggerEl.getBoundingClientRect();
+        let left = Math.min(rect.left, window.innerWidth - popWidth - 8);
+        left = Math.max(8, left);
+        let top = rect.bottom + 8;
+        if (top + popHeight > window.innerHeight - 8) top = Math.max(8, rect.top - popHeight - 8);
+        datePopEl.style.left = `${left}px`;
+        datePopEl.style.top = `${top}px`;
+        window.requestAnimationFrame(() => datePopEl.classList.add('is-open'));
+        datePopOpen = true;
+        dateTriggerEl.setAttribute('aria-expanded', 'true');
+        document.addEventListener('keydown', onDateDocKeydown);
+        window.addEventListener('resize', closeDatePop);
+      }
+
+      function onDateDocPointerDown(event) {
+        if (datePopOpen && !datePopEl.contains(event.target) && !dateTriggerEl.contains(event.target)) closeDatePop();
+      }
+
+      dateTriggerEl.addEventListener('click', () => {
+        if (datePopOpen) closeDatePop();
+        else openDatePop();
       });
+      dateTodayBtn.addEventListener('click', () => commitPublishDate(todayIsoDate()));
+      dateYesterdayBtn.addEventListener('click', () => commitPublishDate(shiftIsoDays(todayIsoDate(), -1)));
+      document.addEventListener('pointerdown', onDateDocPointerDown);
+      syncDateTrigger();
       fields.imageFiles.addEventListener('change', () => {
         releasePendingMedia(editorMediaEntries);
         const existingEntries = editorMediaEntries.filter(entry => !entry.file);
