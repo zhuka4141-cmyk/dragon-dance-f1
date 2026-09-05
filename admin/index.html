@@ -107,6 +107,10 @@
     .post-actions { display:flex; gap:10px; margin-top:13px; }
     .text-button { padding:0; border:0; background:transparent; color:var(--text); font-size:11px; font-weight:600; letter-spacing:.02em; text-decoration:underline; text-decoration-color:var(--red); text-underline-offset:4px; }
     .text-button:hover, .text-button:focus-visible { color:var(--red); outline:0; }
+    .admin-post[draggable="true"] { cursor:grab; }
+    .admin-post[draggable="true"]:active { cursor:grabbing; }
+    .admin-post.is-dragging { opacity:.35; }
+    .admin-post.is-pinned .post-actions .text-button[title*="移動"] { display:none; }
     .empty-posts { padding:23px 0; border-top:1px solid var(--hairline); color:var(--text-2); font-size:13px; }
     .crop-modal { position:fixed; z-index:200; inset:0; display:grid; place-items:center; padding:20px; visibility:hidden; opacity:0; pointer-events:none; transition:opacity .22s ease,visibility 0s linear .22s; }
     .crop-modal.is-open { visibility:visible; opacity:1; pointer-events:auto; transition-delay:0s; }
@@ -283,7 +287,7 @@
         <section class="posts-panel">
           <span class="kicker">已發佈</span>
           <h2>所有<br>動態。</h2>
-          <p>點擊編輯可修改已發佈內容；刪除後會從網站移除。</p>
+          <p>點擊編輯可修改已發佈內容；刪除後會從網站移除。拖動卡片（或按上移/下移）可自訂顯示順序，首頁與動態頁會即時跟隨；置頂動態固定在最前。</p>
           <div class="posts-list" id="postsList"></div>
         </section>
       </div>
@@ -358,6 +362,9 @@
       let editorMediaEntries = [];
       let publishedPosts = [];
       let dateWasChanged = false;
+      let sortColumnAvailable = false;
+      let dragOrderId = null;
+      let dragStartOrder = [];
       let cropSession = null;
       let cropHideTimer = null;
 
@@ -1007,20 +1014,129 @@
           remove.type = 'button';
           remove.textContent = '刪除';
           remove.addEventListener('click', () => deletePost(post));
-          actions.append(edit, pin, remove);
+          const moveUp = document.createElement('button');
+          moveUp.className = 'text-button';
+          moveUp.type = 'button';
+          moveUp.textContent = '上移';
+          moveUp.title = '在顯示順序中向上移動';
+          moveUp.hidden = post.is_pinned || publishedPosts.length < 2;
+          moveUp.addEventListener('click', () => movePostBy(post, -1));
+          const moveDown = document.createElement('button');
+          moveDown.className = 'text-button';
+          moveDown.type = 'button';
+          moveDown.textContent = '下移';
+          moveDown.title = '在顯示順序中向下移動';
+          moveDown.hidden = post.is_pinned || publishedPosts.length < 2;
+          moveDown.addEventListener('click', () => movePostBy(post, 1));
+          actions.append(edit, pin, remove, moveUp, moveDown);
           copy.append(date, title, excerpt, actions);
           article.append(imageBox, copy);
+          article.dataset.id = post.id;
+          const draggable = !post.is_pinned && publishedPosts.length > 1;
+          article.draggable = draggable;
+          if (draggable) {
+            article.addEventListener('dragstart', event => {
+              dragOrderId = post.id;
+              dragStartOrder = Array.from(postsList.querySelectorAll('.admin-post')).map(card => card.dataset.id);
+              event.dataTransfer.effectAllowed = 'move';
+              try { event.dataTransfer.setData('text/plain', post.id); } catch (_) {}
+              article.classList.add('is-dragging');
+              event.stopPropagation();
+            });
+            article.addEventListener('dragover', event => {
+              if (!dragOrderId) return;
+              const target = event.target.closest('.admin-post');
+              if (!target || target === article || target.classList.contains('is-pinned')) return;
+              event.preventDefault();
+              event.dataTransfer.dropEffect = 'move';
+              const rect = target.getBoundingClientRect();
+              if (event.clientY < rect.top + rect.height / 2) {
+                if (target.previousElementSibling !== article) postsList.insertBefore(article, target);
+              } else if (target.nextElementSibling !== article) {
+                postsList.insertBefore(article, target.nextElementSibling);
+              }
+            });
+            article.addEventListener('drop', event => {
+              if (!dragOrderId) return;
+              event.preventDefault();
+            });
+            article.addEventListener('dragend', () => {
+              article.classList.remove('is-dragging');
+              const order = Array.from(postsList.querySelectorAll('.admin-post')).map(card => card.dataset.id);
+              dragOrderId = null;
+              const changed = order.length === dragStartOrder.length && order.some((id, index) => id !== dragStartOrder[index]);
+              dragStartOrder = [];
+              if (changed) void persistPostOrder(order);
+            });
+          }
           postsList.append(article);
         });
       }
 
+      function movePostBy(post, direction) {
+        const lead = publishedPosts.filter(item => item.is_pinned).length;
+        const index = publishedPosts.findIndex(item => item.id === post.id);
+        const target = index + direction;
+        if (index < 0 || target < lead || target >= publishedPosts.length) return;
+        const reordered = publishedPosts.slice();
+        [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
+        void persistPostOrder(reordered.map(item => item.id));
+      }
+
+      async function persistPostOrder(ids) {
+        if (!sortColumnAvailable || !ids.length) return;
+        setStatus(editorStatus, '正在儲存排序...');
+        try {
+          for (let i = 0; i < ids.length; i += 1) {
+            await client.from('updates').update({ sort_order: i + 1 }).eq('id', ids[i]);
+          }
+          setStatus(editorStatus, '顯示順序已更新，網站會立即使用新排序。', 'success');
+          await loadPosts();
+        } catch (error) {
+          setStatus(editorStatus, error.message || '排序儲存失敗，請再試一次。', 'error');
+        }
+      }
+
+      async function normaliseMissingSortOrders() {
+        try {
+          for (let i = 0; i < publishedPosts.length; i += 1) {
+            await client.from('updates').update({ sort_order: i + 1 }).eq('id', publishedPosts[i].id);
+          }
+        } catch (_) {
+          /* non-fatal: rows keep their fallback date order */
+        }
+      }
+
+      async function promoteNewPostToTop(id) {
+        if (!sortColumnAvailable || !id) return;
+        try {
+          const { data: others } = await client.from('updates').select('id,sort_order').not('sort_order', 'is', null);
+          for (const row of (others || [])) {
+            if (row.id === id) continue;
+            await client.from('updates').update({ sort_order: (Number(row.sort_order) || 0) + 1 }).eq('id', row.id);
+          }
+          await client.from('updates').update({ sort_order: 1 }).eq('id', id);
+        } catch (_) {
+          /* non-fatal */
+        }
+      }
+
       async function loadPosts() {
-        const { data, error } = await client.from('updates').select('*').order('is_pinned', { ascending:false }).order('published_at', { ascending:false });
+        const { data, error } = await client
+          .from('updates')
+          .select('*')
+          .order('is_pinned', { ascending:false })
+          .order('sort_order', { ascending:true, nullsFirst:false })
+          .order('published_at', { ascending:false });
         if (error) {
           setStatus(editorStatus, error.message, 'error');
           return;
         }
         publishedPosts = data || [];
+        if (publishedPosts.length && Object.prototype.hasOwnProperty.call(publishedPosts[0], 'sort_order')) {
+          sortColumnAvailable = true;
+          if (publishedPosts.some(post => post.sort_order == null)) await normaliseMissingSortOrders();
+        }
         renderPosts();
       }
 
@@ -1272,8 +1388,9 @@
           const request = editingId
             ? client.from('updates').update(payload).eq('id', editingId)
             : client.from('updates').insert(payload);
-          const { error } = await request;
+          const { data: savedRows, error } = await request;
           if (error) throw error;
+          const savedId = !editingId ? ((savedRows && (savedRows[0]?.id || savedRows.id)) || null) : null;
           let storageCleanupError = null;
           if (removedStoredUrls.length) {
             try {
@@ -1283,6 +1400,7 @@
             }
           }
           resetForm();
+          if (savedId) await promoteNewPostToTop(savedId);
           setStatus(
             editorStatus,
             storageCleanupError

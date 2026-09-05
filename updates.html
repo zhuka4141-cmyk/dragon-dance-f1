@@ -530,9 +530,10 @@
       applyLanguage(language);
       updatesDatabase
         .from('updates')
-        .select('slug,published_at,title_en,title_zh,body_en,body_zh,cover_url,image_urls,is_pinned')
+        .select('slug,published_at,title_en,title_zh,body_en,body_zh,cover_url,image_urls,is_pinned,sort_order')
         .eq('is_published', true)
         .order('is_pinned', { ascending:false })
+        .order('sort_order', { ascending:true, nullsFirst:false })
         .order('published_at', { ascending:false })
         .then(({ data, error }) => { updates = error ? [] : data.map(mapUpdate); renderUpdates(); })
         .catch(() => { updates = []; renderUpdates(); });
