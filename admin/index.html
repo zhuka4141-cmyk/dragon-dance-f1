@@ -252,7 +252,7 @@
         <div>
           <span class="crop-dialog-kicker">Media Crop</span>
           <h2 class="crop-dialog-title" id="cropDialogTitle">裁剪畫面</h2>
-          <p class="crop-dialog-help">一指拖動圖片，兩指縮放；完成後會套用到首頁和動態頁。</p>
+          <p class="crop-dialog-help">一指拖動圖片，兩指或滑鼠滾輪縮放；完成後會套用到首頁和動態頁。</p>
         </div>
         <button class="crop-close" id="cropClose" type="button" aria-label="關閉裁剪工具">×</button>
       </div>
@@ -738,7 +738,7 @@
           cropZoom.disabled = false;
           cropReset.disabled = false;
           cropApply.disabled = false;
-          cropStateMessage.textContent = '拖動調整位置，使用兩指或下方滑桿縮放。';
+          cropStateMessage.textContent = '拖動調整位置，使用兩指、滑鼠滾輪或下方滑桿縮放。';
           renderCropPreview();
         };
         media.addEventListener(readyEvent, onReady, { once:true });
@@ -823,10 +823,24 @@
         }
       }
 
+      function onCropStageWheel(event) {
+        if (!cropSession?.ready || cropSession.pointers.size >= 2) return;
+        event.preventDefault();
+        const deltaY = event.deltaMode === 1
+          ? event.deltaY * 16
+          : event.deltaMode === 2
+            ? event.deltaY * 100
+            : event.deltaY;
+        const next = clamp(cropSession.draft.scale * Math.exp(-deltaY * 0.0016), 1, 3);
+        if (next === cropSession.draft.scale) return;
+        updateCropPositionFromZoom(next, cropPointFromEvent(event));
+      }
+
       cropStage.addEventListener('pointerdown', onCropPointerDown);
       cropStage.addEventListener('pointermove', onCropPointerMove);
       cropStage.addEventListener('pointerup', onCropPointerEnd);
       cropStage.addEventListener('pointercancel', onCropPointerEnd);
+      cropStage.addEventListener('wheel', onCropStageWheel, { passive:false });
       cropZoom.addEventListener('input', () => updateCropPositionFromZoom(Number(cropZoom.value)));
       cropReset.addEventListener('click', () => {
         if (!cropSession?.ready) return;
