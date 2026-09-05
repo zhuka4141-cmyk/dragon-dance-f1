@@ -312,6 +312,7 @@
     .racing-context h2 em { color:var(--red); font-style:normal; }
     .racing-context p { max-width:620px; margin:0; color:var(--text-2); font-size:15px; line-height:1.7; }
     .latest-updates { padding:clamp(70px,8vw,110px) 5vw; background:var(--bg); color:var(--text); border-top:1px solid var(--hairline); }
+    .latest-updates.is-hidden-from-pager { display:none; }
     .updates-preview-header { display:flex; align-items:end; justify-content:space-between; gap:32px; margin-bottom:44px; }
     .updates-preview-header h2 { margin:14px 0 0; font-weight:700; font-size:clamp(44px,6vw,88px); line-height:1.0; letter-spacing:-0.03em; color:var(--text); }
     .updates-preview-link { display:inline-flex; align-items:center; min-height:44px; border:1px solid var(--hairline-2); padding:0 20px; border-radius:var(--radius-pill); color:var(--text); font-size:12px; font-weight:600; letter-spacing:.02em; background:rgba(255,255,255,.05); transition:color .2s,border-color .2s,background .2s; }
@@ -961,6 +962,7 @@
       const partnershipBackdrop = document.getElementById('partnershipBackdrop');
       const partnershipClose = document.getElementById('partnershipClose');
       const homeUpdates = document.getElementById('homeUpdates');
+      const updatesPreviewSection = document.getElementById('updates');
       const homeOnlyContent = document.getElementById('homeOnlyContent');
       const homeOnlyInner = homeOnlyContent.querySelector('.home-only-inner');
       const deadlineCountdowns = Array.from(document.querySelectorAll('.deadline-countdown'));
@@ -1603,6 +1605,11 @@
         });
         const showHomeOnlySections = pageIndex === 0;
         setHomeOnlyContentVisibility(showHomeOnlySections, pageChanged);
+        if (updatesPreviewSection) {
+          updatesPreviewSection.classList.toggle('is-hidden-from-pager', !showHomeOnlySections);
+          updatesPreviewSection.inert = !showHomeOnlySections;
+          updatesPreviewSection.setAttribute('aria-hidden', String(!showHomeOnlySections));
+        }
         if (pageChanged && !reduceMotion) {
           [aboutPageStack, featureStack].forEach(stack => {
             stack.classList.remove('is-page-switching');
