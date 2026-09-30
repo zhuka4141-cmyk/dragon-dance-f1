@@ -2,6 +2,17 @@
 
 Last updated: 2026-09-30
 
+## September 30 Fire Procession Visual Redesign
+
+- The owner explicitly requested another substantial visual redesign: attractive, cooler and clearly inspired by fire-dragon dance. This supersedes the earlier rounded/glass composition while retaining the dark Fire-Dragon identity.
+- `assets/procession.css` is the final visual layer after existing public styles. It covers the four horizontal homepage scenes and the updates archive. The same-document pager remains authoritative.
+- Original `assets/incense-dragon.svg` depicts incense branches, woven structure, a ceremonial head and pearl. It is artistic interpretation, not documentary imagery. Regenerate with `node tools/build-incense-art.mjs`.
+- `assets/procession.js` progressively adds 80 flowing light points, capped at 30fps and DPR 1.5. It runs only for visible Home/Heritage, pauses offscreen/in background/reduced motion, and falls back to the static SVG. Home fog remains.
+- Local SIL OFL fonts: Barlow Condensed 800 and a Noto Serif TC 900 headline subset. If Chinese display text changes, run `python tools/fetch-display-fonts.py` to update the subset. Licenses ship beside the font files.
+- Visual language: soot, incense gold, warm paper and vermilion; large festival typography, square image edges, four-step route navigation, real crew portrait strips, partnership poster. See `DESIGN.md` for the built system.
+- Preserve the removed race exploration CTA, bilingual content, culture citations, media formats, modal behavior and admin. Browser checks cover desktop/mobile, both languages, route buttons and actual drag navigation.
+- Verification: `node tools/verify-homepage.mjs`, `node tools/verify-updates.mjs`, `node tools/verify-effects.mjs`, `node tools/verify-procession.mjs`, and `git diff --check`.
+
 ## Public Website Optimization
 
 - The owner approved the audit/design in `docs/superpowers/specs/2026-09-30-website-audit-optimization-design.md`; implementation preserves the four-slide pager and Fire-Dragon theme.

@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-30T06:24:02.617Z",
+  "title": "Design System: Dragon Dance — Fire Procession",
+  "extensions": {
+    "colorMeta": {
+      "soot": {
+        "role": "neutral",
+        "displayName": "Warm Soot",
+        "tonalRamp": [
+          "oklch(15.00% 0.0048 85.92)",
+          "oklch(26.43% 0.0048 85.92)",
+          "oklch(37.86% 0.0048 85.92)",
+          "oklch(49.29% 0.0048 85.92)",
+          "oklch(60.71% 0.0048 85.92)",
+          "oklch(72.14% 0.0048 85.92)",
+          "oklch(83.57% 0.0048 85.92)",
+          "oklch(95.00% 0.0048 85.92)"
+        ]
+      },
+      "soot-raised": {
+        "role": "neutral",
+        "displayName": "Raised Soot",
+        "tonalRamp": [
+          "oklch(15.00% 0.0063 91.68)",
+          "oklch(26.43% 0.0063 91.68)",
+          "oklch(37.86% 0.0063 91.68)",
+          "oklch(49.29% 0.0063 91.68)",
+          "oklch(60.71% 0.0063 91.68)",
+          "oklch(72.14% 0.0063 91.68)",
+          "oklch(83.57% 0.0063 91.68)",
+          "oklch(95.00% 0.0063 91.68)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Warm Surface",
+        "tonalRamp": [
+          "oklch(15.00% 0.0107 80.54)",
+          "oklch(26.43% 0.0107 80.54)",
+          "oklch(37.86% 0.0107 80.54)",
+          "oklch(49.29% 0.0107 80.54)",
+          "oklch(60.71% 0.0107 80.54)",
+          "oklch(72.14% 0.0107 80.54)",
+          "oklch(83.57% 0.0107 80.54)",
+          "oklch(95.00% 0.0107 80.54)"
+        ]
+      },
+      "surface-raised": {
+        "role": "neutral",
+        "displayName": "Raised Warm Surface",
+        "tonalRamp": [
+          "oklch(15.00% 0.0151 76.13)",
+          "oklch(26.43% 0.0151 76.13)",
+          "oklch(37.86% 0.0151 76.13)",
+          "oklch(49.29% 0.0151 76.13)",
+          "oklch(60.71% 0.0151 76.13)",
+          "oklch(72.14% 0.0151 76.13)",
+          "oklch(83.57% 0.0151 76.13)",
+          "oklch(95.00% 0.0151 76.13)"
+        ]
+      },
+      "editorial-surface": {
+        "role": "neutral",
+        "displayName": "Editorial Brown Black",
+        "tonalRamp": [
+          "oklch(15.00% 0.0117 73.20)",
+          "oklch(26.43% 0.0117 73.20)",
+          "oklch(37.86% 0.0117 73.20)",
+          "oklch(49.29% 0.0117 73.20)",
+          "oklch(60.71% 0.0117 73.20)",
+          "oklch(72.14% 0.0117 73.20)",
+          "oklch(83.57% 0.0117 73.20)",
+          "oklch(95.00% 0.0117 73.20)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "tonalRamp": [
+          "oklch(15.00% 0.0245 83.42)",
+          "oklch(26.43% 0.0245 83.42)",
+          "oklch(37.86% 0.0245 83.42)",
+          "oklch(49.29% 0.0245 83.42)",
+          "oklch(60.71% 0.0245 83.42)",
+          "oklch(72.14% 0.0245 83.42)",
+          "oklch(83.57% 0.0245 83.42)",
+          "oklch(95.00% 0.0245 83.42)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Ash Text",
+        "tonalRamp": [
+          "oklch(15.00% 0.0264 81.09)",
+          "oklch(26.43% 0.0264 81.09)",
+          "oklch(37.86% 0.0264 81.09)",
+          "oklch(49.29% 0.0264 81.09)",
+          "oklch(60.71% 0.0264 81.09)",
+          "oklch(72.14% 0.0264 81.09)",
+          "oklch(83.57% 0.0264 81.09)",
+          "oklch(95.00% 0.0264 81.09)"
+        ]
+      },
+      "quiet": {
+        "role": "neutral",
+        "displayName": "Quiet Ash",
+        "tonalRamp": [
+          "oklch(15.00% 0.0311 82.55)",
+          "oklch(26.43% 0.0311 82.55)",
+          "oklch(37.86% 0.0311 82.55)",
+          "oklch(49.29% 0.0311 82.55)",
+          "oklch(60.71% 0.0311 82.55)",
+          "oklch(72.14% 0.0311 82.55)",
+          "oklch(83.57% 0.0311 82.55)",
+          "oklch(95.00% 0.0311 82.55)"
+        ]
+      },
+      "ember": {
+        "role": "secondary",
+        "displayName": "Ember Vermilion",
+        "tonalRamp": [
+          "oklch(15.00% 0.1915 34.53)",
+          "oklch(26.43% 0.1915 34.53)",
+          "oklch(37.86% 0.1915 34.53)",
+          "oklch(49.29% 0.1915 34.53)",
+          "oklch(60.71% 0.1915 34.53)",
+          "oklch(72.14% 0.1915 34.53)",
+          "oklch(83.57% 0.1915 34.53)",
+          "oklch(95.00% 0.1915 34.53)"
+        ]
+      },
+      "ember-ink": {
+        "role": "secondary",
+        "displayName": "Soft Ember Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.1327 47.07)",
+          "oklch(26.43% 0.1327 47.07)",
+          "oklch(37.86% 0.1327 47.07)",
+          "oklch(49.29% 0.1327 47.07)",
+          "oklch(60.71% 0.1327 47.07)",
+          "oklch(72.14% 0.1327 47.07)",
+          "oklch(83.57% 0.1327 47.07)",
+          "oklch(95.00% 0.1327 47.07)"
+        ]
+      },
+      "incense": {
+        "role": "primary",
+        "displayName": "Incense Gold",
+        "tonalRamp": [
+          "oklch(15.00% 0.1098 72.78)",
+          "oklch(26.43% 0.1098 72.78)",
+          "oklch(37.86% 0.1098 72.78)",
+          "oklch(49.29% 0.1098 72.78)",
+          "oklch(60.71% 0.1098 72.78)",
+          "oklch(72.14% 0.1098 72.78)",
+          "oklch(83.57% 0.1098 72.78)",
+          "oklch(95.00% 0.1098 72.78)"
+        ]
+      },
+      "incense-hover": {
+        "role": "primary",
+        "displayName": "Bright Incense Gold",
+        "tonalRamp": [
+          "oklch(15.00% 0.0715 72.19)",
+          "oklch(26.43% 0.0715 72.19)",
+          "oklch(37.86% 0.0715 72.19)",
+          "oklch(49.29% 0.0715 72.19)",
+          "oklch(60.71% 0.0715 72.19)",
+          "oklch(72.14% 0.0715 72.19)",
+          "oklch(83.57% 0.0715 72.19)",
+          "oklch(95.00% 0.0715 72.19)"
+        ]
+      },
+      "action-ink": {
+        "role": "neutral",
+        "displayName": "Brown Action Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0286 53.17)",
+          "oklch(26.43% 0.0286 53.17)",
+          "oklch(37.86% 0.0286 53.17)",
+          "oklch(49.29% 0.0286 53.17)",
+          "oklch(60.71% 0.0286 53.17)",
+          "oklch(72.14% 0.0286 53.17)",
+          "oklch(83.57% 0.0286 53.17)",
+          "oklch(95.00% 0.0286 53.17)"
+        ]
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Focus Amber",
+        "tonalRamp": [
+          "oklch(15.00% 0.1074 79.25)",
+          "oklch(26.43% 0.1074 79.25)",
+          "oklch(37.86% 0.1074 79.25)",
+          "oklch(49.29% 0.1074 79.25)",
+          "oklch(60.71% 0.1074 79.25)",
+          "oklch(72.14% 0.1074 79.25)",
+          "oklch(83.57% 0.1074 79.25)",
+          "oklch(95.00% 0.1074 79.25)"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Warm Hairline",
+        "tonalRamp": [
+          "oklch(15.00% 0.0629 79.79 / 0.133)",
+          "oklch(26.43% 0.0629 79.79 / 0.133)",
+          "oklch(37.86% 0.0629 79.79 / 0.133)",
+          "oklch(49.29% 0.0629 79.79 / 0.133)",
+          "oklch(60.71% 0.0629 79.79 / 0.133)",
+          "oklch(72.14% 0.0629 79.79 / 0.133)",
+          "oklch(83.57% 0.0629 79.79 / 0.133)",
+          "oklch(95.00% 0.0629 79.79 / 0.133)"
+        ]
+      },
+      "hairline-strong": {
+        "role": "neutral",
+        "displayName": "Strong Warm Hairline",
+        "tonalRamp": [
+          "oklch(15.00% 0.0629 79.79 / 0.259)",
+          "oklch(26.43% 0.0629 79.79 / 0.259)",
+          "oklch(37.86% 0.0629 79.79 / 0.259)",
+          "oklch(49.29% 0.0629 79.79 / 0.259)",
+          "oklch(60.71% 0.0629 79.79 / 0.259)",
+          "oklch(72.14% 0.0629 79.79 / 0.259)",
+          "oklch(83.57% 0.0629 79.79 / 0.259)",
+          "oklch(95.00% 0.0629 79.79 / 0.259)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "English Festival Display",
+        "purpose": "Homepage hero titles; self-hosted Barlow Condensed 800."
+      },
+      "display-tc": {
+        "displayName": "Traditional Chinese Display",
+        "purpose": "Selected Chinese hero and heritage titles; local Noto Serif TC 900 subset."
+      },
+      "headline": {
+        "displayName": "Editorial Headline",
+        "purpose": "Lower-page and heritage display headings."
+      },
+      "body": {
+        "displayName": "Reading Text",
+        "purpose": "Body copy and functional public controls."
+      },
+      "label": {
+        "displayName": "Compact Labels",
+        "purpose": "Visible navigation, dates, roles and provenance."
+      }
+    },
+    "shadows": [
+      {
+        "name": "modal-base",
+        "value": "0 24px 70px rgba(0,0,0,.55)",
+        "purpose": "Retained contact dialog elevation; ordinary editorial cards are flat."
+      }
+    ],
+    "motion": [
+      {
+        "name": "primary-action",
+        "value": "background .2s, color .2s, transform .2s",
+        "purpose": "Warm hover and two-pixel lift; disabled by reduced motion."
+      },
+      {
+        "name": "route-state",
+        "value": "right .35s",
+        "purpose": "Active route top-rule transition; disabled by reduced motion."
+      },
+      {
+        "name": "incense-canvas",
+        "value": "30fps maximum, 80 lights, DPR <= 1.5",
+        "purpose": "Only while active scene and hero are visible and reduced motion is off."
+      },
+      {
+        "name": "pointer-drift",
+        "value": "translate(±6px, ±4px)",
+        "purpose": "Fine-pointer-only art drift; removed when paused."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-desktop",
+        "value": "1050px"
+      },
+      {
+        "name": "stacked",
+        "value": "800px"
+      },
+      {
+        "name": "small-mobile",
+        "value": "480px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Discovery Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The Home action opens the Fire Dragon page.",
+      "html": "<button class=\"ds-primary\" type=\"button\">Discover the fire dragon<span aria-hidden=\"true\">›</span></button>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:space-between;gap:32px;min-height:54px;padding:17px 22px;background:#f2bb73;color:#21130a;border:1px solid #f2bb73;border-radius:2px;font:700 12px var(--font,system-ui);letter-spacing:.025em;cursor:pointer;transition:background .2s,transform .2s}.ds-primary:hover{background:#ffdaad;transform:translateY(-2px)}.ds-primary:active{transform:translateY(0)}.ds-primary:focus-visible,.ds-route-link:focus-visible{outline:2px solid var(--focus,#ffd185);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}.ds-primary:hover{transform:none}}"
+    },
+    {
+      "name": "Cultural Continuation Link",
+      "kind": "button",
+      "refersTo": "button-route-link",
+      "description": "An open, underlined action continues into the heritage story.",
+      "html": "<a class=\"ds-route-link\" href=\"#heritage\">Follow the tradition<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 4v16M5 13l7 7 7-7\"/></svg></a>",
+      "css": ".ds-route-link{display:inline-flex;align-items:center;justify-content:space-between;gap:32px;min-width:220px;min-height:54px;padding:12px 0;border-bottom:1px solid #c19a5d85;color:#eccc98;font:700 12px var(--font,system-ui);text-decoration:none;transition:color .2s}.ds-route-link svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.4}.ds-route-link:hover{color:#fff0d2}.ds-primary:focus-visible,.ds-route-link:focus-visible{outline:2px solid var(--focus,#ffd185);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-route-link{transition:none}}"
+    },
+    {
+      "name": "Four Page Route",
+      "kind": "nav",
+      "refersTo": "route-nav",
+      "description": "The numbered bottom strip mirrors the header and horizontal pager state.",
+      "html": "<nav class=\"ds-route\" aria-label=\"Horizontal pages\"><button aria-pressed=\"true\"><span>01</span>The Team</button><button aria-pressed=\"false\"><span>02</span>Fire Dragon</button><button aria-pressed=\"false\"><span>03</span>The Crew</button><button aria-pressed=\"false\"><span>04</span>Partners</button></nav>",
+      "css": ".ds-route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));min-height:76px;border-top:1px solid #dbc39438;background:#0b0a08e8}.ds-route button{position:relative;display:flex;align-items:center;gap:12px;min-height:60px;padding:0 12px 0 0;background:none;border:0;color:#9d9281;font:600 11px var(--font,system-ui);text-align:left;cursor:pointer}.ds-route button span{font:800 24px var(--display,\"Arial Narrow\",sans-serif);opacity:.75}.ds-route button::before{content:\"\";position:absolute;top:-1px;left:0;right:100%;height:2px;background:#ffc881;transition:right .35s}.ds-route button[aria-pressed=true]{color:#ffe6bd}.ds-route button[aria-pressed=true]::before{right:20%}.ds-route button:focus-visible{outline:2px solid var(--focus,#ffd185);outline-offset:4px}@media(max-width:800px){.ds-route{min-height:70px;gap:8px}.ds-route button{flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;font-size:10px}.ds-route button span{font-size:19px}.ds-route button[aria-pressed=true]::before{right:0}}@media(prefers-reduced-motion:reduce){.ds-route button::before{transition:none}}"
+    },
+    {
+      "name": "Pinned Update Tag",
+      "kind": "chip",
+      "refersTo": "pinned-tag",
+      "description": "Non-interactive status metadata for published updates.",
+      "html": "<span class=\"ds-pin\">Pinned</span>",
+      "css": ".ds-pin{display:inline-block;padding:5px 9px;border:1px solid rgba(255,255,255,.2);border-radius:2px;background:rgba(224,24,35,.14);color:var(--red-ink,#f49463);font:700 9px var(--font,system-ui);letter-spacing:.12em;text-transform:uppercase}"
+    },
+    {
+      "name": "Crew Card Copy",
+      "kind": "card",
+      "refersTo": "editorial-card",
+      "description": "Open caption and role treatment below a real crew portrait.",
+      "html": "<article class=\"ds-crew-card\"><span>01 / Crew</span><strong>Project Manager</strong></article>",
+      "css": ".ds-crew-card{padding:16px 0;border-bottom:1px solid #bb9b6538;background:transparent;color:var(--text,#f6eddc);font-family:var(--font,system-ui)}.ds-crew-card span{display:block;margin-bottom:8px;color:#d4a66e;font-size:10px}.ds-crew-card strong{display:block;font-size:16px;line-height:1.4}"
+    },
+    {
+      "name": "Heritage Disclosure",
+      "kind": "custom",
+      "refersTo": "disclosure",
+      "description": "A native open disclosure with a warm divider and generous reading space.",
+      "html": "<details class=\"ds-detail\" open><summary>The light · Incense, not flame</summary><p>Burning incense is inserted into the dragon, tracing its shape with countless points of light.</p></details>",
+      "css": ".ds-detail{border-block:1px solid #bca07838;color:var(--text,#f6eddc);font-family:var(--font,system-ui)}.ds-detail summary{padding:23px 0;font-size:19px;cursor:pointer}.ds-detail summary:focus-visible{outline:2px solid var(--focus,#ffd185);outline-offset:4px}.ds-detail p{margin:0 0 26px;color:#b9ac96;font-size:15px;line-height:1.9}"
+    },
+    {
+      "name": "Language Selector",
+      "kind": "nav",
+      "description": "Compact bilingual controls retain full 44px touch targets.",
+      "html": "<div class=\"ds-language\" role=\"group\" aria-label=\"Language selector\"><button aria-pressed=\"true\">EN</button><span aria-hidden=\"true\">/</span><button aria-pressed=\"false\">中文</button></div>",
+      "css": ".ds-language{display:inline-flex;align-items:center;gap:2px;font:600 11px var(--font,system-ui)}.ds-language button{min-width:44px;min-height:44px;padding:9px 4px;border:1px solid transparent;border-radius:2px;background:transparent;color:var(--text-2,#b6ac9b);font:inherit;cursor:pointer;transition:color .2s,background .2s}.ds-language button[aria-pressed=true]{border-color:#bea67e65;background:#b59e7420;color:var(--text,#f6eddc)}.ds-language button:hover{color:var(--text,#f6eddc)}.ds-language button:focus-visible{outline:2px solid var(--focus,#ffd185);outline-offset:4px}.ds-language>span{color:var(--text-3,#a69b87)}@media(prefers-reduced-motion:reduce){.ds-language button{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Incense Procession",
+    "overview": "The built September 30 redesign turns a winding dragon into a sculpture of woven incense light. Monumental festival lettering, warm soot backgrounds and restrained fog create the energy of a night procession. Authentic team portraits and a vermilion partnership poster connect that cultural atmosphere to the student team.\n\nThis records the implementation, replacing the earlier heritage-extension description. The homepage loads `assets/home.css`, `assets/heritage.css`, `assets/public-ui.css`, then `assets/procession.css`. The first two retain foundational layout and behavior-related styles; `procession.css` overrides their former cool-black palette, large card radii, central logo scene and display hierarchy. It is the current visual authority. The archive loads its inline base, `public-ui.css`, then the same procession stylesheet. Existing interaction code remains authoritative; the new decorative layer does not drive navigation.",
+    "keyCharacteristics": [
+      "Warm soot and paper with incense gold and vermilion emphasis.",
+      "Tall condensed English display lettering paired with substantial Traditional Chinese serif display lettering.",
+      "An original static incense dragon enhanced by bounded moving lights.",
+      "Open editorial rows, hairline dividers and almost square surfaces.",
+      "Four distinct horizontal scenes sharing one numbered route."
+    ],
+    "rules": [
+      {
+        "name": "The Incense Rule",
+        "body": "Glowing light belongs to the dragon, its route and selected emphasis. It represents burning incense; it must not imply a fantasy dragon breathing flame.",
+        "section": "colors"
+      },
+      {
+        "name": "The Static First Rule",
+        "body": "The original `assets/incense-dragon.svg` remains visible independently of Canvas. Decorative failure or reduced motion must leave a complete composition.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** retain the dark Fire-Dragon identity, original team mark and soft fog while using the new procession composition as visual authority.",
+      "**Do** preserve all four horizontal pages, bilingual copy, visible keyboard focus and at least 44px interactive targets.",
+      "**Do** keep the complete static SVG visible when motion is reduced or Canvas is unavailable.",
+      "**Do** use authentic crew portraits, published team updates and existing proposal/contact destinations.",
+      "**Do** label dragon artwork as an interpretation and preserve official heritage sources and the independent student-team disclaimer."
+    ],
+    "donts": [
+      "**Don't** reintroduce the removed race-car exploration CTA; retain actual engineering and racing content.",
+      "**Don't** add broad elliptical fog rings, flame-breathing imagery, autoplay audio or heavy runtime dependencies.",
+      "**Don't** restore large rounded glass cards as the default based on superseded base stylesheet values.",
+      "**Don't** imply UNESCO recognition, official-organiser status, invented sponsors, awards or race results.",
+      "**Don't** run the new decorative Canvas loop on inactive pages, hidden documents or reduced-motion settings."
+    ]
+  }
+}

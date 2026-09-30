@@ -82,6 +82,8 @@
   <link rel="stylesheet" href="assets/home.css" />
   <link rel="stylesheet" href="assets/heritage.css" />
   <link rel="stylesheet" href="assets/public-ui.css" />
+  <link rel="preload" href="assets/fonts/procession-display.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/procession.css" />
 </head>
 <body>
   <div class="spark-field" aria-hidden="true">
@@ -205,6 +207,8 @@
       <div class="hero-pages" id="heroPages">
         <article class="hero-page hero-page-intro" aria-label="Page 1">
           <canvas class="fog-field" id="fogField" aria-hidden="true"></canvas>
+          <div class="procession-scene" aria-hidden="true"><div class="procession-layer"><img src="assets/incense-dragon.svg" width="1100" height="950" fetchpriority="high" alt="" /><canvas class="procession-lights"></canvas></div></div>
+          <span class="hero-brushmark" aria-hidden="true">龍</span>
           <div class="hero-kicker" data-i18n="heroKicker">AD&amp;FD POHL Leung Sing Tak College · STEM Racing</div>
           <h1 data-i18n-html="heroTitle">Carry<br><i>the fire.</i></h1>
           <p class="hero-copy" data-i18n="heroCopy">Hong Kong's fire dragon tradition moves through many hands and one shared rhythm. We bring that spirit to the starting line: a student STEM Racing team shaped by culture, craft and the pursuit of speed.</p>
@@ -258,20 +262,31 @@
           <div class="hero-footer"><span data-i18n="f1StemLabel">Dragon Dance / STEM Racing</span><span data-i18n="heroMantra">Culture. Craft. Collective spirit.</span><a class="scroll-indicator" href="#about" data-i18n="scrollExplore">Scroll to explore ↓</a></div>
         </article>
         <article class="hero-page title-page title-page-heritage" aria-label="Page 2">
+          <div class="procession-scene procession-scene-heritage" aria-hidden="true"><div class="procession-layer"><img src="assets/incense-dragon.svg" width="1100" height="950" alt="" /><canvas class="procession-lights"></canvas></div></div>
           <div class="title-page-index" data-i18n="heritageIndex">02 / Fire Dragon</div>
           <h2 data-i18n-html="heritageHeroTitle">The fire<br>we carry.</h2>
           <p data-i18n="heritageHeroIntro">Discover Tai Hang's living tradition: hand-crafted dragons, thousands of incense lights, and a community moving as one.</p>
+          <a class="procession-action" href="#heritage"><span data-i18n="enterHeritage">Follow the tradition</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M5 13l7 7 7-7" /></svg></a>
+          <span class="scene-caption" data-i18n="processionArtNote">An artistic study of incense and movement.</span>
         </article>
         <article class="hero-page title-page title-page-crew" aria-label="Page 3">
+          <div class="crew-portrait-composition" aria-hidden="true"><img src="assets/project-manager.jpg" width="480" height="640" alt="" loading="lazy" /><img src="assets/manufacturing.jpg" width="480" height="640" alt="" loading="lazy" /><img src="assets/sponsorship-marketing-portrait.jpg" width="480" height="640" alt="" loading="lazy" /><span data-i18n="heroMantra">Culture. Craft. Collective spirit.</span></div>
           <div class="title-page-index" data-i18n="crewIndex">03 / The Crew</div>
           <h2 data-i18n-html="crewTitle">Meet<br>The Crew</h2>
           <p data-i18n="crewIntro">From project management and engineering to brand and sponsorship, every member brings their expertise to keep Dragon Dance moving as one.</p>
         </article>
         <article class="hero-page title-page title-page-partners" aria-label="Page 4">
+          <div class="partner-manifesto" aria-hidden="true"><span>DRAGON DANCE<br>STEM RACING</span><strong data-i18n-html="partnerPoster">MORE<br>THAN<br>SPEED.</strong><div class="poster-route"></div><span data-i18n="heroMantra">Culture. Craft. Collective spirit.</span></div>
           <div class="title-page-index" data-i18n="partnersIndex">04 / Our Partners</div>
           <h2 data-i18n-html="partnersTitle">Driven<br>By Support</h2>
           <p data-i18n="partnersIntro">We work with partners who value innovation, education and youth development to take engineering in practice and brand storytelling to a bigger stage.</p>
         </article>
+      </div>
+      <div class="hero-route" role="group" aria-label="Horizontal pages">
+        <button type="button" data-page-target="0" aria-pressed="true"><span class="route-number">01</span><span data-i18n="navTeam">The Team</span></button>
+        <button type="button" data-page-target="1" aria-pressed="false"><span class="route-number">02</span><span data-i18n="navHeritage">Fire Dragon</span></button>
+        <button type="button" data-page-target="2" aria-pressed="false"><span class="route-number">03</span><span data-i18n="navCrew">The Crew</span></button>
+        <button type="button" data-page-target="3" aria-pressed="false"><span class="route-number">04</span><span data-i18n="navPartners">Partners</span></button>
       </div>
     </section>
     <button class="pager-arrow pager-prev" id="pagerPrev" type="button" aria-label="Previous page" title="Previous page"><span class="pager-line" aria-hidden="true"></span><span class="pager-label" id="pagerPrevLabel" aria-hidden="true"></span></button>
@@ -313,7 +328,7 @@
       </div>
       <div class="heritage-composition">
         <figure class="heritage-art">
-          <img src="assets/fire-dragon-procession.svg" width="900" height="650" loading="lazy" decoding="async" alt="An artistic interpretation of an incense-lit dragon following a glowing pearl" id="heritageArtwork" />
+          <img src="assets/incense-dragon.svg" width="1100" height="950" loading="lazy" decoding="async" alt="An artistic interpretation of an incense-lit dragon following a glowing pearl" id="heritageArtwork" />
           <figcaption data-i18n="heritageCaption">An artistic interpretation of the fire dragon's movement and incense light.</figcaption>
         </figure>
         <aside class="heritage-history" aria-labelledby="heritageHistoryTitle">
@@ -505,5 +520,6 @@
   <script src="supabase-config.js"></script>
   <script src="assets/updates-feed.js"></script>
   <script src="assets/home.js"></script>
+  <script src="assets/procession.js"></script>
 </body>
 </html>
