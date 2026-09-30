@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 650" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Fire dragon, a procession in light</title>
+  <desc id="desc">An original geometric interpretation of an incense-covered dragon. A winding amber body, fine incense strokes, ceremonial poles and a radiant pearl evoke the collective movement of a fire dragon dance. This is an artistic motif, not a documentary image.</desc>
+  <defs>
+    <path id="body" d="M108 531C232 591 414 577 464 472C515 365 305 388 230 303C155 218 228 116 336 127C445 138 471 256 553 272C608 282 649 238 624 207"/>
+    <linearGradient id="fire" x1="148" y1="536" x2="683" y2="146" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9d4826"/>
+      <stop offset=".4" stop-color="#bc6634"/>
+      <stop offset=".75" stop-color="#e6a460"/>
+      <stop offset="1" stop-color="#f0c98e"/>
+    </linearGradient>
+    <g id="incense">
+      <path d="M0 0V-24" stroke="#c99862" stroke-width="1.4"/>
+      <circle cy="-26" r="2.6" fill="#ffd99d"/>
+    </g>
+    <g id="pearl-ray">
+      <path d="M0-27V-48" stroke="#db9656" stroke-width="1.3"/>
+      <circle cy="-50" r="2.2" fill="#f6d197"/>
+    </g>
+  </defs>
+
+  <!-- The open route is a single flowing line, with no animated filters. -->
+  <path d="M62 582C276 669 505 605 540 476C576 342 352 369 288 293C244 241 273 191 331 196C418 203 444 331 561 335C688 340 733 248 681 171" stroke="#50311f" stroke-width="1"/>
+  <path d="M117 600C300 650 473 601 509 511" stroke="#51301f" stroke-width="1" stroke-dasharray="1 9" stroke-linecap="round"/>
+
+  <!-- Ceremonial support poles: simple geometry keeps the focus on craft. -->
+  <g stroke="#8d653f" stroke-width="3" stroke-linecap="round">
+    <path d="M228 313L216 434"/>
+    <path d="M335 151L324 279"/>
+    <path d="M409 415L391 544"/>
+    <path d="M557 278L569 396"/>
+    <path d="M646 228L662 356"/>
+    <path d="M220 560L208 623"/>
+  </g>
+  <g stroke="#d0a16c" stroke-width="1" stroke-linecap="round">
+    <path d="M220 336L212 411M332 170L324 257M400 437L387 525M566 297L575 376M652 249L666 337"/>
+  </g>
+
+  <!-- The dashed cross-strokes suggest the incense set into the dragon. -->
+  <use href="#body" stroke="#c88a4f" stroke-width="76" stroke-dasharray="1 11" opacity=".6"/>
+  <use href="#body" stroke="#372318" stroke-width="48" stroke-linecap="round"/>
+  <use href="#body" stroke="url(#fire)" stroke-width="43" stroke-linecap="round"/>
+  <use href="#body" stroke="#23180f" stroke-width="40" stroke-linecap="round"/>
+  <use href="#body" stroke="#b88750" stroke-width="35" stroke-dasharray="1 13" opacity=".8"/>
+  <use href="#body" stroke="#e0a968" stroke-width="1.2" opacity=".65"/>
+  <use href="#body" stroke="#ffd5a0" stroke-width="3.5" stroke-dasharray=".1 32" stroke-linecap="round" opacity=".82"/>
+
+  <!-- Tapered tail and its outward sweep. -->
+  <path d="M113 511L79 510L50 486L69 524L101 550L130 551" fill="#20150e" stroke="#b17843" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M111 529L72 513M101 519L89 499M109 537L85 539M94 534L80 528" stroke="#c99458" stroke-width="1.2"/>
+
+  <!-- Horns, angular brow and an open jaw make the dragon legible at scale. -->
+  <path d="M604 164L586 117L595 84L607 117L631 128L623 92L639 61L641 111L654 133L646 164" fill="#1c140e" stroke="#b8844a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M612 167L602 127L617 139M636 159L635 120L632 97" stroke="#dbac70" stroke-width="1.2"/>
+  <path d="M587 211L596 174L619 155L650 163L674 154L695 174L733 180L751 197L737 211L701 213L693 225L731 228L721 246L677 253L647 236L607 240Z" fill="#25190f" stroke="#e6b675" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M597 186L621 174L644 179L664 172L683 184L716 188L733 199L698 202L681 210L669 233L648 222L622 230L607 217" stroke="#a9713d" stroke-width="1.3" stroke-linejoin="round"/>
+  <path d="M651 189L668 183L682 192L665 196Z" fill="#f5d49a"/>
+  <path d="M668 185L666 194" stroke="#25190f" stroke-width="3"/>
+  <path d="M718 191L729 193M695 213L700 221L707 213M686 229L693 237L700 228" stroke="#e6b675" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M728 204C751 208 770 199 779 177M718 239C753 255 770 232 784 237M629 233C644 267 629 284 619 290M639 240C656 275 647 289 646 307" stroke="#dba265" stroke-width="1.6" stroke-linecap="round"/>
+
+  <!-- Incense across the crown and along the spine. -->
+  <g>
+    <use href="#incense" transform="translate(601 169) rotate(-49)"/>
+    <use href="#incense" transform="translate(619 156) rotate(-20)"/>
+    <use href="#incense" transform="translate(647 162) rotate(6)"/>
+    <use href="#incense" transform="translate(675 154) rotate(19)"/>
+    <use href="#incense" transform="translate(694 174) rotate(36)"/>
+    <use href="#incense" transform="translate(705 176) rotate(47)"/>
+    <use href="#incense" transform="translate(589 218) rotate(-103)"/>
+    <use href="#incense" transform="translate(608 239) rotate(-147)"/>
+    <use href="#incense" transform="translate(676 252) rotate(166)"/>
+    <use href="#incense" transform="translate(704 248) rotate(158)"/>
+    <use href="#incense" transform="translate(552 247) rotate(13)"/>
+    <use href="#incense" transform="translate(489 214) rotate(42)"/>
+    <use href="#incense" transform="translate(413 158) rotate(39)"/>
+    <use href="#incense" transform="translate(342 104) rotate(5)"/>
+    <use href="#incense" transform="translate(265 119) rotate(-30)"/>
+    <use href="#incense" transform="translate(201 177) rotate(-61)"/>
+    <use href="#incense" transform="translate(194 261) rotate(-102)"/>
+    <use href="#incense" transform="translate(255 351) rotate(-144)"/>
+    <use href="#incense" transform="translate(349 402) rotate(-170)"/>
+    <use href="#incense" transform="translate(473 447) rotate(63)"/>
+    <use href="#incense" transform="translate(434 541) rotate(144)"/>
+    <use href="#incense" transform="translate(330 582) rotate(168)"/>
+    <use href="#incense" transform="translate(226 583) rotate(-172)"/>
+  </g>
+
+  <!-- The pearl leads the dragon; its rays are incense, not smoke. -->
+  <g transform="translate(809 151)">
+    <path d="M0 26V130" stroke="#966b43" stroke-width="3"/>
+    <circle r="25" fill="#312013" stroke="#edbc7c" stroke-width="1.7"/>
+    <circle r="17" stroke="#946233" stroke-width=".8"/>
+    <path d="M0-25V25M-25 0H25M-17-17L17 17M-17 17L17-17" stroke="#bd844c" stroke-width="1"/>
+    <circle r="4" fill="#f8d69f"/>
+    <use href="#pearl-ray"/>
+    <use href="#pearl-ray" transform="rotate(20)"/>
+    <use href="#pearl-ray" transform="rotate(40)"/>
+    <use href="#pearl-ray" transform="rotate(60)"/>
+    <use href="#pearl-ray" transform="rotate(80)"/>
+    <use href="#pearl-ray" transform="rotate(100)"/>
+    <use href="#pearl-ray" transform="rotate(120)"/>
+    <use href="#pearl-ray" transform="rotate(140)"/>
+    <use href="#pearl-ray" transform="rotate(160)"/>
+    <use href="#pearl-ray" transform="rotate(180)"/>
+    <use href="#pearl-ray" transform="rotate(200)"/>
+    <use href="#pearl-ray" transform="rotate(220)"/>
+    <use href="#pearl-ray" transform="rotate(240)"/>
+    <use href="#pearl-ray" transform="rotate(260)"/>
+    <use href="#pearl-ray" transform="rotate(280)"/>
+    <use href="#pearl-ray" transform="rotate(300)"/>
+    <use href="#pearl-ray" transform="rotate(320)"/>
+    <use href="#pearl-ray" transform="rotate(340)"/>
+  </g>
+
+  <g fill="#edbf80">
+    <circle cx="527" cy="147" r="2"/>
+    <circle cx="492" cy="94" r="1.3"/>
+    <circle cx="722" cy="106" r="1.8"/>
+    <circle cx="148" cy="371" r="1.7"/>
+    <circle cx="105" cy="258" r="1.2"/>
+    <circle cx="339" cy="329" r="1.5"/>
+    <circle cx="600" cy="444" r="1.8"/>
+    <circle cx="572" cy="533" r="1.1"/>
+    <circle cx="750" cy="343" r="1.3"/>
+    <circle cx="827" cy="396" r="1.8"/>
+  </g>
+</svg>

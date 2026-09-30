@@ -5,3 +5,7 @@ PROJECT_HANDOVER.md
 # Dev / build tooling
 tools/
 .codegraph/
+docs/
+DESIGN.md
+PRODUCT.md
+.impeccable/

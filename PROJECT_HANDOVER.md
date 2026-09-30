@@ -1,6 +1,16 @@
 # Dragon Dance Website Handover
 
-Last updated: 2026-08-31
+Last updated: 2026-09-30
+
+## September 2026 Heritage Refactor
+
+- Homepage now links the team story with Tai Hang Fire Dragon Dance: origin legend, 1880/2011/2017 timeline, craft, incense, collective rhythm and the connection to engineering. English and Traditional Chinese copy are complete.
+- Header now exposes Team, Fire Dragon, Crew and Partners directly. Existing horizontal panels still work. On mobile, floating pager arrows are hidden because they otherwise cover the copy.
+- `assets/home.css` and `assets/home.js` were extracted from `index.html`. Future homepage behaviour changes belong in `assets/home.js`; preserve media compatibility functions there. `updates.html` and `admin/index.html` retain their existing implementations.
+- `assets/heritage.css` contains responsive culture/navigation styles. `assets/fire-dragon-procession.svg` is original geometric artwork, explicitly labelled as an interpretation. Do not relabel it as a photograph or evidence of an actual procession.
+- Official references: `https://www.icho.hk/en/web/icho/representative_list_taihang.html`, `https://firedragon1949.org.hk/en/inherit-the-fire-dragon-culture/`, and the Hong Kong Tourism Board's Tai Hang Fire Dragon Dance article. Designations are national (2011) and Hong Kong representative-list (2017), not UNESCO.
+- Run `node tools/verify-homepage.mjs` and `git diff --check` before publishing. The verifier checks bilingual coverage, anchors, asset existence, syntax and both Supabase media representations.
+- `DESIGN.md` records the extended visual language. Internal documentation remains excluded from Vercel through `.vercelignore`.
 
 This file is the durable project memory for a new computer or a new Codex session. Read it before changing the website.
 
