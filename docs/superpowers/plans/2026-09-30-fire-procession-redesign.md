@@ -13,7 +13,7 @@
 - [x] Author the incense-dragon geometry and local display assets; recompose Home and Heritage around the artwork.
 - [x] Apply the new navigation, page position strip, crew/partner compositions and lower-page visual system; retain all bilingual content and working actions.
 - [x] Add reduced-motion/visibility-aware motion; run existing regression checks and desktop/mobile interaction checks.
-- [ ] Run a separate finish review, record the built design, publish to GitHub and verify Vercel.
+- [x] Run a separate finish review, record the built design, publish to GitHub and verify Vercel.
 
 ## Constraints
 
@@ -22,5 +22,7 @@ Four horizontal pages; English/Traditional Chinese; no returned race-car explora
 ## Finish review
 
 Independent verdict: **Approved for publication**. Contract fit, artwork, bilingual typography, mobile composition and source behavior passed. Findings resolved: lower-page content is visible by default; redundant decorative kickers removed; overview uses a balanced heading/copy split. No unresolved material visual defect. Reviewer used source and screenshots; parent verified interactions.
+
+Published implementation: `ac2ae86027d2987f8b4e206365ba4a3a7756e978`. GitHub Vercel check reports success; production browser confirms the new illustration, visual stylesheet and four route controls, with no console errors.
 
 Validation: all four Node verification scripts pass. Desktop 1440px and mobile 390px/320px inspected; route buttons, actual swipe, keyboard arrows, language persistence and reduced-motion CSS checked. Browser console reported no errors. Detector's remaining gradient-text warning is intentional in the fire identity; portrait border warning is a false positive on square images; inherited archive halo rules are overridden by solid surfaces.
