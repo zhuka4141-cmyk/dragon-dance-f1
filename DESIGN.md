@@ -27,3 +27,11 @@ Native buttons, anchors and details controls retain keyboard operation, visible 
 ## Files
 
 `index.html` owns semantic content and metadata. `assets/home.css` and `assets/home.js` contain the extracted existing homepage styling/behaviour. `assets/heritage.css` contains the focused editorial and navigation extension. `assets/fire-dragon-procession.svg` is the original local art. No framework or build step is required.
+
+## September 30 optimization
+
+`assets/public-ui.css` now provides shared public-page touch targets, warm amber keyboard focus, readable muted text, media fallback surfaces and reduced-motion rules. Interactive controls are at least 44px. Contact dialogs scroll within short viewports and long email addresses wrap rather than shrink. The approved gradients, fog and fire accents remain intentional.
+
+Inactive hero and detail panels are inert. Both contact and media dialogs isolate background focus and return focus on closing. Home-only sections switch directly without animating layout height. Fog runs only on a visible Home hero in a visible document, and reduced-motion users receive a static frame.
+
+`assets/updates-feed.js` owns the shared optional SDK loader, bounded published-post request and distinct bilingual loading, empty, error/retry and ready states. A failed CDN cannot block navigation. Home requests three posts; archive cards load only a cover until the visitor opens the gallery. Videos use explicit playback controls in the gallery; previews no longer autoplay or rotate on timers.

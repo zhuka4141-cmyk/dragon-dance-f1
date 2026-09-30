@@ -8,6 +8,9 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const html = readFileSync(resolve(root, 'index.html'), 'utf8');
 const script = readFileSync(resolve(root, 'assets/home.js'), 'utf8');
 new vm.Script(script);
+new vm.Script(readFileSync(resolve(root, 'assets/updates-feed.js'), 'utf8'));
+const archive = readFileSync(resolve(root, 'updates.html'), 'utf8');
+for (const match of archive.matchAll(/<script>([\s\S]*?)<[/]script>/g)) new vm.Script(match[1]);
 assert.equal((html.match(/class="hero-page /g) || []).length, 4, 'Home, heritage, crew and partners share the four-slide pager');
 assert.ok(!html.includes('href="heritage.html"'), 'Culture controls must switch the pager instead of opening another document');
 assert.ok(html.includes('id="heritage" hidden'), 'Heritage detail is a pager-controlled panel');
@@ -57,4 +60,13 @@ assert.equal(entries[1].positionX, 23);
 assert.equal(entries[1].positionY, 74);
 assert.equal(entries[1].scale, 1.8);
 assert.equal(media.normaliseMediaEntries({cover_url:plain})[0].url, plain);
+for (const page of [archive]) {
+  const start = page.indexOf('function parseMediaEntry(');
+  const end = page.indexOf('function mediaNaturalSize(', start);
+  assert.ok(start >= 0 && end > start, 'Each media surface keeps the compatible parser');
+  const parser = vm.runInNewContext(`(() => { ${page.slice(start, end)}; return {mediaUrl, normaliseMediaEntries}; })()`);
+  assert.equal(parser.mediaUrl(JSON.stringify(cropped)), cropped.url);
+  assert.equal(parser.mediaUrl(plain), plain);
+  assert.equal(parser.normaliseMediaEntries({image_urls:[JSON.stringify(cropped)]})[0].scale, 1.8);
+}
 console.log('PASS: JavaScript syntax, bilingual coverage, unique IDs, local assets, section anchors and media compatibility.');

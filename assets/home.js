@@ -22,13 +22,8 @@
       const homeUpdates = document.getElementById('homeUpdates');
       const updatesPreviewSection = document.getElementById('updates');
       const homeOnlyContent = document.getElementById('homeOnlyContent');
-      const homeOnlyInner = homeOnlyContent.querySelector('.home-only-inner');
       const deadlineCountdowns = Array.from(document.querySelectorAll('.deadline-countdown'));
       const copyEmailButtons = Array.from(document.querySelectorAll('[data-copy-email]'));
-      // News is optional: navigation and cultural content still work if the CDN is unavailable.
-      const updatesDatabase = window.supabase && window.DRAGON_DANCE_SUPABASE
-        ? window.supabase.createClient(window.DRAGON_DANCE_SUPABASE.url, window.DRAGON_DANCE_SUPABASE.publishableKey)
-        : null;
       const pagerLabels = {
         en: [
           { prev:'', next:'Fire Dragon' },
@@ -55,7 +50,8 @@
           failed:'未能複製電郵地址。請選取並複製。'
         }
       };
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let reduceMotion = motionPreference.matches;
       const wisps = [
         { x:.02, y:.18, radius:110, stretch:2.8, speed:7, wave:.42, alpha:.13 },
         { x:.28, y:.34, radius:145, stretch:3.2, speed:10, wave:.31, alpha:.11 },
@@ -78,9 +74,10 @@
       let language = 'en';
       let languageAnimationTimer = 0;
       let pageAnimationTimer = 0;
-      let homeContentAnimationTimer = 0;
-      let homeOnlyVisible = true;
       let updates = [];
+      let updatesState = 'loading';
+      let modalReturnFocus = null;
+      let modalBackground = [];
       let scrollRevealObserver = null;
       const textElements = Array.from(document.querySelectorAll('[data-i18n]'));
       const htmlElements = Array.from(document.querySelectorAll('[data-i18n-html]'));
@@ -447,14 +444,8 @@
       function renderHomeUpdates() {
         if (!homeUpdates) return;
         homeUpdates.replaceChildren();
+        if (window.DragonUpdates.renderStatus(homeUpdates, updatesState, language, loadUpdates)) return;
         const posts = updates.slice(0, 3);
-        if (!posts.length) {
-          const status = document.createElement('p');
-          status.className = 'updates-preview-status';
-          status.textContent = language === 'zh' ? '暫時未有動態，請稍後再回來看看。' : 'No updates have been published yet. Check back soon.';
-          homeUpdates.append(status);
-          return;
-        }
         posts.forEach((post, index) => {
           const card = document.createElement('a');
           card.className = `update-preview-card${index === 0 ? ' is-featured' : ''}${index === 2 ? ' is-last' : ''}`;
@@ -469,18 +460,19 @@
             media.className = 'update-preview-media';
             const coverUrl = mediaUrl(post.cover);
             const coverMedia = isVideoUrl(coverUrl) ? document.createElement('video') : document.createElement('img');
+            window.DragonUpdates.protectMedia(coverMedia, language);
             coverMedia.src = coverUrl;
             coverMedia.decoding = 'async';
             applyMediaLayout(coverMedia, post.cover);
             if (coverMedia.tagName === 'VIDEO') {
               coverMedia.muted = true;
-              coverMedia.loop = true;
-              coverMedia.autoplay = true;
               coverMedia.playsInline = true;
-              coverMedia.preload = index === 0 ? 'auto' : 'metadata';
+              coverMedia.preload = 'metadata';
             } else {
               coverMedia.alt = title;
-              coverMedia.loading = index === 0 ? 'eager' : 'lazy';
+              coverMedia.loading = 'lazy';
+              coverMedia.width = 800;
+              coverMedia.height = 600;
             }
             media.append(coverMedia);
             card.append(media);
@@ -525,35 +517,42 @@
       }
 
       async function loadUpdates() {
+        updatesState = 'loading';
+        renderHomeUpdates();
         try {
-          if (!updatesDatabase) { renderHomeUpdates(); return; }
-          const { data, error } = await updatesDatabase
-            .from('updates')
-            .select('slug,published_at,title_en,title_zh,body_en,body_zh,cover_url,image_urls,is_pinned,sort_order')
-            .eq('is_published', true)
-            .order('is_pinned', { ascending:false })
-            .order('sort_order', { ascending:true, nullsFirst:false })
-            .order('published_at', { ascending:false });
-          updates = error ? [] : data.map(mapUpdate);
+          updates = (await window.DragonUpdates.load(3)).map(mapUpdate);
+          updatesState = updates.length ? 'ready' : 'empty';
         } catch (_) {
           updates = [];
+          updatesState = 'error';
         }
         renderHomeUpdates();
       }
 
       function openPartnershipModal() {
+        modalReturnFocus = document.activeElement;
+        partnershipModal.inert = false;
         partnershipModal.classList.add('is-open');
         partnershipModal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('has-modal');
         partnershipClose.focus();
+        modalBackground = Array.from(document.body.children)
+          .filter(element => element !== partnershipModal && !['SCRIPT', 'STYLE', 'LINK'].includes(element.tagName))
+          .map(element => ({element, inert:element.inert}));
+        modalBackground.forEach(({element}) => { element.inert = true; });
       }
 
       function closePartnershipModal() {
         if (!partnershipModal.classList.contains('is-open')) return;
+        modalBackground.forEach(({element, inert}) => { element.inert = inert; });
+        modalBackground = [];
+        const target = modalReturnFocus?.isConnected && !modalReturnFocus.closest('[inert], [hidden]')
+          ? modalReturnFocus : document.querySelector('.site-sections [aria-pressed="true"]');
+        target?.focus({preventScroll:true});
+        partnershipModal.inert = true;
         partnershipModal.classList.remove('is-open');
         partnershipModal.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('has-modal');
-        partnershipTrigger.focus();
       }
 
       function handleModalKeydown(event) {
@@ -630,42 +629,18 @@
         heroPages.style.transform = `translate3d(calc(-${pageIndex * 100}%${adjustment}),0,0)`;
       }
 
-      function setHomeOnlyContentVisibility(show, animate) {
-        if (homeOnlyVisible === show) return;
-        homeOnlyVisible = show;
-        const shouldAnimate = animate && !reduceMotion;
-        window.clearTimeout(homeContentAnimationTimer);
+      function setHomeOnlyContentVisibility(show) {
+        homeOnlyContent.hidden = !show;
         homeOnlyContent.inert = !show;
         homeOnlyContent.setAttribute('aria-hidden', String(!show));
-
-        if (!shouldAnimate) {
-          homeOnlyContent.classList.toggle('is-collapsed', !show);
-          homeOnlyContent.style.height = show ? 'auto' : '0px';
-          return;
-        }
-
-        if (show) {
-          homeOnlyContent.style.height = '0px';
-          homeOnlyContent.classList.remove('is-collapsed');
-          void homeOnlyContent.offsetHeight;
-          homeOnlyContent.style.height = `${homeOnlyInner.scrollHeight}px`;
-        } else {
-          homeOnlyContent.style.height = `${homeOnlyContent.getBoundingClientRect().height}px`;
-          void homeOnlyContent.offsetHeight;
-          homeOnlyContent.classList.add('is-collapsed');
-          homeOnlyContent.style.height = '0px';
-        }
-
-        homeContentAnimationTimer = window.setTimeout(() => {
-          if (homeOnlyVisible) homeOnlyContent.style.height = 'auto';
-        }, 740);
       }
 
       function setPage(nextIndex) {
         const pageChanged = pageIndex !== Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
         pageIndex = Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
-        if (pageChanged) window.scrollTo(0, 0);
+        if (pageChanged) window.scrollTo({top:0, behavior:'instant'});
         renderTrack();
+        updateFogState();
         heroPages.dataset.page = String(pageIndex + 1);
         const prevHidden = pageIndex === 0;
         const nextHidden = pageIndex === heroSlides.length - 1;
@@ -695,22 +670,28 @@
           const active = Number(panel.dataset.pagePanel) === pageIndex;
           panel.classList.toggle('is-active', active);
           panel.setAttribute('aria-hidden', String(!active));
+          panel.inert = !active;
         });
         featurePages.forEach((panel, index) => {
           const active = Number(panel.dataset.pagePanel) === pageIndex;
           panel.classList.toggle('is-active', active);
           panel.setAttribute('aria-hidden', String(!active));
+          panel.inert = !active;
         });
         const cultureActive = pageIndex === 1;
         document.getElementById('heritage').hidden = !cultureActive;
         document.getElementById('about').hidden = cultureActive;
         featureStack.hidden = cultureActive;
         const showHomeOnlySections = pageIndex === 0;
-        setHomeOnlyContentVisibility(showHomeOnlySections, pageChanged);
+        setHomeOnlyContentVisibility(showHomeOnlySections);
         if (updatesPreviewSection) {
           updatesPreviewSection.classList.toggle('is-hidden-from-pager', !showHomeOnlySections);
           updatesPreviewSection.inert = !showHomeOnlySections;
           updatesPreviewSection.setAttribute('aria-hidden', String(!showHomeOnlySections));
+        }
+        const focus = document.activeElement;
+        if (focus?.closest('[inert], [hidden], [aria-hidden="true"]')) {
+          document.querySelector(`.site-sections [data-page-target="${pageIndex}"]`)?.focus({preventScroll:true});
         }
         if (pageChanged && !reduceMotion) {
           [aboutPageStack, featureStack].forEach(stack => {
@@ -727,6 +708,7 @@
       }
 
       function beginSwipe(event) {
+        if (document.body.classList.contains('has-modal')) return;
         if (event.target.closest('a, button, input, select, textarea, summary, [role="dialog"]')) return;
         if (event.isPrimary === false || (event.pointerType === 'mouse' && event.button !== 0)) return;
         swipeStart = { id:event.pointerId, x:event.clientX, y:event.clientY, axis:null, moved:false, scrollY:window.scrollY };
@@ -744,7 +726,7 @@
         if (swipeStart.axis !== 'horizontal') return;
         if (event.cancelable) event.preventDefault();
         const atBoundary = (pageIndex === 0 && deltaX > 0) || (pageIndex === heroSlides.length - 1 && deltaX < 0);
-        renderTrack(deltaX * (atBoundary ? .22 : 1));
+        if (!reduceMotion) renderTrack(deltaX * (atBoundary ? .22 : 1));
         swipeStart.moved = true;
       }
 
@@ -780,12 +762,14 @@
       }
 
       function resizeFog() {
+        if (!context) return;
         width = hero.clientWidth;
         height = hero.clientHeight;
         const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
         canvas.width = Math.round(width * ratio);
         canvas.height = Math.round(height * ratio);
         context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        updateFogState();
       }
 
       function drawWisp(wisp, index, seconds) {
@@ -827,22 +811,43 @@
         context.globalCompositeOperation = 'source-over';
       }
 
+      function fogCanAnimate() {
+        return context && width && height && visible && pageIndex === 0 && !document.hidden && !reduceMotion;
+      }
+
+      function paintFog(now) {
+        context.clearRect(0, 0, width, height);
+        wisps.forEach((wisp, index) => drawWisp(wisp, index, now / 1000));
+        clearFog(now);
+      }
+
+      function updateFogState() {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        const paused = !fogCanAnimate();
+        hero.classList.toggle('is-effects-paused', paused);
+        canvas.hidden = pageIndex !== 0;
+        if (!paused) frame = requestAnimationFrame(drawFog);
+        else {
+          clearPoints = [];
+          if (context && width && height && visible && pageIndex === 0 && !document.hidden) paintFog(0);
+        }
+      }
+
       function drawFog(now) {
-        if (!visible) return;
+        frame = 0;
+        if (!fogCanAnimate()) return;
         if (now - lastDraw < 32) {
           frame = requestAnimationFrame(drawFog);
           return;
         }
         lastDraw = now;
-        context.clearRect(0, 0, width, height);
-        const seconds = now / 1000;
-        wisps.forEach((wisp, index) => drawWisp(wisp, index, seconds));
-        clearFog(now);
+        paintFog(now);
         frame = requestAnimationFrame(drawFog);
       }
 
       function disperseFog(event) {
-        if (pageIndex !== 0) return;
+        if (!fogCanAnimate()) return;
         const bounds = hero.getBoundingClientRect();
         const x = event.clientX - bounds.left;
         const y = event.clientY - bounds.top;
@@ -862,8 +867,17 @@
       loadUpdates();
       resizeFog();
       window.addEventListener('resize', resizeFog, { passive:true });
-      window.addEventListener('pointerdown', disperseFog, { passive:true });
-      window.addEventListener('pointermove', disperseFog, { passive:true });
+      hero.addEventListener('pointerdown', disperseFog, { passive:true });
+      hero.addEventListener('pointermove', disperseFog, { passive:true });
+      document.addEventListener('visibilitychange', updateFogState);
+      motionPreference.addEventListener('change', event => {
+        reduceMotion = event.matches;
+        if (reduceMotion) {
+          scrollRevealObserver?.disconnect();
+          document.querySelectorAll('[data-scroll-reveal]').forEach(element => element.classList.add('is-visible'));
+        }
+        updateFogState();
+      });
       document.addEventListener('pointerdown', beginSwipe, { passive:true });
       document.addEventListener('pointermove', moveSwipe, { passive:false });
       document.addEventListener('pointerup', finishSwipe, { passive:true });
@@ -909,10 +923,9 @@
       if ('IntersectionObserver' in window) {
         new IntersectionObserver(entries => {
           visible = entries[0].isIntersecting;
-          cancelAnimationFrame(frame);
-          if (visible) frame = requestAnimationFrame(drawFog);
+          updateFogState();
         }, { threshold:.01 }).observe(hero);
       } else {
-        frame = requestAnimationFrame(drawFog);
+        updateFogState();
       }
     })();

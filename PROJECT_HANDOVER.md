@@ -2,6 +2,16 @@
 
 Last updated: 2026-09-30
 
+## Public Website Optimization
+
+- The owner approved the audit/design in `docs/superpowers/specs/2026-09-30-website-audit-optimization-design.md`; implementation preserves the four-slide pager and Fire-Dragon theme.
+- `assets/updates-feed.js` is shared by Home and the archive. It loads the optional Supabase SDK asynchronously with an 8-second limit, times out/aborts data requests after 12 seconds, and provides separate bilingual loading/empty/error/retry states. Public reads disable auth persistence so blocked local storage does not break the feed. The admin script remains unchanged.
+- Home requests only three published posts. Archive cards request only the cover; additional media load when the gallery opens. Videos are user-controlled, and media errors preserve the frame with a readable fallback. URL/JSON media parsing and crop metadata remain compatible.
+- All inactive hero/about/feature panels are inert; contact and gallery dialogs isolate the background, trap keyboard focus, support Escape, and return focus. Gallery overlays now sit above the navigation.
+- Fog pauses outside Home, below the hero, in hidden tabs and with reduced motion. Reduced motion keeps one static frame. Pointer sampling is scoped to the hero. Home-only content no longer animates height.
+- `assets/public-ui.css` contains shared 44px controls, focus rings, contrast improvements, responsive dialogs and long-text wrapping. Mobile heritage navigation no longer shrinks language controls below 44px.
+- Verify with `node tools/verify-homepage.mjs`, `node tools/verify-updates.mjs`, `node tools/verify-effects.mjs`, and `git diff --check`; then browser-check the homepage and archive.
+
 ## Horizontal Heritage Page — Corrected Requirement
 
 - The owner clarified that a separate page means another horizontal pager slide, exactly like Crew and Partners, not a separate document. Current order: Home (0), Fire Dragon (1), Crew (2), Partners (3).

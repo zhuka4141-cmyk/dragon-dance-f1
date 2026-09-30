@@ -81,7 +81,8 @@
   <title>Dragon Dance STEM Racing | Hong Kong</title>
   <link rel="stylesheet" href="assets/home.css" />
   <link rel="stylesheet" href="assets/heritage.css" />
-  </head>
+  <link rel="stylesheet" href="assets/public-ui.css" />
+</head>
 <body>
   <div class="spark-field" aria-hidden="true">
     <span class="spark" style="left:24.2%;--s:3.7px;--t:7.6s;--d:0.2s;--dx:20px"></span>
@@ -252,7 +253,7 @@
             <div class="dragon-mist dragon-mist-one"></div>
             <div class="dragon-mist dragon-mist-two"></div>
             <div class="dragon-mist dragon-mist-three"></div>
-            <img class="dragon" id="dragon" src="assets/dragon-mark.png" alt="Dragon Dance dragon symbol" />
+            <img class="dragon" id="dragon" src="assets/dragon-mark.png" width="640" height="640" fetchpriority="high" alt="Dragon Dance dragon symbol" />
           </div>
           <div class="hero-footer"><span data-i18n="f1StemLabel">Dragon Dance / STEM Racing</span><span data-i18n="heroMantra">Culture. Craft. Collective spirit.</span><a class="scroll-indicator" href="#about" data-i18n="scrollExplore">Scroll to explore ↓</a></div>
         </article>
@@ -356,7 +357,7 @@
 
     <section class="feature-stack" id="machine" aria-live="polite" data-scroll-reveal>
       <article class="feature-page machine is-active" aria-label="Page 1 feature" data-page-panel="0">
-        <div class="car-photo" data-label="01 / DRAGON PROTOTYPE"><img src="assets/race-car.jpg" alt="F1 Dragon Dance race car on a STEM Racing track" /></div>
+        <div class="car-photo" data-label="01 / DRAGON PROTOTYPE"><img src="assets/race-car.jpg" loading="lazy" decoding="async" alt="F1 Dragon Dance race car on a STEM Racing track" /></div>
         <div class="machine-copy">
           <div><div class="eyebrow" data-i18n="machineLabel">02 / The Machine</div><h2 data-i18n-html="machineTitle">Engineered<br>to launch.</h2><p data-i18n="machineCopy">Every wing surface and body contour pursues cleaner airflow, less drag and one clear destination.</p></div>
           <div class="specs"><div class="spec"><span data-i18n="chassisLabel">Chassis</span><span data-i18n="precisionCrafted">Precision Crafted</span></div><div class="spec"><span data-i18n="focusLabel">Focus</span><span data-i18n="aerodynamics">Aerodynamics</span></div><div class="spec"><span data-i18n="raceMode">Race Mode</span><span data-i18n="fullAttack">Full Attack</span></div></div>
@@ -477,7 +478,7 @@
     </section>
     <div class="footer-meta" data-i18n-html="footerMeta">AD&amp;FD POHL Leung Sing Tak College<br>Hong Kong</div>
   </footer>
-  <div class="contact-modal" id="partnershipModal" aria-hidden="true">
+  <div class="contact-modal" id="partnershipModal" aria-hidden="true" inert>
     <button class="modal-backdrop" id="partnershipBackdrop" type="button" tabindex="-1" aria-label="Close dialog"></button>
     <section class="contact-dialog" role="dialog" aria-modal="true" aria-labelledby="partnershipModalTitle" aria-describedby="partnershipModalCopy">
       <button class="modal-close" id="partnershipClose" type="button" aria-label="Close dialog">&times;</button>
@@ -501,8 +502,8 @@
     </section>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
+  <script src="assets/updates-feed.js"></script>
   <script src="assets/home.js"></script>
 </body>
 </html>

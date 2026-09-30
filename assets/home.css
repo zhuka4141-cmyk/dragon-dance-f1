@@ -258,9 +258,7 @@
       .update-preview-card.is-last .update-preview-copy { justify-content:center; padding:clamp(28px,3.4vw,52px) clamp(26px,3.4vw,56px); }
       .update-preview-card.is-last .update-preview-heading { font-size:clamp(28px,3vw,46px); }
     }
-    .home-only-content { height:auto; overflow:hidden; transition:height .72s cubic-bezier(.22,.8,.24,1); }
-    .home-only-inner { min-height:0; overflow:hidden; opacity:1; transform:translate3d(0,0,0); transition:opacity .28s ease,transform .62s cubic-bezier(.22,.8,.24,1); }
-    .home-only-content.is-collapsed .home-only-inner { opacity:0; transform:translate3d(0,38px,0); pointer-events:none; }
+    .home-only-content, .home-only-inner { min-height:0; }
     .race-deadlines { padding:clamp(70px,8vw,110px) 5vw; border-top:1px solid var(--hairline); background:var(--bg-2); color:var(--text); }
     .race-deadlines-header { display:flex; align-items:end; justify-content:space-between; gap:32px; margin-bottom:36px; }
     .race-deadlines-header h2 { max-width:660px; margin:12px 0 0; font-weight:700; font-size:clamp(40px,6vw,80px); line-height:1.0; letter-spacing:-0.03em; color:var(--text); }
@@ -416,13 +414,13 @@
       background:radial-gradient(circle,rgba(255,110,40,.26),transparent 68%);filter:blur(7px);pointer-events:none;}
     @media (prefers-reduced-motion:reduce){.spark{animation:none;opacity:.35;}.fire-divider::after{display:none;}}
 
-    /* Keep the footer email readable in narrow layouts (single line). */
+    /* Let long email addresses wrap instead of shrinking on narrow screens. */
     @media (max-width:340px){
       .contact-email-item{grid-template-columns:minmax(0,1fr) 38px;gap:8px;align-items:end;}
       .contact-email-link{display:block;min-width:0;}
       .contact-email-item .contact-icon{display:none;}
       .contact-email-item .contact-copy{min-width:0;}
-      .contact-email-item .contact-copy span{white-space:nowrap;overflow-wrap:normal;font-size:clamp(8px,3.2vw,12px);line-height:1.4;}
+      .contact-email-item .contact-copy span{white-space:normal;overflow-wrap:anywhere;font-size:13px;line-height:1.6;}
       .contact-email-item .copy-email-button{grid-column:2;grid-row:1;align-self:end;margin:0;}
       .modal-contact-email{grid-template-columns:minmax(0,1fr) 38px;gap:8px;}
       .modal-contact-email .modal-contact-link{grid-template-columns:minmax(0,1fr);padding:12px 0;}

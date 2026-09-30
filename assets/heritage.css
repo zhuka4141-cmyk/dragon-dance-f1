@@ -344,7 +344,7 @@ html[lang="zh-Hant"] .heritage-bridge :is(h2, h3) { max-width: 9em; line-height:
   nav:has(.site-sections) .wordmark { font-size: 17px; }
   nav:has(.site-sections) .nav-tools { gap: 6px; }
   nav:has(.site-sections) .nav-tools > .eyebrow { display: none; }
-  nav:has(.site-sections) .language-switch button { min-width: 36px; min-height: 38px; }
+  nav:has(.site-sections) .language-switch button { min-width: 44px; min-height: 44px; }
   nav .site-sections { gap: 23px; padding-top: 4px; }
   nav .site-sections :is(a, button) { font-size: 11px; }
   .heritage-button { padding-inline: 20px; font-size: 12px; }

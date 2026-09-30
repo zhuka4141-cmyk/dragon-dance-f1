@@ -1,0 +1,63 @@
+/* Shared public controls and resilient media, preserving the Fire-Dragon theme. */
+:root { --text-3:#96939d; --focus:#f3be79; --red-ink:#ff746d; color-scheme:dark; }
+[hidden] { display:none !important; }
+::selection { color:#090909; background:#f3be79; }
+html { scrollbar-color:#67616a #101013; scroll-padding-top:130px; }
+body :is(a, button, summary, [tabindex]):focus-visible {
+  outline:2px solid var(--focus);
+  outline-offset:4px;
+}
+.wordmark { min-height:44px; justify-content:center; }
+.language-switch button { min-width:44px; min-height:44px; color:var(--text-2); }
+.copy-email-button, .modal-close { width:44px; height:44px; min-width:44px; min-height:44px; }
+.contact-email-item, .modal-contact-email { grid-template-columns:minmax(0,1fr) 44px; }
+.proposal-contact, .pdf-download, .contact-detail, .scroll-indicator, .heritage-link, .heritage-sources a {
+  display:inline-flex; align-items:center; min-height:44px;
+}
+.contact-detail { display:flex; }
+.contact-email-link { min-height:44px; align-items:center; }
+.pdf-download { margin-top:4px; }
+.contact-copy span, .modal-contact-email .modal-contact-copy > span {
+  white-space:normal; overflow-wrap:anywhere; font-size:13px; line-height:1.6;
+}
+.contact-dialog { max-height:calc(100dvh - 32px); overflow-y:auto; overscroll-behavior:contain; padding-top:64px; }
+.contact-dialog h2 { overflow-wrap:anywhere; }
+.updates-status, .updates-preview-status {
+  grid-column:1 / -1; min-height:144px; padding:28px 0;
+  color:var(--text-2); line-height:1.7; font-size:15px;
+}
+.updates-status p { max-width:60ch; margin:0 0 16px; }
+.updates-retry {
+  min-width:44px; min-height:44px; padding:10px 20px;
+  border:1px solid var(--hairline-2); border-radius:var(--radius-pill);
+  background:var(--surface-2); color:var(--text); font:inherit; cursor:pointer;
+}
+.updates-retry:hover { border-color:var(--focus); }
+.media-unavailable {
+  display:grid; place-items:center; position:absolute; inset:0; padding:16px;
+  color:var(--text-2); background:var(--surface-2); font:500 14px/1.5 var(--font); text-align:center;
+}
+.member-card-role, .update-preview-date, .update-preview-pin, .update-date, .update-pin,
+.racing-context-label, .modal-kicker { color:var(--red-ink); }
+.update-preview-heading, .update-entry h2 { overflow-wrap:anywhere; }
+.update-preview-date, .update-date, .deadline-countdown { font-variant-numeric:tabular-nums; }
+.hero.is-effects-paused *, .hero.is-effects-paused *::before, .hero.is-effects-paused *::after { animation-play-state:paused; }
+.gallery-overlay { z-index:100; }
+.gallery-image { position:relative; }
+.gallery-close, .gallery-nav { background:#17171cee; }
+.gallery-thumb { flex-shrink:0; }
+.back-home { min-height:44px; display:inline-flex; align-items:center; justify-content:center; }
+.update-entry { scroll-margin-top:110px; }
+@media (max-width:480px) {
+  .updates-hero h1 { font-size:clamp(52px,16vw,72px); }
+  .update-entry h2 { font-size:clamp(30px,8.6vw,40px); line-height:1.15; }
+  .gallery-overlay { padding:12px; }
+  .gallery-image { height:65dvh; }
+  .gallery-thumbnails { padding:4px; }
+  nav:has(.back-home) { flex-wrap:wrap; gap:8px 16px; padding-block:10px; }
+  nav:has(.back-home) .language-switch { margin-left:auto; }
+}
+@media (prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto; }
+  *, *::before, *::after { animation:none !important; transition:none !important; }
+}

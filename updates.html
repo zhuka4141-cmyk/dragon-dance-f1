@@ -131,6 +131,7 @@
     @media (prefers-reduced-motion:reduce){.incense-dot{opacity:.7;animation:none;}.ember::before{display:none;}}
 
   </style>
+  <link rel="stylesheet" href="assets/public-ui.css" />
 </head>
 <body>
   <div class="topline"></div>
@@ -164,10 +165,8 @@
     </section>
   </main>
   <footer><strong data-i18n-html="footerTitle">Dance with<br>the dragon.</strong><span>Dragon Dance / STEM Racing · Hong Kong</span></footer>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-
-</script>
   <script src="supabase-config.js"></script>
+  <script src="assets/updates-feed.js"></script>
   <script>
     (() => {
       const updatesList = document.getElementById('updatesList');
@@ -179,10 +178,9 @@
       const chineseHtml = { updatesTitle:'持續<br>前進。', footerTitle:'與龍<br>共舞。' };
       const langEnglish = document.getElementById('langEnglish');
       const langChinese = document.getElementById('langChinese');
-      const updatesDatabase = window.supabase.createClient(window.DRAGON_DANCE_SUPABASE.url, window.DRAGON_DANCE_SUPABASE.publishableKey);
       let language = 'en';
       let updates = [];
-      let carouselTimers = [];
+      let updatesState = 'loading';
 
       function mapUpdate(row) {
         const images = normaliseMediaEntries(row);
@@ -316,12 +314,11 @@
         });
       });
 
-      function clearCarousels() {
-        carouselTimers.forEach(timer => window.clearInterval(timer));
-        carouselTimers = [];
-      }
-
       function openGallery(images, title, startIndex) {
+        const returnFocus = document.activeElement;
+        const background = Array.from(document.body.children)
+          .filter(element => !['SCRIPT', 'STYLE', 'LINK'].includes(element.tagName))
+          .map(element => ({element, inert:element.inert}));
         let activeIndex = startIndex;
         const overlay = document.createElement('div');
         overlay.className = 'gallery-overlay';
@@ -337,33 +334,36 @@
         close.className = 'gallery-close';
         close.type = 'button';
         close.textContent = '×';
-        close.setAttribute('aria-label', 'Close gallery');
+        close.setAttribute('aria-label', language === 'zh' ? '關閉媒體檢視' : 'Close gallery');
         const previous = document.createElement('button');
         previous.className = 'gallery-nav prev';
         previous.type = 'button';
         previous.textContent = '←';
-        previous.setAttribute('aria-label', 'Previous image');
+        previous.setAttribute('aria-label', language === 'zh' ? '上一項媒體' : 'Previous media');
         const next = document.createElement('button');
         next.className = 'gallery-nav next';
         next.type = 'button';
         next.textContent = '→';
-        next.setAttribute('aria-label', 'Next image');
+        next.setAttribute('aria-label', language === 'zh' ? '下一項媒體' : 'Next media');
         const thumbnails = document.createElement('div');
         thumbnails.className = 'gallery-thumbnails';
         const thumbButtons = images.map((entry, index) => {
           const thumb = document.createElement('button');
           thumb.className = 'gallery-thumb';
           thumb.type = 'button';
-          thumb.setAttribute('aria-label', `View image ${index + 1}`);
+          thumb.setAttribute('aria-label', language === 'zh' ? `檢視第 ${index + 1} 項媒體` : `View media ${index + 1}`);
           const url = mediaUrl(entry);
           const thumbMedia = isVideoUrl(url) ? document.createElement('video') : document.createElement('img');
           thumbMedia.src = url;
           thumbMedia.alt = '';
           thumbMedia.loading = 'lazy';
+          thumbMedia.decoding = 'async';
+          window.DragonUpdates.protectMedia(thumbMedia, language);
           applyMediaLayout(thumbMedia, entry);
           if (thumbMedia.tagName === 'VIDEO') {
             thumbMedia.muted = true;
             thumbMedia.playsInline = true;
+            thumbMedia.preload = 'metadata';
           }
           thumb.append(thumbMedia);
           thumb.addEventListener('click', () => showImage(index));
@@ -376,28 +376,43 @@
           const url = mediaUrl(entry);
           const media = isVideoUrl(url) ? document.createElement('video') : document.createElement('img');
           media.className = 'gallery-stage-media';
+          window.DragonUpdates.protectMedia(media, language);
           media.src = url;
           if (media.tagName === 'VIDEO') {
             media.controls = true;
-            media.autoplay = true;
-            media.loop = true;
-            media.muted = true;
             media.playsInline = true;
+            media.preload = 'metadata';
           } else {
             media.alt = `${title} ${activeIndex + 1}`;
+            media.decoding = 'async';
           }
+          stage.querySelectorAll('video').forEach(video => video.pause());
           stage.replaceChildren(media);
-          thumbButtons.forEach((thumb, thumbIndex) => thumb.classList.toggle('is-active', thumbIndex === activeIndex));
+          thumbButtons.forEach((thumb, thumbIndex) => {
+            thumb.classList.toggle('is-active', thumbIndex === activeIndex);
+            thumb.setAttribute('aria-pressed', String(thumbIndex === activeIndex));
+          });
         }
         function closeGallery() {
           document.removeEventListener('keydown', onKeydown);
           document.body.classList.remove('has-gallery');
+          stage.querySelectorAll('video').forEach(video => video.pause());
           overlay.remove();
+          background.forEach(({element, inert}) => { element.inert = inert; });
+          if (returnFocus?.isConnected) returnFocus.focus({preventScroll:true});
         }
         function onKeydown(event) {
-          if (event.key === 'Escape') closeGallery();
-          if (event.key === 'ArrowLeft') showImage(activeIndex - 1);
-          if (event.key === 'ArrowRight') showImage(activeIndex + 1);
+          if (event.key === 'Escape') { event.preventDefault(); closeGallery(); return; }
+          if (event.key === 'Tab') {
+            const targets = Array.from(dialog.querySelectorAll('button, video[controls]')).filter(element => !element.hidden && !element.closest('[hidden]'));
+            const first = targets[0];
+            const last = targets[targets.length - 1];
+            if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+            else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+          }
+          if (event.target.closest('video')) return;
+          if (event.key === 'ArrowLeft') { event.preventDefault(); showImage(activeIndex - 1); }
+          if (event.key === 'ArrowRight') { event.preventDefault(); showImage(activeIndex + 1); }
         }
         close.addEventListener('click', closeGallery);
         previous.addEventListener('click', () => showImage(activeIndex - 1));
@@ -415,76 +430,53 @@
         document.addEventListener('keydown', onKeydown);
         showImage(activeIndex);
         close.focus();
+        background.forEach(({element}) => { element.inert = true; });
       }
 
-      function createCarousel(post) {
-        let activeIndex = 0;
+      function createMediaPreview(post) {
         const media = document.createElement('button');
         media.className = 'update-media';
         media.type = 'button';
-        media.setAttribute('aria-label', `Open media gallery: ${postText(post, 'title')}`);
-        const slides = post.images.map((entry, index) => {
-          const url = mediaUrl(entry);
-          const slide = isVideoUrl(url) ? document.createElement('video') : document.createElement('img');
-          slide.className = `update-slide${index === 0 ? ' is-active' : ''}`;
-          slide.src = url;
-          slide.decoding = 'async';
-          applyMediaLayout(slide, entry);
-          if (slide.tagName === 'VIDEO') {
-            slide.muted = true;
-            slide.loop = true;
-            slide.autoplay = index === 0;
-            slide.playsInline = true;
-            slide.preload = index === 0 ? 'auto' : 'metadata';
-          } else {
-            slide.alt = index === 0 ? postText(post, 'title') : '';
-            slide.loading = index === 0 ? 'eager' : 'lazy';
-          }
-          media.append(slide);
-          return slide;
-        });
-        function showSlide(index) {
-          activeIndex = (index + slides.length) % slides.length;
-          slides.forEach((slide, slideIndex) => {
-            const isActive = slideIndex === activeIndex;
-            slide.classList.toggle('is-active', isActive);
-            if (slide.tagName === 'VIDEO') {
-              if (isActive) slide.play().catch(() => {});
-              else slide.pause();
-            }
-          });
-          if (count) count.textContent = `${activeIndex + 1} / ${slides.length}`;
+        media.setAttribute('aria-label', `${language === 'zh' ? '開啟媒體檢視：' : 'Open media gallery: '}${postText(post, 'title')}`);
+        // Fetch the cover only; additional full-size media load on opening the gallery.
+        const entry = post.images[0];
+        const url = mediaUrl(entry);
+        const cover = isVideoUrl(url) ? document.createElement('video') : document.createElement('img');
+        cover.className = 'update-slide is-active';
+        window.DragonUpdates.protectMedia(cover, language);
+        cover.src = url;
+        applyMediaLayout(cover, entry);
+        if (cover.tagName === 'VIDEO') {
+          cover.muted = true;
+          cover.playsInline = true;
+          cover.preload = 'metadata';
+        } else {
+          cover.alt = postText(post, 'title');
+          cover.loading = 'lazy';
+          cover.decoding = 'async';
+          cover.width = 800;
+          cover.height = 600;
         }
-        let count = null;
-        if (slides.length > 1) {
-          count = document.createElement('span');
+        media.append(cover);
+        if (post.images.length > 1 || cover.tagName === 'VIDEO') {
+          const count = document.createElement('span');
           count.className = 'carousel-count';
-          count.textContent = `1 / ${slides.length}`;
+          count.textContent = language === 'zh' ? `檢視媒體 · ${post.images.length}` : `View media · ${post.images.length}`;
           media.append(count);
-          if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            carouselTimers.push(window.setInterval(() => showSlide(activeIndex + 1), 4500));
-          }
         }
-        media.addEventListener('click', () => openGallery(post.images, postText(post, 'title'), activeIndex));
+        media.addEventListener('click', () => openGallery(post.images, postText(post, 'title'), 0));
         return media;
       }
 
       function renderUpdates() {
-        clearCarousels();
         updatesList.replaceChildren();
-        if (!updates.length) {
-          const status = document.createElement('p');
-          status.className = 'updates-status';
-          status.textContent = language === 'zh' ? chinese.empty : 'No updates have been published yet. Check back soon.';
-          updatesList.append(status);
-          return;
-        }
+        if (window.DragonUpdates.renderStatus(updatesList, updatesState, language, loadUpdates)) return;
         updates.forEach(post => {
           const entry = document.createElement('article');
           entry.className = 'update-entry';
           entry.id = post.id || '';
           if (window.location.hash === `#${post.id}`) entry.classList.add('is-target');
-          if (post.images.length) entry.append(createCarousel(post));
+          if (post.images.length) entry.append(createMediaPreview(post));
           const copy = document.createElement('div');
           if (post.isPinned) {
             const pin = document.createElement('span');
@@ -528,15 +520,19 @@
 
       try { language = window.localStorage.getItem('dragon-dance-language') === 'zh' ? 'zh' : 'en'; } catch (_) {}
       applyLanguage(language);
-      updatesDatabase
-        .from('updates')
-        .select('slug,published_at,title_en,title_zh,body_en,body_zh,cover_url,image_urls,is_pinned,sort_order')
-        .eq('is_published', true)
-        .order('is_pinned', { ascending:false })
-        .order('sort_order', { ascending:true, nullsFirst:false })
-        .order('published_at', { ascending:false })
-        .then(({ data, error }) => { updates = error ? [] : data.map(mapUpdate); renderUpdates(); })
-        .catch(() => { updates = []; renderUpdates(); });
+      async function loadUpdates() {
+        updatesState = 'loading';
+        renderUpdates();
+        try {
+          updates = (await window.DragonUpdates.load()).map(mapUpdate);
+          updatesState = updates.length ? 'ready' : 'empty';
+        } catch (_) {
+          updates = [];
+          updatesState = 'error';
+        }
+        renderUpdates();
+      }
+      loadUpdates();
       langEnglish.addEventListener('click', () => applyLanguage('en'));
       langChinese.addEventListener('click', () => applyLanguage('zh'));
     })();
