@@ -186,9 +186,9 @@
     <a class="wordmark" href="#top">Dragon Dance<span>STEM Racing</span></a>
     <div class="navlinks site-sections">
       <button type="button" data-page-target="0" data-i18n="navTeam" aria-pressed="true">The Team</button>
-      <a class="nav-heritage" href="heritage.html" data-i18n="navHeritage">Fire Dragon</a>
-      <button type="button" data-page-target="1" data-i18n="navCrew" aria-pressed="false">The Crew</button>
-      <button type="button" data-page-target="2" data-i18n="navPartners" aria-pressed="false">Partners</button>
+      <button class="nav-heritage" type="button" data-page-target="1" aria-pressed="false" data-i18n="navHeritage">Fire Dragon</button>
+      <button type="button" data-page-target="2" data-i18n="navCrew" aria-pressed="false">The Crew</button>
+      <button type="button" data-page-target="3" data-i18n="navPartners" aria-pressed="false">Partners</button>
     </div>
     <div class="nav-tools">
       <div class="language-switch" role="group" aria-label="Language selector">
@@ -207,7 +207,7 @@
           <div class="hero-kicker" data-i18n="heroKicker">AD&amp;FD POHL Leung Sing Tak College · STEM Racing</div>
           <h1 data-i18n-html="heroTitle">Carry<br><i>the fire.</i></h1>
           <p class="hero-copy" data-i18n="heroCopy">Hong Kong's fire dragon tradition moves through many hands and one shared rhythm. We bring that spirit to the starting line: a student STEM Racing team shaped by culture, craft and the pursuit of speed.</p>
-          <div class="hero-actions"><a class="heritage-button" href="heritage.html" data-i18n="discoverHeritage">Discover the fire dragon</a></div>
+          <div class="hero-actions"><button class="heritage-button" type="button" data-page-target="1" data-i18n="discoverHeritage">Discover the fire dragon</button></div>
           <p class="hero-provenance" data-i18n="heroProvenance">Tai Hang, Hong Kong · A tradition that inspires us</p>
           <div class="dragon-stage" id="dragonStage" aria-label="Interactive Dragon Dance dragon symbol">
             <svg class="dragon-trail" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -256,13 +256,18 @@
           </div>
           <div class="hero-footer"><span data-i18n="f1StemLabel">Dragon Dance / STEM Racing</span><span data-i18n="heroMantra">Culture. Craft. Collective spirit.</span><a class="scroll-indicator" href="#about" data-i18n="scrollExplore">Scroll to explore ↓</a></div>
         </article>
-        <article class="hero-page title-page title-page-crew" aria-label="Page 2">
-          <div class="title-page-index" data-i18n="crewIndex">02 / The Crew</div>
+        <article class="hero-page title-page title-page-heritage" aria-label="Page 2">
+          <div class="title-page-index" data-i18n="heritageIndex">02 / Fire Dragon</div>
+          <h2 data-i18n-html="heritageHeroTitle">The fire<br>we carry.</h2>
+          <p data-i18n="heritageHeroIntro">Discover Tai Hang's living tradition: hand-crafted dragons, thousands of incense lights, and a community moving as one.</p>
+        </article>
+        <article class="hero-page title-page title-page-crew" aria-label="Page 3">
+          <div class="title-page-index" data-i18n="crewIndex">03 / The Crew</div>
           <h2 data-i18n-html="crewTitle">Meet<br>The Crew</h2>
           <p data-i18n="crewIntro">From project management and engineering to brand and sponsorship, every member brings their expertise to keep Dragon Dance moving as one.</p>
         </article>
-        <article class="hero-page title-page title-page-partners" aria-label="Page 3">
-          <div class="title-page-index" data-i18n="partnersIndex">03 / Our Partners</div>
+        <article class="hero-page title-page title-page-partners" aria-label="Page 4">
+          <div class="title-page-index" data-i18n="partnersIndex">04 / Our Partners</div>
           <h2 data-i18n-html="partnersTitle">Driven<br>By Support</h2>
           <p data-i18n="partnersIntro">We work with partners who value innovation, education and youth development to take engineering in practice and brand storytelling to a bigger stage.</p>
         </article>
@@ -273,7 +278,7 @@
 
     <section class="about" id="about" data-scroll-reveal>
       <div class="about-pages" id="aboutPages" aria-live="polite">
-        <article class="about-page is-active" aria-label="Page 1 overview">
+        <article class="about-page is-active" aria-label="Page 1 overview" data-page-panel="0">
           <div><div class="section-label" data-i18n="teamLabel">01 / The Team</div></div>
           <div>
             <h2>Dragon<br>Dance</h2>
@@ -281,22 +286,63 @@
             <div class="fact-row"><div class="fact"><b data-i18n="baseLabel">Base</b><span>Hong Kong</span></div><div class="fact"><b data-i18n="programLabel">Program</b><span>STEM Racing</span></div><div class="fact"><b data-i18n="identityLabel">Identity</b><span data-i18n="identityValue">Dragon Dance in Motion</span></div></div>
           </div>
         </article>
-        <article class="about-page" aria-label="Page 2 overview">
-          <div><div class="section-label" data-i18n="crewIndex">02 / The Crew</div></div>
+        <article class="about-page" aria-label="Page 3 overview" data-page-panel="2">
+          <div><div class="section-label" data-i18n="crewIndex">03 / The Crew</div></div>
           <div>
             <h2 data-i18n-html="crewTitle">Meet<br>The Crew</h2>
             <p data-i18n="crewOverview">Dragon Dance brings together members with different strengths. From project management and engineering to brand and sponsorship, every role works in rhythm to put ideas on the track.</p>
             <div class="fact-row"><div class="fact"><b data-i18n="directionLabel">Direction</b><span data-i18n="oneTeam">One Team</span></div><div class="fact"><b data-i18n="methodLabel">Method</b><span data-i18n="sharedOwnership">Shared Ownership</span></div><div class="fact"><b data-i18n="energyLabel">Energy</b><span data-i18n="fullCommitment">Full Commitment</span></div></div>
           </div>
         </article>
-        <article class="about-page" aria-label="Page 3 overview">
-          <div><div class="section-label" data-i18n="partnersIndex">03 / Our Partners</div></div>
+        <article class="about-page" aria-label="Page 4 overview" data-page-panel="3">
+          <div><div class="section-label" data-i18n="partnersIndex">04 / Our Partners</div></div>
           <div>
             <h2 data-i18n-html="partnersTitle">Driven<br>By Support</h2>
             <p data-i18n="partnersOverview">Every contribution helps Dragon Dance go further. We welcome partners who care about innovation, education and youth development to bring engineering in practice and brand stories to a bigger stage.</p>
             <div class="fact-row"><div class="fact"><b data-i18n="partnershipLabel">Partnership</b><span data-i18n="openLabel">Open</span></div><div class="fact"><b data-i18n="reachLabel">Reach</b><span>Hong Kong</span></div><div class="fact"><b data-i18n="contactLabel">Contact</b><span data-i18n="emailUs">Email Us</span></div></div>
           </div>
         </article>
+      </div>
+    </section>
+
+    <section class="heritage-section" id="heritage" hidden aria-labelledby="heritageTitle">
+      <div class="heritage-heading">
+        <h2 class="heritage-title" id="heritageTitle" data-i18n-html="heritageTitle">A neighbourhood.<br>A living dragon.</h2>
+        <p class="heritage-intro" data-i18n="heritageIntro">Every Mid-Autumn Festival, the streets of Tai Hang become a meeting place for craft, incense and collective movement. The fire dragon is more than a spectacle: it is a tradition carried by the people who build it, guide it and pass it on.</p>
+      </div>
+      <div class="heritage-composition">
+        <figure class="heritage-art">
+          <img src="assets/fire-dragon-procession.svg" width="900" height="650" loading="lazy" decoding="async" alt="An artistic interpretation of an incense-lit dragon following a glowing pearl" id="heritageArtwork" />
+          <figcaption data-i18n="heritageCaption">An artistic interpretation of the fire dragon's movement and incense light.</figcaption>
+        </figure>
+        <aside class="heritage-history" aria-labelledby="heritageHistoryTitle">
+          <span class="heritage-year">1880</span>
+          <h2 id="heritageHistoryTitle" data-i18n="heritageHistoryTitle">A story rooted in Tai Hang</h2>
+          <p data-i18n="heritageHistoryCopy">The tradition traces its beginnings to 1880. Local accounts tell of villagers performing a fire dragon dance to ward off a plague. That story lives on in a Mid-Autumn custom, bringing neighbours and generations together.</p>
+          <ol class="heritage-timeline">
+            <li><time datetime="1880">1880</time><span data-i18n="heritageTimelineOrigin">The beginnings of Tai Hang's fire dragon tradition.</span></li>
+            <li><time datetime="2011">2011</time><span data-i18n="heritageTimelineNational">Included in the third national list of intangible cultural heritage.</span></li>
+            <li><time datetime="2017">2017</time><span data-i18n="heritageTimelineHK">Included in Hong Kong's first Representative List of Intangible Cultural Heritage.</span></li>
+          </ol>
+        </aside>
+      </div>
+      <div class="heritage-craft">
+        <h2 data-i18n="heritageCraftTitle">What brings the dragon to life?</h2>
+        <p data-i18n="heritageCraftIntro">Look closer: the glow begins with patient hands, simple materials and people moving together.</p>
+        <div class="heritage-details">
+          <details class="heritage-detail" open><summary><span data-i18n="heritageBodyTitle">The body · Built by hand</span><span class="heritage-detail-icon" aria-hidden="true"></span></summary><p data-i18n="heritageBodyCopy">Rattan, rope and pearl grass are shaped into a new dragon each year, with bamboo supports for its bearers. The work begins before the procession: binding, shaping and balancing each part. For us, that care echoes the path from a design to a carefully made race car.</p></details>
+          <details class="heritage-detail" open><summary><span data-i18n="heritageIncenseTitle">The light · Incense, not flame</span><span class="heritage-detail-icon" aria-hidden="true"></span></summary><p data-i18n="heritageIncenseCopy">Burning incense is inserted into the dragon, tracing its shape with countless points of light. Smoke and glowing tips create the fire dragon's distinctive presence. Our amber particles and flowing lines take their cue from this light, rather than a dragon breathing fire.</p></details>
+          <details class="heritage-detail" open><summary><span data-i18n="heritageRhythmTitle">The rhythm · Many hands, one dragon</span><span class="heritage-detail-icon" aria-hidden="true"></span></summary><p data-i18n="heritageRhythmCopy">Dragon pearls lead the way as drums and gongs set the rhythm. Bearers coordinate the head, body and tail through Tai Hang's streets. That shared attention inspires how our designers, makers and team managers work towards the same start line.</p></details>
+        </div>
+      </div>
+      <div class="heritage-bridge">
+        <h2 data-i18n-html="heritageBridgeTitle">From the streets.<br>To the start line.</h2>
+        <div><p data-i18n="heritageBridgeCopy">We see a connection between a dragon carried by its community and a race car brought to life by a team. Craft becomes engineering. Rhythm becomes coordination. A shared tradition becomes an invitation to create something together.</p></div>
+      </div>
+      <div class="heritage-sources">
+        <p data-i18n="heritageSourcesTitle">Explore the living tradition</p>
+        <ul><li><a id="heritageIchLink" href="https://www.icho.hk/en/web/icho/representative_list_taihang.html" target="_blank" rel="noopener noreferrer" data-i18n="heritageSourceICH">Hong Kong Intangible Cultural Heritage Office ↗</a></li><li><a href="https://firedragon1949.org.hk/en/inherit-the-fire-dragon-culture/" target="_blank" rel="noopener noreferrer" data-i18n="heritageSourceCentre">Tai Hang Fire Dragon Heritage Centre ↗</a></li><li><a id="heritageTourismLink" href="https://www.discoverhongkong.com/eng/culture/what-to-expect-during-the-tai-hang-fire-dragon-dance.html" target="_blank" rel="noopener noreferrer" data-i18n="heritageSourceTourism">Hong Kong Tourism Board ↗</a></li></ul>
+        <p class="heritage-disclaimer" data-i18n="heritageDisclaimer">A cultural inspiration for Dragon Dance STEM Racing. We are an independent student team, not the organiser or an official representative of the Tai Hang Fire Dragon Dance.</p>
       </div>
     </section>
 
@@ -309,14 +355,14 @@
     </section>
 
     <section class="feature-stack" id="machine" aria-live="polite" data-scroll-reveal>
-      <article class="feature-page machine is-active" aria-label="Page 1 feature">
+      <article class="feature-page machine is-active" aria-label="Page 1 feature" data-page-panel="0">
         <div class="car-photo" data-label="01 / DRAGON PROTOTYPE"><img src="assets/race-car.jpg" alt="F1 Dragon Dance race car on a STEM Racing track" /></div>
         <div class="machine-copy">
           <div><div class="eyebrow" data-i18n="machineLabel">02 / The Machine</div><h2 data-i18n-html="machineTitle">Engineered<br>to launch.</h2><p data-i18n="machineCopy">Every wing surface and body contour pursues cleaner airflow, less drag and one clear destination.</p></div>
           <div class="specs"><div class="spec"><span data-i18n="chassisLabel">Chassis</span><span data-i18n="precisionCrafted">Precision Crafted</span></div><div class="spec"><span data-i18n="focusLabel">Focus</span><span data-i18n="aerodynamics">Aerodynamics</span></div><div class="spec"><span data-i18n="raceMode">Race Mode</span><span data-i18n="fullAttack">Full Attack</span></div></div>
         </div>
       </article>
-      <article class="feature-page team-showcase" aria-label="Page 2 team roles">
+      <article class="feature-page team-showcase" aria-label="Page 3 team roles" data-page-panel="2">
         <div class="feature-copy">
           <div class="eyebrow" data-i18n="rolesLabel">Roles / Responsibilities</div>
           <h2 data-i18n-html="rolesTitle">One Crew.<br>Many<br>Skills.</h2>
@@ -346,7 +392,7 @@
           </div>
         </div>
       </article>
-      <article class="feature-page sponsor-showcase" aria-label="Page 3 sponsorship">
+      <article class="feature-page sponsor-showcase" aria-label="Page 4 sponsorship" data-page-panel="3">
         <div class="feature-copy">
           <div class="eyebrow" data-i18n="sponsorshipLabel">Sponsorship / 2026</div>
           <h2 data-i18n-html="sponsorTitle">Partner<br>With Us.</h2>

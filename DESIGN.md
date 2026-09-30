@@ -1,6 +1,6 @@
 # Dragon Dance — Fire Dragon Heritage
 
-September 30 follow-up: the full cultural introduction now lives on `heritage.html`, using `assets/heritage.js` for its own language controls. Navigation and the remaining heritage hero action open this page. The race car exploration actions have been removed. Old `#heritage` links redirect to the new page; crew/partners links return to the corresponding homepage panel. Shared cultural styling and artwork remain unchanged.
+September 30 clarification: Fire Dragon is the second horizontal slide in the homepage's existing pager, between Home and Crew, followed by Partners. The cultural introduction appears beneath its own title slide. Arrows, swipes, keyboard and header controls use the same interaction as the existing panels. `heritage.html` only redirects older links to `index.html#heritage`. Race car exploration actions remain removed.
 
 The homepage preserves the approved Fire-Dragon identity. The September 2026 extension gives Tai Hang's living tradition a distinct editorial section without replacing the team's racing identity.
 
@@ -14,7 +14,7 @@ The homepage preserves the approved Fire-Dragon identity. The September 2026 ext
 
 ## Navigation and layout
 
-The visible header exposes team, fire dragon, crew and partners. Existing horizontal panels and keyboard/swipe support remain. Cultural content appears only on the home panel. At 1050px and below, section navigation moves to a second row with horizontal overflow available; its controls have a minimum 44px width and 46px height. Floating pager arrows are hidden at 800px and below so they cannot cover the text.
+The visible header exposes team, fire dragon, crew and partners. All four entries select horizontal slides. Cultural content appears only on the Fire Dragon slide. At 1050px and below, section navigation moves to a second row with horizontal overflow available; its controls have a minimum 44px width and 46px height. Floating pager arrows are hidden at 800px and below so they cannot cover the text.
 
 Desktop culture content uses two asymmetric columns within a 1360px maximum content width. At 800px and below, the main editorial compositions stack into a single reading column; the history date and copy retain a compact split until 480px. Mobile hero copy/actions precede the mark instead of overlapping it. New cultural elements add no animation, and their hover transitions are disabled for reduced motion.
 

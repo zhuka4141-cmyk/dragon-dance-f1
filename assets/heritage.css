@@ -27,8 +27,7 @@
 
 .site-sections :is(a, button):hover,
 .site-sections [aria-current="page"],
-.site-sections [aria-pressed="true"],
-.site-sections .nav-heritage { color: #f3be79; }
+.site-sections [aria-pressed="true"] { color: #f3be79; }
 
 .site-sections :is(a, button):focus-visible,
 .heritage-button:focus-visible,
@@ -361,8 +360,8 @@ html[lang="zh-Hant"] .heritage-bridge :is(h2, h3) { max-width: 9em; line-height:
   .site-sections :is(a, button), .heritage-button, .heritage-link, .heritage-detail summary { transition: none; }
 }
 
-/* Standalone culture page inherits the existing header and palette. */
-.heritage-document { background: #0c0a08; }
-.heritage-document .heritage-section { border-top: 0; }
-.heritage-page-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 28px; }
-.heritage-page-footer strong { font-size: clamp(24px, 3vw, 40px); }
+/* Culture is the second page in the existing horizontal pager. */
+.about[hidden], .feature-stack[hidden], .heritage-section[hidden] { display: none; }
+.title-page-heritage { background: radial-gradient(ellipse at 75% 55%, rgba(234,180,119,.07), transparent 65%); }
+.title-page-heritage h2 { color: #f3be79; }
+button.heritage-button { font-family: inherit; cursor: pointer; }

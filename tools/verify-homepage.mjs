@@ -8,21 +8,19 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const html = readFileSync(resolve(root, 'index.html'), 'utf8');
 const script = readFileSync(resolve(root, 'assets/home.js'), 'utf8');
 new vm.Script(script);
-assert.ok(existsSync(resolve(root, 'heritage.html')), 'Fire dragon introduction has its own page');
-assert.ok(!html.includes('id="heritage"'), 'Homepage no longer embeds the full introduction');
-assert.ok(!html.includes('data-i18n="discoverMachine"'), 'Remove the explore race car entry');
-assert.ok(html.includes('href="heritage.html"'), 'Homepage links to the separate heritage page');
-const heritageHtml = readFileSync(resolve(root, 'heritage.html'), 'utf8');
-const heritageScript = readFileSync(resolve(root, 'assets/heritage.js'), 'utf8');
-new vm.Script(heritageScript);
-assert.ok(heritageHtml.includes('<h1'), 'Standalone introduction has a primary heading');
-assert.ok(!heritageHtml.includes('heritageBridgeLink'), 'No race car exploration CTA on culture page');
-for (const match of heritageHtml.matchAll(/(?:src|href)="(assets[/][^"]+)"/g)) {
-  assert.ok(existsSync(resolve(root, match[1])), `Missing cultural page asset: ${match[1]}`);
-}
+assert.equal((html.match(/class="hero-page /g) || []).length, 4, 'Home, heritage, crew and partners share the four-slide pager');
+assert.ok(!html.includes('href="heritage.html"'), 'Culture controls must switch the pager instead of opening another document');
+assert.ok(html.includes('id="heritage" hidden'), 'Heritage detail is a pager-controlled panel');
+assert.ok(!html.includes('data-i18n="discoverMachine"'), 'Race car exploration remains removed');
+assert.ok(!html.includes('heritageBridgeLink'), 'No race car exploration CTA in culture panel');
+const legacyPage = readFileSync(resolve(root, 'heritage.html'), 'utf8');
+assert.ok(legacyPage.includes('url=index.html#heritage'), 'Old standalone URL redirects into the pager');
+assert.equal((html.match(/data-page-panel="0"/g) || []).length, 2);
+assert.equal((html.match(/data-page-panel="2"/g) || []).length, 2);
+assert.equal((html.match(/data-page-panel="3"/g) || []).length, 2);
 
 // Translation omissions are easy to miss when adding editorial content.
-for (const [markup, source] of [[html, script], [heritageHtml, heritageScript]]) {
+for (const [markup, source] of [[html, script]]) {
 for (const [attribute, dictionary] of [['data-i18n', 'chineseText'], ['data-i18n-html', 'chineseHtml']]) {
   const start = source.indexOf(`const ${dictionary} = {`);
   assert.ok(start >= 0, `${dictionary} exists`);
@@ -40,7 +38,7 @@ assert.equal(new Set(ids).size, ids.length, 'HTML IDs must be unique');
 for (const match of html.matchAll(/(?:src|href)="(assets[/][^"]+)"/g)) {
   assert.ok(existsSync(resolve(root, match[1])), `Missing local asset: ${match[1]}`);
 }
-assert.ok(heritageHtml.includes('id="heritage"'), 'Heritage anchor lives on its own page');
+assert.ok(ids.includes('heritage'), 'Culture panel is in the homepage');
 for (const match of html.matchAll(/href="#([^"]+)"/g)) {
   assert.ok(ids.includes(match[1]), `Missing section target: ${match[1]}`);
 }

@@ -2,12 +2,12 @@
 
 Last updated: 2026-09-30
 
-## Separate Heritage Page Follow-up
+## Horizontal Heritage Page — Corrected Requirement
 
-- The owner requested the full fire dragon introduction on its own page. It now lives in `heritage.html` with independent bilingual behaviour in `assets/heritage.js`; the homepage retains only its cultural framing and links.
+- The owner clarified that a separate page means another horizontal pager slide, exactly like Crew and Partners, not a separate document. Current order: Home (0), Fire Dragon (1), Crew (2), Partners (3).
 - Removed the homepage race car exploration button and the culture section's race car exploration link. The actual racing content remains on the homepage.
-- Old `/#heritage` links redirect to `heritage.html`. The culture page links back to the homepage and its `#crew` and `#partners` panels. Language preference is shared across both pages.
-- `sitemap.xml` includes the new canonical page. The static verifier checks both pages and confirms the former exploration button is absent.
+- `index.html` holds the heritage title slide and full cultural detail panel, visible only when page index 1 is active. All translations and navigation run through `assets/home.js`. Existing about/feature panels use explicit `data-page-panel` indexes so Crew and Partners retain their content.
+- `heritage.html` is only a compatibility redirect to `index.html#heritage`; the separate language script has been removed. Hash links select the relevant slide. The static verifier checks four slides, panel mappings, bilingual coverage, and that the racing exploration entry remains absent.
 
 ## September 2026 Heritage Refactor
 
