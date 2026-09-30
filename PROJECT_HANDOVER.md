@@ -2,6 +2,13 @@
 
 Last updated: 2026-09-30
 
+## Separate Heritage Page Follow-up
+
+- The owner requested the full fire dragon introduction on its own page. It now lives in `heritage.html` with independent bilingual behaviour in `assets/heritage.js`; the homepage retains only its cultural framing and links.
+- Removed the homepage race car exploration button and the culture section's race car exploration link. The actual racing content remains on the homepage.
+- Old `/#heritage` links redirect to `heritage.html`. The culture page links back to the homepage and its `#crew` and `#partners` panels. Language preference is shared across both pages.
+- `sitemap.xml` includes the new canonical page. The static verifier checks both pages and confirms the former exploration button is absent.
+
 ## September 2026 Heritage Refactor
 
 - Homepage now links the team story with Tai Hang Fire Dragon Dance: origin legend, 1880/2011/2017 timeline, craft, incense, collective rhythm and the connection to engineering. English and Traditional Chinese copy are complete.

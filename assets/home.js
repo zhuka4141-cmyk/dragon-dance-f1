@@ -107,30 +107,7 @@
         navCrew:'隊員',
         navPartners:'合作夥伴',
         discoverHeritage:'認識大坑舞火龍',
-        discoverMachine:'探索我們的賽車 ↗',
         heroProvenance:'香港・大坑 — 啟發我們的傳統',
-        heritageIntro:'每逢中秋，大坑街巷交織着紮作手藝、香火與眾人的步伐。舞火龍不只是一場表演，更是一項由街坊親手紮作、合力舞動，並代代相傳的活態文化。',
-        heritageCaption:'以火龍的舞動與香火光點為靈感的藝術演繹。',
-        heritageHistoryTitle:'從大坑街巷開始的故事',
-        heritageHistoryCopy:'這項傳統可追溯至1880年。相傳當年大坑發生瘟疫，村民舞動火龍，祈求消災平安。這份守護家園的心意，延續成為凝聚街坊與不同世代的中秋習俗。',
-        heritageTimelineOrigin:'大坑舞火龍傳統的起源。',
-        heritageTimelineNational:'列入第三批國家級非物質文化遺產名錄。',
-        heritageTimelineHK:'列入首份《香港非物質文化遺產代表作名錄》。',
-        heritageCraftTitle:'是甚麼，讓火龍活起來？',
-        heritageCraftIntro:'走近一點：萬點光芒的背後，是耐心的雙手、樸素的材料，以及同心前行的人。',
-        heritageBodyTitle:'龍身・一草一結，親手紮作',
-        heritageBodyCopy:'藤枝、繩索與珍珠草，每年重新紮成火龍，再以竹枝承托。巡遊前，工匠細心綁紮、塑形，調整每一部分的平衡。這份匠心，也啟發我們把設計一步步變成精密製作的賽車。',
-        heritageIncenseTitle:'香火・萬點光芒，連成火龍',
-        heritageIncenseCopy:'燃點的香枝插滿龍身，點點香火勾勒出火龍的輪廓。煙霧與香頭的光芒，共同構成舞火龍的獨特景象。網站的琥珀色光點與流動線條，取意於這些香火，而非噴火的神話巨龍。',
-        heritageRhythmTitle:'節奏・龍珠引路，眾人同心',
-        heritageRhythmCopy:'龍珠在前引路，鑼鼓帶動節奏；龍頭、龍身與龍尾的舞動者互相配合，讓長龍穿梭大坑街巷。這份默契啟發我們的設計、製造與管理成員，一起朝着同一條起跑線前進。',
-        heritageBridgeCopy:'一條由街坊合力舞動的火龍，與一部由隊友共同打造的賽車，分享着協作的力量。匠心化作工程，節奏化作默契；傳統成為邀請，讓我們一起創作、一起前行。',
-        heritageBridgeLink:'在賽車上，看見這份精神 ↗',
-        heritageSourcesTitle:'走近這項活態文化',
-        heritageSourceICH:'香港非物質文化遺產辦事處 ↗',
-        heritageSourceCentre:'大坑火龍文化館 ↗',
-        heritageSourceTourism:'香港旅遊發展局 ↗',
-        heritageDisclaimer:'大坑舞火龍是 Dragon Dance STEM Racing 的文化靈感。我們是獨立學生車隊，並非大坑舞火龍的主辦單位或官方代表。',
         scrollExplore:'向下探索 ↓',
         crewIndex:'02 / 隊員',
         crewIntro:'從專案管理、工程設計到品牌與贊助，隊員各自發揮專長，讓 Dragon Dance 同步前進。',
@@ -212,8 +189,6 @@
         deadlinesTitle:'兩個日期。<br>同一條終點線。',
         updatesTitle:'持續<br>前進。',
         heroTitle:'薪火<br><i>疾行。</i>',
-        heritageTitle:'一方街巷。<br>一條活起來的龍。',
-        heritageBridgeTitle:'從街巷。<br>到起跑線。',
         crewTitle:'認識<br>隊員',
         partnersTitle:'支持<br>驅動。',
         machineTitle:'為起跑<br>而生。',
@@ -595,9 +570,6 @@
         heroSlides.forEach((slide, index) => slide.setAttribute('aria-label', chinese ? `第 ${index + 1} 頁` : `Page ${index + 1}`));
         document.getElementById('dragonStage').setAttribute('aria-label', chinese ? '可互動的龍圖案' : 'Interactive Dragon Dance dragon symbol');
         document.getElementById('dragon').alt = chinese ? 'Dragon Dance 龍圖案' : 'Dragon Dance dragon symbol';
-        document.getElementById('heritageArtwork').alt = chinese ? '以香火光點勾勒火龍追隨龍珠的藝術演繹' : 'An artistic interpretation of an incense-lit dragon following a glowing pearl';
-        document.getElementById('heritageIchLink').href = `https://www.icho.hk/${chinese ? 'tc' : 'en'}/web/icho/representative_list_taihang.html`;
-        document.getElementById('heritageTourismLink').href = `https://www.discoverhongkong.com/${chinese ? 'tc' : 'eng'}/culture/what-to-expect-during-the-tai-hang-fire-dragon-dance.html`;
         document.querySelector('.car-photo').dataset.label = chinese ? '01 / 龍舞原型' : '01 / DRAGON PROTOTYPE';
         document.querySelector('.footer-contact').setAttribute('aria-label', chinese ? '聯絡我們' : 'Contact');
         partnershipClose.setAttribute('aria-label', chinese ? '關閉對話框' : 'Close dialog');
@@ -688,7 +660,6 @@
         document.querySelectorAll('button[data-page-target]').forEach(button => {
           button.setAttribute('aria-pressed', String(Number(button.dataset.pageTarget) === pageIndex));
         });
-        document.querySelectorAll('[data-home-section]').forEach(section => { section.hidden = pageIndex !== 0; });
         aboutPages.forEach((panel, index) => {
           const active = index === pageIndex;
           panel.classList.toggle('is-active', active);
@@ -877,12 +848,16 @@
         });
       });
       document.querySelector('.wordmark').addEventListener('click', () => setPage(0));
-      window.addEventListener('hashchange', () => {
+      function followPageLink() {
         if (location.hash === '#heritage') {
-          setPage(0);
-          document.getElementById('heritage').scrollIntoView({ behavior:reduceMotion ? 'instant' : 'smooth' });
+          window.location.replace('heritage.html');
+          return;
         }
-      });
+        const routes = { '#crew':1, '#partners':2, '#top':0 };
+        if (Object.hasOwn(routes, location.hash)) setPage(routes[location.hash]);
+      }
+      window.addEventListener('hashchange', followPageLink);
+      followPageLink();
       langEnglish.addEventListener('click', () => applyLanguage('en'));
       langChinese.addEventListener('click', () => applyLanguage('zh'));
       partnershipTrigger.addEventListener('click', openPartnershipModal);

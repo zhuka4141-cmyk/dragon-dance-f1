@@ -1,5 +1,7 @@
 # Dragon Dance — Fire Dragon Heritage
 
+September 30 follow-up: the full cultural introduction now lives on `heritage.html`, using `assets/heritage.js` for its own language controls. Navigation and the remaining heritage hero action open this page. The race car exploration actions have been removed. Old `#heritage` links redirect to the new page; crew/partners links return to the corresponding homepage panel. Shared cultural styling and artwork remain unchanged.
+
 The homepage preserves the approved Fire-Dragon identity. The September 2026 extension gives Tai Hang's living tradition a distinct editorial section without replacing the team's racing identity.
 
 ## Visual language
