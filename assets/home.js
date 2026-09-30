@@ -84,8 +84,6 @@
       const englishText = Object.fromEntries(textElements.map(element => [element.dataset.i18n, element.textContent]));
       const englishHtml = Object.fromEntries(htmlElements.map(element => [element.dataset.i18nHtml, element.innerHTML]));
       const chineseText = {
-        enterHeritage:'沿着香火，走進大坑',
-        processionArtNote:'以香火光點與舞動節奏創作的藝術演繹。',
         heritageIntro:'每逢中秋，大坑街巷交織着紮作手藝、香火與眾人的步伐。舞火龍不只是一場表演，更是一項由街坊親手紮作、合力舞動，並代代相傳的活態文化。',
         heritageCaption:'以火龍的舞動與香火光點為靈感的藝術演繹。',
         heritageHistoryTitle:'從大坑街巷開始的故事',
@@ -210,7 +208,6 @@
         schoolWebsite:'學校網站'
       };
       const chineseHtml = {
-        partnerPoster:'一起<br>走得<br>更遠。',
         heritageTitle:'一方街巷。<br>一條活起來的龍。',
         heritageBridgeTitle:'從街巷。<br>到起跑線。',
         heritageHeroTitle:'大坑<br>舞火龍。',
@@ -598,8 +595,7 @@
         document.documentElement.lang = chinese ? 'zh-Hant' : 'en';
         hero.setAttribute('aria-label', chinese ? 'Dragon Dance 首頁' : 'Dragon Dance homepage');
         heroSlides.forEach((slide, index) => slide.setAttribute('aria-label', chinese ? `第 ${index + 1} 頁` : `Page ${index + 1}`));
-        document.getElementById('dragonStage').setAttribute('aria-label', chinese ? 'Dragon Dance 龍圖案' : 'Dragon Dance dragon symbol');
-        document.querySelector('.hero-route').setAttribute('aria-label', chinese ? '橫向分頁' : 'Horizontal pages');
+        document.getElementById('dragonStage').setAttribute('aria-label', chinese ? '可互動的龍圖案' : 'Interactive Dragon Dance dragon symbol');
         document.getElementById('dragon').alt = chinese ? 'Dragon Dance 龍圖案' : 'Dragon Dance dragon symbol';
         document.querySelector('.car-photo').dataset.label = chinese ? '01 / 龍舞原型' : '01 / DRAGON PROTOTYPE';
         document.querySelector('.footer-contact').setAttribute('aria-label', chinese ? '聯絡我們' : 'Contact');
@@ -667,7 +663,7 @@
           slide.setAttribute('aria-hidden', String(index !== pageIndex));
           slide.inert = index !== pageIndex;
         });
-        document.querySelectorAll('.site-sections button[data-page-target], .hero-route button[data-page-target]').forEach(button => {
+        document.querySelectorAll('.site-sections button[data-page-target]').forEach(button => {
           button.setAttribute('aria-pressed', String(Number(button.dataset.pageTarget) === pageIndex));
         });
         aboutPages.forEach((panel, index) => {
