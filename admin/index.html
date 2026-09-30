@@ -373,6 +373,11 @@
         element.className = `status${type ? ` ${type}` : ''}`;
       }
 
+      function authErrorMessage(error) {
+        if (error && error.message) return error.message;
+        return '無法連接內容資料庫。請檢查 Supabase 專案是否仍然存在，或聯絡網站管理員更新資料庫設定。';
+      }
+
       function assetUrl(url) {
         if (!url || /^https?:\/\//i.test(url)) return url;
         return `../${url.replace(/^\//, '')}`;
@@ -1435,11 +1440,15 @@
       document.getElementById('signInForm').addEventListener('submit', async event => {
         event.preventDefault();
         setStatus(authStatus, '正在登入...');
-        const { error } = await client.auth.signInWithPassword({
-          email:document.getElementById('signInEmail').value.trim(),
-          password:document.getElementById('signInPassword').value
-        });
-        if (error) setStatus(authStatus, error.message, 'error');
+        try {
+          const { error } = await client.auth.signInWithPassword({
+            email:document.getElementById('signInEmail').value.trim(),
+            password:document.getElementById('signInPassword').value
+          });
+          if (error) setStatus(authStatus, authErrorMessage(error), 'error');
+        } catch (error) {
+          setStatus(authStatus, authErrorMessage(error), 'error');
+        }
       });
 
       document.getElementById('resetPasswordButton').addEventListener('click', async () => {
@@ -1448,14 +1457,18 @@
           setStatus(authStatus, '請輸入 Dragon Dance 管理電郵，再重設密碼。', 'error');
           return;
         }
-        const { error } = await client.auth.resetPasswordForEmail(email, {
-          redirectTo:`${window.location.origin}/admin/`
-        });
-        setStatus(
-          authStatus,
-          error ? error.message : '重設密碼電郵已寄出，請到電郵繼續。',
-          error ? 'error' : 'success'
-        );
+        try {
+          const { error } = await client.auth.resetPasswordForEmail(email, {
+            redirectTo:`${window.location.origin}/admin/`
+          });
+          setStatus(
+            authStatus,
+            error ? authErrorMessage(error) : '重設密碼電郵已寄出，請到電郵繼續。',
+            error ? 'error' : 'success'
+          );
+        } catch (error) {
+          setStatus(authStatus, authErrorMessage(error), 'error');
+        }
       });
 
       passwordForm.addEventListener('submit', async event => {
