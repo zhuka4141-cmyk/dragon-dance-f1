@@ -38,6 +38,7 @@ This file is the durable project memory for a new computer or a new Codex sessio
 - Admin dashboard: https://lstc-dragon-dance.vercel.app/admin/
 - GitHub repository: https://github.com/zhuka4141-cmyk/dragon-dance-f1
 - Deployment: Vercel deploys automatically when `main` is pushed.
+- Supabase keepalive: `.github/workflows/supabase-keepalive.yml` queries the public `updates` endpoint once per day and can also be run manually from GitHub Actions. It uses only the publishable key already used by the public site.
 - Supabase project reference: `csnleawnckocalvggvdf`
 - Supabase configuration file: `supabase-config.js`
 - Admin login email: `dragondance@lstc.edu.hk`
