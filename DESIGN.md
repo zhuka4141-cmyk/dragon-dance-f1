@@ -35,3 +35,7 @@ Native buttons, anchors and details controls retain keyboard operation, visible 
 Inactive hero and detail panels are inert. Both contact and media dialogs isolate background focus and return focus on closing. Home-only sections switch directly without animating layout height. Fog runs only on a visible Home hero in a visible document, and reduced-motion users receive a static frame.
 
 `assets/updates-feed.js` owns the shared optional SDK loader, bounded published-post request and distinct bilingual loading, empty, error/retry and ready states. A failed CDN cannot block navigation. Home requests three posts; archive cards load only a cover until the visitor opens the gallery. Videos use explicit playback controls in the gallery; previews no longer autoplay or rotate on timers.
+
+## Admin visitor statistics — October 24
+
+The statistics section inherits the existing admin surface, rounded border, system type and pill button. Four labelled tabular-number metrics share an open definition list, in four columns on desktop and two below 600px. No chart, new decorative effect or public navigation change is introduced. Initial loading and failures show em dashes rather than invented totals; subsequent refreshes retain the previous counts while loading, and empty results show zero with an explanation. The panel explains anonymous browser identification, the activation date and Hong Kong timing. Its refresh control retains a visible warm focus ring and a disabled loading state.

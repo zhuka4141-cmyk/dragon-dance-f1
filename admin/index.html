@@ -72,6 +72,17 @@
     .password-panel { display:grid; gap:13px; max-width:560px; padding:24px 28px; border:1px solid var(--hairline); border-top:3px solid var(--red); background:var(--surface); border-radius:var(--radius); }
     .password-panel p { margin:0; color:var(--text-2); font-size:13px; line-height:1.6; }
     .admin-content { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(290px,.9fr); gap:18px; align-items:start; }
+    .analytics-panel { min-width:0; padding:26px 28px; border:1px solid var(--hairline); border-radius:var(--radius); background:var(--surface); }
+    .analytics-heading { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+    .analytics-heading h3 { font-size:24px; }
+    .analytics-period, .analytics-note { margin:10px 0 0; color:var(--text-2); font-size:13px; line-height:1.7; }
+    .analytics-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px 16px; margin:26px 0 0; padding:24px 0; border-block:1px solid var(--hairline); }
+    .analytics-metrics dt { color:var(--text-2); font-size:13px; }
+    .analytics-metrics dd { margin:10px 0 0; font-size:32px; line-height:1.2; font-weight:700; font-variant-numeric:tabular-nums; overflow-wrap:anywhere; }
+    .analytics-panel .status { margin-top:12px; }
+    .analytics-panel .button:disabled { cursor:wait; opacity:.6; transform:none; }
+    .analytics-panel .button:focus-visible { outline:2px solid #ff9a4d; outline-offset:4px; }
+    @media (max-width:600px) { .analytics-panel { padding:22px; } .analytics-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .analytics-metrics dd { font-size:28px; } }
     .editor-panel, .posts-panel { border-top-color:var(--red); }
     .editor-panel > p, .posts-panel > p { margin:13px 0 26px; color:var(--text-2); font-size:13px; line-height:1.6; }
     .field-columns { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; }
@@ -249,6 +260,21 @@
         <label>確認新密碼<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
         <div class="form-actions"><button class="button" type="submit">儲存密碼</button></div>
       </form>
+      <section class="analytics-panel" id="siteAnalytics" aria-labelledby="analyticsTitle" aria-busy="false">
+        <div class="analytics-heading">
+          <h3 id="analyticsTitle">網站訪問統計</h3>
+          <button class="button secondary" id="analyticsRefresh" type="button">更新統計</button>
+        </div>
+        <p class="analytics-period" id="analyticsPeriod">網站公開頁面的訪問統計</p>
+        <dl class="analytics-metrics">
+          <div><dt>累計訪客</dt><dd id="totalVisitors">—</dd></div>
+          <div><dt>累計瀏覽次數</dt><dd id="totalViews">—</dd></div>
+          <div><dt>今日訪客</dt><dd id="todayVisitors">—</dd></div>
+          <div><dt>今日瀏覽次數</dt><dd id="todayViews">—</dd></div>
+        </dl>
+        <p class="status" id="analyticsStatus" role="status" aria-live="polite"></p>
+        <p class="analytics-note">訪客以匿名瀏覽器識別，同一瀏覽器重複瀏覽只算一位訪客。換裝置、無痕模式或清除網站資料會重新計算；封鎖統計的訪問不計入。數據從啟用後開始累計，不包含過往流量。</p>
+      </section>
       <div class="admin-content">
         <section class="editor-panel">
           <span class="kicker" id="formMode">新增動態</span>
@@ -326,6 +352,7 @@
 
 
   <script src="../supabase-config.js"></script>
+  <script src="../assets/admin-analytics.js"></script>
   <script>
     (() => {
       const administratorEmail = 'dragondance@lstc.edu.hk';
@@ -1431,6 +1458,7 @@
         }
         authView.hidden = Boolean(currentUser);
         editorView.hidden = !currentUser;
+        window.DragonAnalyticsAdmin.setSession(client, currentUser);
         if (!currentUser) return;
         document.getElementById('editorEmail').textContent = currentUser.email;
         resetForm();

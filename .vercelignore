@@ -4,6 +4,7 @@ PROJECT_HANDOVER.md
 
 # Dev / build tooling
 tools/
+supabase/
 .codegraph/
 docs/
 DESIGN.md

@@ -1,6 +1,17 @@
 # Dragon Dance Website Handover
 
-Last updated: 2026-09-30
+Last updated: 2026-10-24
+
+## Website Visitor Statistics
+
+- `assets/site-analytics.js` records anonymous browser visits to the production homepage (`/` and `/index.html`) and `/updates.html`. It excludes admin, the compatibility redirect, localhost and preview hosts. Background tabs count only when first viewed. Global Privacy Control / Do Not Track and blocked storage are respected. Failures never block the website.
+- A random UUID in local storage identifies an approximate unique browser; different devices, private browsing and clearing storage can create new visitors. Visit rows store an event UUID, anonymous browser UUID, the `home`/`updates` page category and a server-generated timestamp. No IP address, full URL, query parameters, email or other personal profile is stored in analytics tables.
+- Setup: execute `supabase/migrations/202610240001_site_analytics.sql` in the SQL editor of project `csnleawnckocalvggvdf`. It creates `site_visits`, `site_analytics_settings`, `record_site_visit` and `get_site_analytics`. The migration is safe to rerun and preserves the first activation date. The dashboard explicitly shows setup is pending if the RPC has not been installed; it never substitutes fake zero totals.
+- Production database setup was applied on 2026-10-24. Hosted transaction tests passed for the confirmed admin identity, unique visitors, duplicate event handling, daily counters and RLS; synthetic visits were rolled back. Real REST checks rejected anonymous aggregate/raw-table reads (401 / `42501`) and invalid public page categories (400 / `22023`).
+- Raw tables have RLS enabled and no public/admin-client read or write grants. The public RPC only records visits; the aggregate RPC requires the confirmed `dragondance@lstc.edu.hk` account, verified by `auth.uid()` against `auth.users`. A primary key deduplicates repeated event IDs, server time determines visit dates, and a browser-level 120-per-minute limit bounds accidental refresh loops. This is a small-site counter, not a bot-proof analytics platform.
+- The existing admin dashboard includes all-time unique browsers/page views and today's unique browsers/page views. Dates use `Asia/Hong_Kong`; totals start when the database setup is enabled and do not reconstruct historical traffic. `assets/admin-analytics.js` handles loading, empty, unavailable and setup states, refreshes once a minute while visible, and clears/cancels private counts on sign-out. It does not change update editing or media behavior.
+- `supabase/` is excluded from Vercel's static output. Never expose a service-role key to make statistics work.
+- Checks: `node tools/verify-analytics.mjs` exercises collector and dashboard states; existing homepage, updates and effects checks still apply. `node tools/verify-analytics-sql.mjs <absolute-path-to-@electric-sql/pglite/dist/index.js>` optionally validates the migration in an isolated PostgreSQL runtime, with simulated Supabase auth objects and no writes to production.
 
 ## Public Website Optimization
 
