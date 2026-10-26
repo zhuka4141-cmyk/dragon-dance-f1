@@ -13,13 +13,17 @@
 
   const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
   const AVOID_RADIUS = 150;
+  const PUSH_DISTANCE = 70;
   const PUFF_COUNT = window.innerWidth < 760 ? 22 : 46;
   let width = 0;
   let height = 0;
   let pointer = { x: -9999, y: -9999 };
+  let smooth = { x: -9999, y: -9999 };
   let frame = 0;
   let last = 0;
   let puffs = [];
+
+  const clamp01 = value => Math.max(0, Math.min(1, value));
 
   // Pre-render one soft puff so each frame only draws images, not gradients.
   const sprite = document.createElement('canvas');
@@ -36,65 +40,89 @@
     const size = 90 + Math.random() * 150;
     return {
       x: Math.random() * width,
-      y: initial ? Math.random() * height : height + size,
-      vx: 0,
+      y: initial ? Math.random() * height : height + size / 2 + 20,
+      ox: 0,
+      oy: 0,
       vy: -(8 + Math.random() * 14),
       size,
       alpha: 0.25 + Math.random() * 0.35,
       phase: Math.random() * Math.PI * 2,
-      sway: 18 + Math.random() * 30
+      sway: 18 + Math.random() * 30,
+      age: initial ? 1 : 0
     };
   }
 
+  function draw(dt) {
+    ctx.clearRect(0, 0, width, height);
+    const ease = 1 - Math.exp(-dt * 3);
+    const follow = 1 - Math.exp(-dt * 12);
+    smooth.x += (pointer.x - smooth.x) * follow;
+    smooth.y += (pointer.y - smooth.y) * follow;
+
+    for (const p of puffs) {
+      p.phase += dt * 0.6;
+      p.age = Math.min(1, p.age + dt / 1.2);
+      p.x += Math.sin(p.phase) * p.sway * dt;
+      p.y += p.vy * dt;
+
+      // Ease toward a push target that grows as the pointer gets closer, then relax back.
+      let tx = 0;
+      let ty = 0;
+      if (fine.matches) {
+        const dx = p.x - smooth.x;
+        const dy = p.y - smooth.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const reach = AVOID_RADIUS + p.size * 0.3;
+        if (dist < reach) {
+          const push = (1 - dist / reach) ** 2 * PUSH_DISTANCE;
+          tx = (dx / dist) * push;
+          ty = (dy / dist) * push * 0.6;
+        }
+      }
+      p.ox += (tx - p.ox) * ease;
+      p.oy += (ty - p.oy) * ease;
+
+      // Fade in after spawning and out before leaving the top, so nothing pops.
+      const fade = p.age * clamp01((p.y + p.size / 2) / p.size);
+      if (p.y + p.size / 2 < 0) Object.assign(p, spawn(false));
+
+      ctx.globalAlpha = p.alpha * fade;
+      ctx.drawImage(sprite, p.x + p.ox - p.size / 2, p.y + p.oy - p.size / 2, p.size, p.size);
+    }
+    ctx.globalAlpha = 1;
+  }
+
   function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
+    const nextWidth = window.innerWidth;
+    const nextHeight = window.innerHeight;
+    // Mobile toolbars change the height by a few dozen pixels while scrolling; ignore those.
+    if (width && nextWidth === width && Math.abs(nextHeight - height) < 160) return;
+    const scaleX = width ? nextWidth / width : 1;
+    const scaleY = height ? nextHeight / height : 1;
+    width = nextWidth;
+    height = nextHeight;
     canvas.width = Math.round(width * DPR);
     canvas.height = Math.round(height * DPR);
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    puffs = Array.from({ length: PUFF_COUNT }, () => spawn(true));
+    if (puffs.length) {
+      for (const p of puffs) { p.x *= scaleX; p.y *= scaleY; }
+      draw(0);
+    } else {
+      puffs = Array.from({ length: PUFF_COUNT }, () => spawn(true));
+    }
   }
 
   function step(time) {
     frame = requestAnimationFrame(step);
     const dt = Math.min((time - last) / 1000 || 0.016, 0.05);
     last = time;
-    ctx.clearRect(0, 0, width, height);
-
-    for (const p of puffs) {
-      p.phase += dt * 0.6;
-      // Gentle sideways sway plus upward drift.
-      let targetX = p.x + Math.sin(p.phase) * p.sway * dt;
-      p.y += p.vy * dt;
-
-      // Push the smoke away from the cursor with a soft falloff.
-      if (fine.matches) {
-        const dx = p.x - pointer.x;
-        const dy = p.y - pointer.y;
-        const dist = Math.hypot(dx, dy) || 1;
-        const reach = AVOID_RADIUS + p.size * 0.3;
-        if (dist < reach) {
-          const force = (1 - dist / reach) * 140 * dt;
-          p.vx += (dx / dist) * force;
-          p.vy += (dy / dist) * force * 0.4;
-        }
-      }
-      p.vx *= 0.94;
-      p.vy += (-(8 + p.size * 0.02) - p.vy) * 0.02;
-      targetX += p.vx * dt * 60;
-      p.x = targetX;
-
-      if (p.y + p.size < -40) Object.assign(p, spawn(false));
-
-      ctx.globalAlpha = p.alpha;
-      ctx.drawImage(sprite, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
-    }
-    ctx.globalAlpha = 1;
+    draw(dt);
   }
 
   function onPointer(event) {
+    if (pointer.x < -9000) { smooth.x = event.clientX; smooth.y = event.clientY; }
     pointer.x = event.clientX;
     pointer.y = event.clientY;
   }
