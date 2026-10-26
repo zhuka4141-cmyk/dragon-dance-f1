@@ -310,3 +310,17 @@ a.contact-item:hover { border-color: var(--amber); }
 @media (max-width: 760px) {
   .dragon-stage { top: 676px; height: 240px; }
 }
+/* ================= Extra motion (only when the visitor allows motion) ================= */
+@media (prefers-reduced-motion: no-preference) {
+  /* heritage details: the copy eases in when a panel opens */
+  .heritage-detail[open] > p { animation: detail-in .5s var(--ease-ios) both; }
+  @keyframes detail-in { from { opacity: 0; transform: translate3d(0, -8px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+
+  /* footer contact rows rise one after another once the footer is revealed */
+  .has-scroll-reveal footer.is-visible .contact-item { animation: contact-in .7s var(--ease-out) both; }
+  .has-scroll-reveal footer.is-visible .contact-item:nth-child(1) { animation-delay: .15s; }
+  .has-scroll-reveal footer.is-visible .contact-item:nth-child(2) { animation-delay: .23s; }
+  .has-scroll-reveal footer.is-visible .contact-item:nth-child(3) { animation-delay: .31s; }
+  .has-scroll-reveal footer.is-visible .contact-item:nth-child(4) { animation-delay: .39s; }
+  @keyframes contact-in { from { opacity: 0; transform: translate3d(0, 14px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+}
