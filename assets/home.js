@@ -452,10 +452,16 @@
         homeOnlyContent.setAttribute('aria-hidden', String(!show));
       }
 
+      /* Glide back to the top instead of snapping; reduced motion keeps the instant jump. */
+      function scrollToTop() {
+        if (window.scrollY === 0) return;
+        window.scrollTo({top:0, behavior:reduceMotion ? 'instant' : 'smooth'});
+      }
+
       function setPage(nextIndex) {
         const pageChanged = pageIndex !== Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
         pageIndex = Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
-        if (pageChanged) window.scrollTo({top:0, behavior:'instant'});
+        if (pageChanged) scrollToTop();
         renderTrack();
         heroPages.dataset.page = String(pageIndex + 1);
         const prevHidden = pageIndex === 0;
@@ -605,7 +611,7 @@
       document.querySelectorAll('[data-page-target]').forEach(control => {
         control.addEventListener('click', () => {
           setPage(Number(control.dataset.pageTarget));
-          if (control.tagName === 'BUTTON') window.scrollTo({top:0, behavior:'instant'});
+          if (control.tagName === 'BUTTON') scrollToTop();
         });
       });
       document.querySelector('.wordmark').addEventListener('click', () => setPage(0));
