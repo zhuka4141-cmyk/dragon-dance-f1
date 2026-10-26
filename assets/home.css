@@ -47,7 +47,14 @@
 .language-caret { width:6px; height:6px; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:translateY(-2px) rotate(45deg); transition:transform .2s; }
 .language-toggle[aria-expanded="true"] .language-caret { transform:translateY(1px) rotate(225deg); }
 .language-menu { position:absolute; top:calc(100% + 6px); right:0; z-index:40; margin:0; padding:4px; min-width:150px; list-style:none; border:1px solid var(--hairline-2); border-radius:14px; background:rgba(12,10,16,.94); backdrop-filter:blur(18px); box-shadow:0 18px 40px rgba(0,0,0,.5); display:none; }
-.language-menu:not([hidden]) { display:block; }
+.language-menu { transform-origin:top right; }
+.language-menu:not([hidden]) { display:block; animation:language-menu-in .3s cubic-bezier(.32,.72,0,1) both; }
+.language-menu.is-closing { pointer-events:none; animation:language-menu-out .18s cubic-bezier(.4,0,1,1) both; }
+.language-menu:not([hidden]):not(.is-closing) .language-option { animation:language-option-in .34s cubic-bezier(.32,.72,0,1) both; animation-delay:calc(var(--i, 0) * 28ms + 50ms); }
+@keyframes language-menu-in { from { opacity:0; transform:translate3d(0,-8px,0) scale(.96); } to { opacity:1; transform:translate3d(0,0,0) scale(1); } }
+@keyframes language-menu-out { from { opacity:1; transform:translate3d(0,0,0) scale(1); } to { opacity:0; transform:translate3d(0,-6px,0) scale(.97); } }
+@keyframes language-option-in { from { opacity:0; transform:translate3d(0,-6px,0); } to { opacity:1; transform:translate3d(0,0,0); } }
+@media (prefers-reduced-motion:reduce) { .language-menu:not([hidden]), .language-menu.is-closing, .language-menu .language-option { animation:none !important; } }
 .language-option { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 12px; border-radius:10px; color:var(--text-3); font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
 .language-option:hover, .language-option:focus-visible { color:var(--text); background:rgba(255,255,255,.07); outline:0; }
 .language-option[aria-selected="true"] { color:var(--text); background:rgba(255,255,255,.1); }

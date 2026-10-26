@@ -181,9 +181,10 @@
     menu.textContent = '';
     menu.hidden = true;
 
-    const options = SUPPORTED.map(code => {
+    const options = SUPPORTED.map((code, index) => {
       const item = document.createElement('li');
       item.className = 'language-option';
+      item.style.setProperty('--i', String(index));
       item.setAttribute('role', 'option');
       item.setAttribute('tabindex', '-1');
       item.setAttribute('lang', META[code].htmlLang);
@@ -204,12 +205,26 @@
       }
     }
 
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let closeTimer = 0;
+
+    /* A menu that is playing its exit animation counts as closed. */
     function isOpen() {
-      return !menu.hidden;
+      return !menu.hidden && !menu.classList.contains('is-closing');
+    }
+
+    function finishClose() {
+      window.clearTimeout(closeTimer);
+      closeTimer = 0;
+      menu.classList.remove('is-closing');
+      menu.hidden = true;
     }
 
     function open(focusSelected) {
       if (isOpen()) return;
+      window.clearTimeout(closeTimer);
+      closeTimer = 0;
+      menu.classList.remove('is-closing');
       menu.hidden = false;
       toggle.setAttribute('aria-expanded', 'true');
       if (focusSelected) {
@@ -220,8 +235,13 @@
 
     function close(refocus) {
       if (!isOpen()) return;
-      menu.hidden = true;
       toggle.setAttribute('aria-expanded', 'false');
+      if (reduceMotion.matches) {
+        finishClose();
+      } else {
+        menu.classList.add('is-closing');
+        closeTimer = window.setTimeout(finishClose, 220);
+      }
       if (refocus) toggle.focus();
     }
 
