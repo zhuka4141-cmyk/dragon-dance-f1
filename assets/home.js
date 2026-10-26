@@ -763,6 +763,7 @@
       document.addEventListener('pointermove', moveSwipe, { passive:false });
       document.addEventListener('pointerup', finishSwipe, { passive:true });
       document.addEventListener('pointercancel', cancelSwipe, { passive:true });
+      document.addEventListener('pointerdown', () => { suppressClickUntil = 0; }, { passive:true, capture:true });
       document.addEventListener('click', event => {
         if (performance.now() >= suppressClickUntil) return;
         suppressClickUntil = 0;
