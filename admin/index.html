@@ -64,6 +64,9 @@
     .status { min-height:24px; margin:18px 0 0; color:var(--text-2); font-size:13px; line-height:1.5; }
     .status.error { color:#ff9ca1; }
     .status.success { color:#b9ebc5; }
+    .translate-hint { min-height:20px; margin:0; color:var(--text-3); font-size:12px; line-height:1.5; }
+    .translate-hint.ok { color:#b9ebc5; }
+    .translate-hint.error { color:#ff9ca1; }
     [hidden] { display:none !important; }
     .admin-shell { display:grid; gap:48px; }
     .admin-bar { display:flex; align-items:end; justify-content:space-between; gap:20px; padding-bottom:22px; border-bottom:1px solid var(--hairline); }
@@ -303,6 +306,7 @@
             <label>標題（繁體中文）<input id="titleZh" type="text" required /></label>
             <label>內文（English）<textarea id="bodyEn" required></textarea></label>
             <label>內文（繁體中文）<textarea id="bodyZh" required></textarea></label>
+            <p class="translate-hint" id="translateHint" role="status" aria-live="polite"></p>
             <div class="form-actions">
               <button class="button" id="publishButton" type="submit">發佈動態</button>
               <button class="button secondary" id="resetButton" type="button">清除內容</button>
@@ -353,6 +357,7 @@
 
   <script src="../supabase-config.js"></script>
   <script src="../assets/admin-analytics.js"></script>
+  <script src="../assets/admin-translate.js" defer></script>
   <script>
     (() => {
       const administratorEmail = 'dragondance@lstc.edu.hk';
@@ -975,6 +980,7 @@
         editorMediaEntries = [];
         dateWasChanged = false;
         updateForm.reset();
+        window.AdminTranslate?.reset();
         fields.publishedAt.value = todayIsoDate();
         syncDateTrigger();
         document.getElementById('formMode').textContent = '新增動態';
@@ -1204,6 +1210,7 @@
         fields.titleZh.value = post.title_zh || '';
         fields.bodyEn.value = post.body_en || '';
         fields.bodyZh.value = post.body_zh || '';
+        window.AdminTranslate?.reset();
         document.getElementById('formMode').textContent = '編輯動態';
         document.getElementById('formTitle').innerHTML = '編輯<br>動態。';
         document.getElementById('publishButton').textContent = '儲存更新';
