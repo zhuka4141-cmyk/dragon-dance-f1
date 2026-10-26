@@ -146,12 +146,16 @@
      dictionary is applied. The timer is the failure path, not the happy path. */
   if (state.current !== 'en') {
     const style = document.createElement('style');
-    style.textContent = 'html[data-lang]:not([data-lang-ready]) body{opacity:0}';
+    style.textContent = 'html[data-lang]:not([data-lang-ready]) body{opacity:0}body{transition:opacity .25s ease}';
     document.head.append(style);
     window.setTimeout(() => document.documentElement.setAttribute('data-lang-ready', ''), 3000);
   }
 
   const ready = load(state.current).catch(() => null);
+
+  /* Reveal as soon as the dictionary is in. The frame delay lets each page's own
+     ready handler apply the translation first, so English never flashes. */
+  ready.then(() => window.requestAnimationFrame(() => document.documentElement.setAttribute('data-lang-ready', '')));
 
   function set(code) {
     const next = normalise(code) || 'en';
