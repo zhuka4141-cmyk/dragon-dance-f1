@@ -592,6 +592,7 @@
         document.getElementById('heritageTourismLink').href = `https://www.discoverhongkong.com/${chinese ? 'tc' : 'eng'}/culture/what-to-expect-during-the-tai-hang-fire-dragon-dance.html`;
         langEnglish.setAttribute('aria-pressed', String(!chinese));
         langChinese.setAttribute('aria-pressed', String(chinese));
+        if (typeof positionLanguagePill === 'function') positionLanguagePill();
         syncCopyEmailControls();
         try { window.localStorage.setItem('dragon-dance-language', language); } catch (_) {}
         setPage(pageIndex);
@@ -785,6 +786,17 @@
       followPageLink();
       langEnglish.addEventListener('click', () => applyLanguage('en'));
       langChinese.addEventListener('click', () => applyLanguage('zh'));
+
+      // Slide the highlight pill under the active language button.
+      const languagePill = document.querySelector('.language-pill');
+      function positionLanguagePill() {
+        if (!languagePill) return;
+        const active = language === 'zh' ? langChinese : langEnglish;
+        languagePill.style.width = `${active.offsetWidth}px`;
+        languagePill.style.transform = `translate3d(${active.offsetLeft}px,0,0)`;
+      }
+      window.addEventListener('resize', positionLanguagePill, { passive: true });
+      positionLanguagePill();
       partnershipTrigger.addEventListener('click', openPartnershipModal);
       partnershipBackdrop.addEventListener('click', closePartnershipModal);
       partnershipClose.addEventListener('click', closePartnershipModal);
