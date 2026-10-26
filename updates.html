@@ -112,30 +112,12 @@
       footer { align-items:start; flex-direction:column; padding:34px 7vw 26px; }
     }
 
-.updates-hero{position:relative;}    /* ==== Fire-Dragon theme ==== */
-    .ember-field{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}    .ember{position:absolute;bottom:-14px;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle,#ffe08a 0%,#ff8a3c 45%,#ff3b2e 70%,transparent 78%);box-shadow:0 0 14px 2px rgba(255,120,40,.5);opacity:0;animation:ember-rise linear infinite;}    @keyframes ember-rise{0%{transform:translate3d(0,0,0) scale(1);opacity:0;}10%{opacity:.85;}60%{opacity:.5;}100%{transform:translate3d(var(--dx,20px),-72vh,0) scale(.3);opacity:0;}}    h1 i{background:linear-gradient(100deg,#ffd27a 0%,#ff7a2f 40%,#e01823 80%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}    .dragon-halo{box-shadow:0 0 90px rgba(224,24,35,.30),0 0 44px rgba(255,140,60,.24), inset 0 0 70px rgba(224,24,35,.18);border-color:rgba(255,255,255,.16);}    .dragon-stage:before{content:"";position:absolute;inset:8% 0;border-radius:50%;background:radial-gradient(circle,rgba(255,120,40,.18),rgba(224,24,35,.10) 55%,transparent 72%);filter:blur(12px);}    .eyebrow{background:linear-gradient(90deg,#ff9a4d,#ff5a1f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}    @media (prefers-reduced-motion:reduce){ .ember{display:none;} }
-
-    /* ==== Fire Dragon Dance extras (updates) ==== */
-    .incense-field{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-    .incense-dot{position:absolute;width:var(--s,5px);height:var(--s,5px);border-radius:50%;
-      background:radial-gradient(circle,rgba(255,216,140,.95) 0%,rgba(255,122,44,.78) 42%,rgba(224,24,35,.32) 68%,transparent 82%);
-      box-shadow:0 0 8px 1px rgba(255,132,52,.5),0 0 18px 2px rgba(255,92,32,.24);
-      animation:incense-twinkle var(--t,4.2s) ease-in-out infinite;animation-delay:var(--d,0s);}
-    @keyframes incense-twinkle{0%,100%{opacity:.3;transform:translate3d(0,0,0) scale(.88);}50%{opacity:.95;transform:translate3d(var(--dx,0),-3px,0) scale(1.12);}}
-    .ember{box-shadow:0 0 12px 2px rgba(255,120,40,.6),0 6px 16px 1px rgba(255,90,30,.42);}
-    .ember::before{content:"";position:absolute;left:50%;top:100%;width:2px;height:16px;margin-left:-1px;
-      background:linear-gradient(180deg,rgba(255,172,84,.9),transparent);border-radius:2px;opacity:.85;}
-    @keyframes ember-rise{0%{transform:translate3d(0,0,0);opacity:0;}12%{opacity:.9;}60%{opacity:.55;}100%{transform:translate3d(calc(var(--dx,20px)*2),-74vh,0);opacity:0;}}
-    .updates-hero .incense-field{z-index:0;}
-    .updates-hero>*{position:relative;z-index:1;}
-    @media (prefers-reduced-motion:reduce){.incense-dot{opacity:.7;animation:none;}.ember::before{display:none;}}
-
   </style>
   <link rel="stylesheet" href="assets/public-ui.css" />
+  <link rel="stylesheet" href="assets/refine.css" />
 </head>
 <body>
-  <div class="topline"></div>
-  <nav>
+    <nav>
     <a class="wordmark" href="index.html">Dragon Dance<span>STEM Racing</span></a>
     <a class="back-home" href="index.html#updates" data-i18n="backHome">Home</a>
     <div class="language-switch" role="group" aria-label="Language selector">
@@ -144,19 +126,6 @@
   </nav>
   <main>
     <section class="updates-hero" aria-labelledby="updatesTitle">
-    <div class="incense-field" aria-hidden="true">
-    <span class="incense-dot" style="left:8%;top:18%;--s:4px;--t:4.4s;--d:.3s;--dx:7px"></span>
-    <span class="incense-dot" style="left:18%;top:34%;--s:5px;--t:5s;--d:.9s;--dx:-6px"></span>
-    <span class="incense-dot" style="left:28%;top:24%;--s:4px;--t:4.8s;--d:1.6s;--dx:8px"></span>
-    <span class="incense-dot" style="left:40%;top:14%;--s:5px;--t:4s;--d:2.2s;--dx:-5px"></span>
-    <span class="incense-dot" style="left:52%;top:28%;--s:4px;--t:5.4s;--d:.5s;--dx:6px"></span>
-    <span class="incense-dot" style="left:62%;top:18%;--s:5px;--t:4.6s;--d:1.1s;--dx:-8px"></span>
-    <span class="incense-dot" style="left:74%;top:32%;--s:4px;--t:5s;--d:1.9s;--dx:7px"></span>
-    <span class="incense-dot" style="left:84%;top:20%;--s:5px;--t:4.2s;--d:2.6s;--dx:-5px"></span>
-    <span class="incense-dot" style="left:34%;top:40%;--s:4px;--t:5.6s;--d:3s;--dx:6px"></span>
-    <span class="incense-dot" style="left:48%;top:36%;--s:5px;--t:4.8s;--d:2.4s;--dx:-7px"></span>
-    </div>
-  <div class="ember-field" aria-hidden="true">    <span class="ember" style="left:5%;animation-duration:7s;animation-delay:0s;--dx:16px"></span>    <span class="ember" style="left:16%;width:4px;height:4px;animation-duration:9s;animation-delay:1.2s;--dx:-12px"></span>    <span class="ember" style="left:27%;animation-duration:8s;animation-delay:.6s;--dx:22px"></span>    <span class="ember" style="left:38%;width:5px;height:5px;animation-duration:10s;animation-delay:2s;--dx:-18px"></span>    <span class="ember" style="left:50%;animation-duration:7.5s;animation-delay:.3s;--dx:14px"></span>    <span class="ember" style="left:61%;width:4px;height:4px;animation-duration:8.5s;animation-delay:1.6s;--dx:-20px"></span>    <span class="ember" style="left:72%;animation-duration:9.5s;animation-delay:.9s;--dx:18px"></span>    <span class="ember" style="left:83%;width:5px;height:5px;animation-duration:7s;animation-delay:2.4s;--dx:-14px"></span>    <span class="ember" style="left:91%;animation-duration:8s;animation-delay:1s;--dx:12px"></span>    <span class="ember" style="left:10%;width:3px;height:3px;animation-duration:11s;animation-delay:3s;--dx:10px"></span>    <span class="ember" style="left:45%;width:3px;height:3px;animation-duration:12s;animation-delay:2s;--dx:-10px"></span>    <span class="ember" style="left:68%;width:6px;height:6px;animation-duration:9s;animation-delay:3.5s;--dx:20px"></span>  </div>
       <div><div class="eyebrow" data-i18n="updatesLabel">Latest / Updates</div><h1 id="updatesTitle" data-i18n-html="updatesTitle">On The<br>Move.</h1></div>
       <p data-i18n="updatesIntro">News, race preparation and the moments that move Dragon Dance forward.</p>
     </section>
@@ -168,6 +137,7 @@
   <script src="supabase-config.js"></script>
   <script src="assets/site-analytics.js" defer></script>
   <script src="assets/updates-feed.js"></script>
+  <script src="assets/motion.js" defer></script>
   <script>
     (() => {
       const updatesList = document.getElementById('updatesList');

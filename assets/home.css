@@ -344,76 +344,6 @@
       .deadline-copy strong { font-size:32px; }
     }
 
-    /* ==== Fire-Dragon theme ==== */
-    .ember-field{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}    .ember{position:absolute;bottom:-14px;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle,#ffe08a 0%,#ff8a3c 45%,#ff3b2e 70%,transparent 78%);box-shadow:0 0 14px 2px rgba(255,120,40,.5);opacity:0;animation:ember-rise linear infinite;}    @keyframes ember-rise{0%{transform:translate3d(0,0,0) scale(1);opacity:0;}10%{opacity:.85;}60%{opacity:.5;}100%{transform:translate3d(var(--dx,20px),-72vh,0) scale(.3);opacity:0;}}    h1 i{background:linear-gradient(100deg,#ffd27a 0%,#ff7a2f 40%,#e01823 80%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}    .dragon-halo{box-shadow:0 0 90px rgba(224,24,35,.30),0 0 44px rgba(255,140,60,.24), inset 0 0 70px rgba(224,24,35,.18);border-color:rgba(255,255,255,.16);}    .dragon-stage:before{content:"";position:absolute;inset:8% 0;border-radius:50%;background:radial-gradient(circle,rgba(255,120,40,.18),rgba(224,24,35,.10) 55%,transparent 72%);filter:blur(12px);}    .eyebrow{background:linear-gradient(90deg,#ff9a4d,#ff5a1f);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}    @media (prefers-reduced-motion:reduce){ .ember{display:none;} }
-
-    /* ==== Fire Dragon Dance extras ==== */
-    /* incense dots (香火龍) */
-    .incense-field{position:absolute;inset:-8% -6%;z-index:0;pointer-events:none;}
-    .incense-dot{position:absolute;width:var(--s,5px);height:var(--s,5px);border-radius:50%;
-      background:radial-gradient(circle,rgba(255,216,140,.95) 0%,rgba(255,122,44,.78) 42%,rgba(224,24,35,.32) 68%,transparent 82%);
-      box-shadow:0 0 8px 1px rgba(255,132,52,.55),0 0 18px 2px rgba(255,92,32,.26);
-      animation:incense-twinkle var(--t,4.2s) ease-in-out infinite;animation-delay:var(--d,0s);}
-    @keyframes incense-twinkle{
-      0%,100%{opacity:.3;transform:translate3d(0,0,0) scale(.88);}
-      50%{opacity:.95;transform:translate3d(var(--dx,0),-3px,0) scale(1.12);}
-    }
-    /* dragon undulation (蜿蜒舞动) */
-    @keyframes dragon-undulate{
-      0%,100%{transform:translate3d(0,0,0) rotate(-1.1deg) scale(1);}
-      25%{transform:translate3d(4px,-7px,0) rotate(1deg) scale(1.02);}
-      50%{transform:translate3d(-2px,-13px,0) rotate(-1deg) scale(.985);}
-      75%{transform:translate3d(-5px,-5px,0) rotate(1.3deg) scale(1.01);}
-    }
-    #dragon{animation:dragon-undulate 7s ease-in-out infinite;transform-origin:50% 72%;will-change:transform;}
-    /* meteor sparks: add trailing tail to existing embers */
-    .ember{box-shadow:0 0 12px 2px rgba(255,120,40,.6),0 6px 16px 1px rgba(255,90,30,.42);}
-    .ember::before{content:"";position:absolute;left:50%;top:100%;width:2px;height:18px;margin-left:-1px;
-      background:linear-gradient(180deg,rgba(255,172,84,.95),transparent);border-radius:2px;opacity:.85;}
-    @keyframes ember-rise{
-      0%{transform:translate3d(0,0,0);opacity:0;}
-      12%{opacity:.9;}
-      60%{opacity:.55;}
-      100%{transform:translate3d(calc(var(--dx,20px)*2.2),-80vh,0);opacity:0;}
-    }
-    /* dragon fire-trail (S-shaped flowing light) */
-    .dragon-trail{position:absolute;right:-4%;top:-4%;width:110%;height:112%;z-index:0;pointer-events:none;opacity:.72;}
-    .dragon-trail path{fill:none;stroke-width:1.2;stroke-linecap:round;
-      filter:drop-shadow(0 0 5px rgba(255,110,40,.55));stroke-dasharray:2px 9px;animation:trail-flow 3.4s linear infinite;}
-    @keyframes trail-flow{from{stroke-dashoffset:0;}to{stroke-dashoffset:-32px;}}
-    .dragon-stage{z-index:1;}
-    @media (prefers-reduced-motion:reduce){
-      #dragon,.incense-dot,.dragon-trail path{animation:none;}
-      .incense-dot{opacity:.7;}
-      .ember::before{display:none;}
-    }
-
-    /* ==== page-wide ambient sparks + fire dividers ==== */
-    .spark-field{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;mix-blend-mode:screen;opacity:.72;}
-    .spark{position:absolute;bottom:-8px;width:var(--s,3px);height:var(--s,3px);border-radius:50%;
-      background:radial-gradient(circle,#ffe3a8 0%,#ff9a4d 45%,#ff5a1f 72%,transparent 84%);
-      box-shadow:0 0 8px 1px rgba(255,130,45,.5),0 5px 12px 1px rgba(255,90,30,.28);
-      animation:spark-rise var(--t,11s) linear infinite;animation-delay:var(--d,0s);opacity:0;}
-    @keyframes spark-rise{
-      0%{transform:translate3d(0,0,0) scale(.55);opacity:0;}
-      7%{opacity:.8;}
-      55%{opacity:.5;}
-      100%{transform:translate3d(var(--dx,16px),-104vh,0) scale(.95);opacity:0;}
-    }
-    /* lift page content above the ambient spark layer */
-    main :is(h1,h2,h3,h4,p,strong,li,blockquote,a),
-    .member-card,.deadline-card,.update-preview-card,.partner-item,.contact-item,
-    .role-item,.proposal-cta,.feature-copy,.machine-copy,.fact-row{position:relative;z-index:2;}
-    .hero,.about-page,.feature-page{position:relative;z-index:3;isolation:isolate;}
-    /* winding fire-line divider */
-    .fire-divider{position:relative;height:30px;background:transparent;pointer-events:none;}
-    .fire-divider::before{content:"";position:absolute;left:0;right:0;top:50%;height:3px;transform:translateY(-50%);
-      background:linear-gradient(90deg,transparent,rgba(255,90,30,.55) 18%,rgba(255,214,140,.9) 50%,rgba(255,90,30,.55) 82%,transparent);
-      border-radius:2px;filter:blur(.6px);opacity:.8;}
-    .fire-divider::after{content:"";position:absolute;left:50%;top:50%;width:130px;height:130px;transform:translate(-50%,-50%);
-      background:radial-gradient(circle,rgba(255,110,40,.26),transparent 68%);filter:blur(7px);pointer-events:none;}
-    @media (prefers-reduced-motion:reduce){.spark{animation:none;opacity:.35;}.fire-divider::after{display:none;}}
-
     /* Let long email addresses wrap instead of shrinking on narrow screens. */
     @media (max-width:340px){
       .contact-email-item{grid-template-columns:minmax(0,1fr) 38px;gap:8px;align-items:end;}
@@ -427,17 +357,3 @@
       .modal-contact-email .modal-contact-link img{display:none;}
       .modal-contact-email .modal-contact-copy > span{white-space:nowrap;overflow-wrap:normal;font-size:clamp(9px,3vw,13px);}
     }
-
-/* team logo: same white-ink dragon and red glow as the hero; glow sits on the wrapper so the image filter does not invert it */
-.team-logo-stage { position: relative; isolation: isolate; width: clamp(200px, 30vw, 380px); margin: 0 0 32px; }
-.team-logo-stage::before {
-  content: ""; position: absolute; inset: -10%; border-radius: 50%; z-index: -1; pointer-events: none;
-  background: radial-gradient(closest-side, rgba(228, 24, 35, .34), rgba(120, 10, 16, .2) 55%, transparent 76%);
-  filter: blur(18px);
-}
-.team-logo-stage::after {
-  content: ""; position: absolute; inset: 4%; border-radius: 50%; z-index: -1; pointer-events: none;
-  border: 1px solid rgba(228, 178, 122, .22);
-  box-shadow: 0 0 44px rgba(228, 24, 35, .18) inset;
-}
-.team-logo { display: block; width: 100%; height: auto; }

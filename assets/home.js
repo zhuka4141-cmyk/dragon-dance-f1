@@ -1,8 +1,6 @@
 (() => {
       document.documentElement.classList.add('has-scroll-reveal');
       const hero = document.querySelector('.hero');
-      const canvas = document.getElementById('fogField');
-      const context = canvas.getContext('2d');
       const heroPages = document.getElementById('heroPages');
       const heroSlides = Array.from(heroPages.children);
       const aboutPageStack = document.getElementById('aboutPages');
@@ -52,22 +50,6 @@
       };
       const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
       let reduceMotion = motionPreference.matches;
-      const wisps = [
-        { x:.02, y:.18, radius:110, stretch:2.8, speed:7, wave:.42, alpha:.13 },
-        { x:.28, y:.34, radius:145, stretch:3.2, speed:10, wave:.31, alpha:.11 },
-        { x:.58, y:.2, radius:125, stretch:2.5, speed:8, wave:.38, alpha:.12 },
-        { x:.78, y:.48, radius:170, stretch:3.4, speed:6, wave:.27, alpha:.1 },
-        { x:.12, y:.66, radius:155, stretch:3.1, speed:9, wave:.33, alpha:.12 },
-        { x:.45, y:.78, radius:135, stretch:2.7, speed:11, wave:.4, alpha:.1 },
-        { x:.72, y:.82, radius:180, stretch:3.5, speed:5, wave:.25, alpha:.09 }
-      ];
-      let width = 0;
-      let height = 0;
-      let frame = 0;
-      let visible = true;
-      let clearPoints = [];
-      let lastDraw = 0;
-      let lastSample = { time:0, x:-1000, y:-1000 };
       let pageIndex = 0;
       let swipeStart = null;
       let suppressClickUntil = 0;
@@ -205,7 +187,11 @@
         emailLabel:'電郵',
         projectManagerContact:'專案經理 · 91639154',
         sponsorshipContact:'贊助及推廣經理 · 60116515',
-        schoolWebsite:'學校網站'
+        schoolWebsite:'學校網站',
+        statYears:'年大坑舞火龍傳統',
+        statRoles:'個角色，同一支隊伍',
+        statDeadlines:'個關鍵日期',
+        statDays:'距離賽車交接（天）'
       };
       const chineseHtml = {
         heritageTitle:'一方街巷。<br>一條活起來的龍。',
@@ -640,7 +626,6 @@
         pageIndex = Math.max(0, Math.min(nextIndex, heroSlides.length - 1));
         if (pageChanged) window.scrollTo({top:0, behavior:'instant'});
         renderTrack();
-        updateFogState();
         heroPages.dataset.page = String(pageIndex + 1);
         const prevHidden = pageIndex === 0;
         const nextHidden = pageIndex === heroSlides.length - 1;
@@ -761,122 +746,17 @@
         renderTrack();
       }
 
-      function resizeFog() {
-        if (!context) return;
-        width = hero.clientWidth;
-        height = hero.clientHeight;
-        const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
-        canvas.width = Math.round(width * ratio);
-        canvas.height = Math.round(height * ratio);
-        context.setTransform(ratio, 0, 0, ratio, 0, 0);
-        updateFogState();
-      }
-
-      function drawWisp(wisp, index, seconds) {
-        const travel = width * 1.55;
-        const drift = reduceMotion ? 0 : seconds * wisp.speed;
-        const x = ((wisp.x * travel + drift) % travel) - width * .22;
-        const y = wisp.y * height + (reduceMotion ? 0 : Math.sin(seconds * wisp.wave + index) * 15);
-        const gradient = context.createRadialGradient(x, y, 0, x, y, wisp.radius);
-        gradient.addColorStop(0, `rgba(214,224,219,${wisp.alpha})`);
-        gradient.addColorStop(.48, `rgba(191,205,201,${wisp.alpha * .58})`);
-        gradient.addColorStop(1, 'rgba(170,188,184,0)');
-        context.save();
-        context.translate(x, y);
-        context.scale(wisp.stretch, 1);
-        context.translate(-x, -y);
-        context.fillStyle = gradient;
-        context.beginPath();
-        context.arc(x, y, wisp.radius, 0, Math.PI * 2);
-        context.fill();
-        context.restore();
-      }
-
-      function clearFog(now) {
-        clearPoints = clearPoints.filter(point => now - point.created < 1150);
-        context.globalCompositeOperation = 'destination-out';
-        clearPoints.forEach(point => {
-          const progress = Math.min((now - point.created) / 1150, 1);
-          const radius = point.radius + progress * 38;
-          const strength = .94 * (1 - progress);
-          const gradient = context.createRadialGradient(point.x, point.y, radius * .18, point.x, point.y, radius);
-          gradient.addColorStop(0, `rgba(0,0,0,${strength})`);
-          gradient.addColorStop(.58, `rgba(0,0,0,${strength * .72})`);
-          gradient.addColorStop(1, 'rgba(0,0,0,0)');
-          context.fillStyle = gradient;
-          context.beginPath();
-          context.arc(point.x, point.y, radius, 0, Math.PI * 2);
-          context.fill();
-        });
-        context.globalCompositeOperation = 'source-over';
-      }
-
-      function fogCanAnimate() {
-        return context && width && height && visible && pageIndex === 0 && !document.hidden && !reduceMotion;
-      }
-
-      function paintFog(now) {
-        context.clearRect(0, 0, width, height);
-        wisps.forEach((wisp, index) => drawWisp(wisp, index, now / 1000));
-        clearFog(now);
-      }
-
-      function updateFogState() {
-        cancelAnimationFrame(frame);
-        frame = 0;
-        const paused = !fogCanAnimate();
-        hero.classList.toggle('is-effects-paused', paused);
-        canvas.hidden = pageIndex !== 0;
-        if (!paused) frame = requestAnimationFrame(drawFog);
-        else {
-          clearPoints = [];
-          if (context && width && height && visible && pageIndex === 0 && !document.hidden) paintFog(0);
-        }
-      }
-
-      function drawFog(now) {
-        frame = 0;
-        if (!fogCanAnimate()) return;
-        if (now - lastDraw < 32) {
-          frame = requestAnimationFrame(drawFog);
-          return;
-        }
-        lastDraw = now;
-        paintFog(now);
-        frame = requestAnimationFrame(drawFog);
-      }
-
-      function disperseFog(event) {
-        if (!fogCanAnimate()) return;
-        const bounds = hero.getBoundingClientRect();
-        const x = event.clientX - bounds.left;
-        const y = event.clientY - bounds.top;
-        if (x < 0 || y < 0 || x > bounds.width || y > bounds.height) return;
-        const now = performance.now();
-        const distance = Math.hypot(x - lastSample.x, y - lastSample.y);
-        if (event.type === 'pointermove' && now - lastSample.time < 34 && distance < 22) return;
-        clearPoints.push({ x, y, radius:event.pointerType === 'touch' ? 104 : 82, created:now });
-        if (clearPoints.length > 28) clearPoints.shift();
-        lastSample = { time:now, x, y };
-      }
-
       let savedLanguage = 'en';
       try { savedLanguage = window.localStorage.getItem('dragon-dance-language') || 'en'; } catch (_) {}
       initScrollReveals();
       applyLanguage(savedLanguage === 'zh' ? 'zh' : 'en', false);
       loadUpdates();
-      resizeFog();
-      window.addEventListener('resize', resizeFog, { passive:true });
-      hero.addEventListener('pointerdown', disperseFog, { passive:true });
-      hero.addEventListener('pointermove', disperseFog, { passive:true });
-      document.addEventListener('visibilitychange', updateFogState);
       motionPreference.addEventListener('change', event => {
         reduceMotion = event.matches;
         if (reduceMotion) {
           scrollRevealObserver?.disconnect();
           document.querySelectorAll('[data-scroll-reveal]').forEach(element => element.classList.add('is-visible'));
         }
-        updateFogState();
       });
       document.addEventListener('pointerdown', beginSwipe, { passive:true });
       document.addEventListener('pointermove', moveSwipe, { passive:false });
@@ -920,12 +800,4 @@
           setPage(pageIndex + 1);
         }
       });
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver(entries => {
-          visible = entries[0].isIntersecting;
-          updateFogState();
-        }, { threshold:.01 }).observe(hero);
-      } else {
-        updateFogState();
-      }
     })();
