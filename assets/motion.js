@@ -47,21 +47,32 @@
 (() => {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-  const lang = () => (document.documentElement.lang === 'zh-Hant' ? 'zh' : 'en');
+  const lang = () => document.documentElement.dataset.lang || document.documentElement.lang || 'en';
 
   /* Ticker */
   const ticker = document.getElementById('ticker');
   const words = {
     en: ['Culture', 'Craft', 'Collective spirit', 'Aerodynamics', 'Tai Hang', 'STEM Racing', 'Hong Kong', 'Carry the fire'],
-    zh: ['文化', '匠心', '同心', '空氣動力學', '大坑', 'STEM Racing', '香港', '薪火疾行']
+    'zh-Hant': ['文化', '匠心', '同心', '空氣動力學', '大坑', 'STEM Racing', '香港', '薪火疾行'],
+    'zh-Hans': ['文化', '匠心', '同心', '空气动力学', '大坑', 'STEM Racing', '香港', '薪火疾行'],
+    ja: ['文化', '匠の技', '心を一つに', '空気力学', '大坑', 'STEM Racing', '香港', '火を運ぶ'],
+    ko: ['문화', '장인정신', '한마음', '공기역학', '타이항', 'STEM Racing', '홍콩', '불을 나르다'],
+    es: ['Cultura', 'Artesanía', 'Espíritu colectivo', 'Aerodinámica', 'Tai Hang', 'STEM Racing', 'Hong Kong', 'Llevar el fuego'],
+    fr: ['Culture', 'Savoir-faire', 'Esprit collectif', 'Aérodynamique', 'Tai Hang', 'STEM Racing', 'Hong Kong', 'Porter le feu'],
+    de: ['Kultur', 'Handwerk', 'Gemeinschaftsgeist', 'Aerodynamik', 'Tai Hang', 'STEM Racing', 'Hongkong', 'Das Feuer tragen'],
+    pt: ['Cultura', 'Artesanato', 'Espírito coletivo', 'Aerodinâmica', 'Tai Hang', 'STEM Racing', 'Hong Kong', 'Levar o fogo']
   };
+  let tickerLang = '';
   function buildTicker() {
     if (!ticker) return;
-    const row = words[lang()].map(w => `<span>${w}</span><i></i>`).join('');
+    const code = words[lang()] ? lang() : 'en';
+    if (code === tickerLang) return;
+    tickerLang = code;
+    const row = words[code].map(w => `<span>${w}</span><i></i>`).join('');
     ticker.innerHTML = `<div class="ticker-track">${row}${row}</div>`;
   }
   buildTicker();
-  new MutationObserver(buildTicker).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  new MutationObserver(buildTicker).observe(document.documentElement, { attributes: true, attributeFilter: ['lang', 'data-lang'] });
 
   /* Counters */
   const stats = document.getElementById('stats');
