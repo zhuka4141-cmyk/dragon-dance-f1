@@ -179,6 +179,7 @@
 
     const label = toggle.querySelector('.language-current');
     menu.textContent = '';
+    menu.hidden = true;
 
     const options = SUPPORTED.map(code => {
       const item = document.createElement('li');
