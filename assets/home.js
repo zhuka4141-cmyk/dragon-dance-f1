@@ -13,6 +13,7 @@
       const pagerNextLabel = document.getElementById('pagerNextLabel');
       const langEnglish = document.getElementById('langEnglish');
       const langChinese = document.getElementById('langChinese');
+      const languagePill = document.querySelector('.language-pill');
       const partnershipTrigger = document.getElementById('partnershipTrigger');
       const partnershipModal = document.getElementById('partnershipModal');
       const partnershipBackdrop = document.getElementById('partnershipBackdrop');
@@ -789,7 +790,6 @@
       langChinese.addEventListener('click', () => applyLanguage('zh'));
 
       // Slide the highlight pill under the active language button.
-      const languagePill = document.querySelector('.language-pill');
       function positionLanguagePill() {
         if (!languagePill) return;
         const active = language === 'zh' ? langChinese : langEnglish;
