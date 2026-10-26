@@ -11,9 +11,6 @@
       const pagerNext = document.getElementById('pagerNext');
       const pagerPrevLabel = document.getElementById('pagerPrevLabel');
       const pagerNextLabel = document.getElementById('pagerNextLabel');
-      const langEnglish = document.getElementById('langEnglish');
-      const langChinese = document.getElementById('langChinese');
-      const languagePill = document.querySelector('.language-pill');
       const partnershipTrigger = document.getElementById('partnershipTrigger');
       const partnershipModal = document.getElementById('partnershipModal');
       const partnershipBackdrop = document.getElementById('partnershipBackdrop');
@@ -23,32 +20,12 @@
       const homeOnlyContent = document.getElementById('homeOnlyContent');
       const deadlineCountdowns = Array.from(document.querySelectorAll('.deadline-countdown'));
       const copyEmailButtons = Array.from(document.querySelectorAll('[data-copy-email]'));
-      const pagerLabels = {
-        en: [
-          { prev:'', next:'Fire Dragon' },
-          { prev:'Home', next:'Crew' },
-          { prev:'Fire Dragon', next:'Partners' },
-          { prev:'Crew', next:'' }
-        ],
-        zh: [
-          { prev:'', next:'大坑火龍' },
-          { prev:'首頁', next:'隊員' },
-          { prev:'大坑火龍', next:'贊助商' },
-          { prev:'隊員', next:'' }
-        ]
-      };
-      const copyEmailMessages = {
-        en: {
-          copy:'Copy email address',
-          copied:'Email address copied',
-          failed:'Could not copy the email address. Please select and copy it.'
-        },
-        zh: {
-          copy:'複製電郵地址',
-          copied:'已複製電郵地址',
-          failed:'未能複製電郵地址。請選取並複製。'
-        }
-      };
+      const pagerLabelKeys = [
+        { prev:'', next:'pagerHeritage' },
+        { prev:'pagerHome', next:'pagerCrew' },
+        { prev:'pagerHeritage', next:'pagerPartners' },
+        { prev:'pagerCrew', next:'' }
+      ];
       const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
       let reduceMotion = motionPreference.matches;
       let pageIndex = 0;
@@ -66,151 +43,7 @@
       const htmlElements = Array.from(document.querySelectorAll('[data-i18n-html]'));
       const englishText = Object.fromEntries(textElements.map(element => [element.dataset.i18n, element.textContent]));
       const englishHtml = Object.fromEntries(htmlElements.map(element => [element.dataset.i18nHtml, element.innerHTML]));
-      const chineseText = {
-        heritageIntro:'每逢中秋，大坑街巷交織着紮作手藝、香火與眾人的步伐。舞火龍不只是一場表演，更是一項由街坊親手紮作、合力舞動，並代代相傳的活態文化。',
-        heritageCaption:'以火龍的舞動與香火光點為靈感的藝術演繹。',
-        heritageHistoryTitle:'從大坑街巷開始的故事',
-        heritageHistoryCopy:'這項傳統可追溯至1880年。相傳當年大坑發生瘟疫，村民舞動火龍，祈求消災平安。這份守護家園的心意，延續成為凝聚街坊與不同世代的中秋習俗。',
-        heritageTimelineOrigin:'大坑舞火龍傳統的起源。',
-        heritageTimelineNational:'列入第三批國家級非物質文化遺產名錄。',
-        heritageTimelineHK:'列入首份《香港非物質文化遺產代表作名錄》。',
-        heritageCraftTitle:'是甚麼，讓火龍活起來？',
-        heritageCraftIntro:'走近一點：萬點光芒的背後，是耐心的雙手、樸素的材料，以及同心前行的人。',
-        heritageBodyTitle:'龍身・一草一結，親手紮作',
-        heritageBodyCopy:'藤枝、繩索與珍珠草，每年重新紮成火龍，再以竹枝承托。巡遊前，工匠細心綁紮、塑形，調整每一部分的平衡。這份匠心，也啟發我們把設計一步步變成精密製作的賽車。',
-        heritageIncenseTitle:'香火・萬點光芒，連成火龍',
-        heritageIncenseCopy:'燃點的香枝插滿龍身，點點香火勾勒出火龍的輪廓。煙霧與香頭的光芒，共同構成舞火龍的獨特景象。網站的琥珀色光點與流動線條，取意於這些香火，而非噴火的神話巨龍。',
-        heritageRhythmTitle:'節奏・龍珠引路，眾人同心',
-        heritageRhythmCopy:'龍珠在前引路，鑼鼓帶動節奏；龍頭、龍身與龍尾的舞動者互相配合，讓長龍穿梭大坑街巷。這份默契啟發我們的設計、製造與管理成員，一起朝着同一條起跑線前進。',
-        heritageBridgeCopy:'一條由街坊合力舞動的火龍，與一部由隊友共同打造的賽車，分享着協作的力量。匠心化作工程，節奏化作默契；傳統成為邀請，讓我們一起創作、一起前行。',
-        heritageSourcesTitle:'走近這項活態文化',
-        heritageSourceICH:'香港非物質文化遺產辦事處 ↗',
-        heritageSourceCentre:'大坑火龍文化館 ↗',
-        heritageSourceTourism:'香港旅遊發展局 ↗',
-        heritageDisclaimer:'大坑舞火龍是 Dragon Dance STEM Racing 的文化靈感。我們是獨立學生車隊，並非大坑舞火龍的主辦單位或官方代表。',
-        heritageIndex:'02 / 大坑火龍',
-        heritageHeroIntro:'走近大坑的活態傳統：親手紮作的火龍、萬點香火，以及街坊同心舞動的步伐。',
-        deadlinesLabel:'賽事日程 / 2026 · Professional Class',
-        deadlinesNote:'Professional Class 線上檔案與賽車交接的提交日期。',
-        onlineFileTitle:'提交線上檔案',
-        onlineFileCopy:'線上檔案最終提交期限。',
-        carHandoverTitle:'交接賽車',
-        carHandoverCopy:'交接完成的賽車，以供檢查。',
-        november2026:'2026年11月',
-        pagerHint:'滑動更換頁面',
-        updatesLabel:'最新 / 動態',
-        viewAllUpdates:'查看全部動態 ↗',
-        updatesLoading:'正在載入最新動態...',
-        updatesEmpty:'暫時未有動態，請稍後再回來看看。',
-        readUpdate:'查看動態 ↗',
-        heroKicker:'博愛醫院歷屆總理聯誼會梁省德中學 · STEM Racing',
-        heroCopy:'萬點香火，眾人同心。香港舞火龍的節奏與默契，啟發我們走向起跑線。Dragon Dance 是一支把文化、匠心與速度連在一起的學生 STEM Racing 車隊。',
-        f1StemLabel:'Dragon Dance / STEM Racing',
-        heroMantra:'文化。匠心。同心。',
-        navTeam:'車隊',
-        navHeritage:'大坑火龍',
-        navCrew:'隊員',
-        navPartners:'合作夥伴',
-        discoverHeritage:'認識大坑舞火龍',
-        heroProvenance:'香港・大坑 — 啟發我們的傳統',
-        scrollExplore:'向下探索 ↓',
-        crewIndex:'03 / 隊員',
-        crewIntro:'從專案管理、工程設計到品牌與贊助，隊員各自發揮專長，讓 Dragon Dance 同步前進。',
-        partnersIndex:'04 / 贊助商',
-        partnersIntro:'與重視創新、教育與青年發展的夥伴並肩，把工程實踐與品牌故事推上更大的舞台。',
-        teamLabel:'01 / 車隊',
-        teamOverview:'我們是博愛醫院歷屆總理聯誼會梁省德中學的 STEM Racing 車隊。以大坑舞火龍的同心精神為靈感，把香港文化連結工程、視覺設計與賽事策略。不同專長，同一方向。',
-        baseLabel:'基地',
-        programLabel:'項目',
-        identityLabel:'精神',
-        identityValue:'龍舞疾行',
-        crewOverview:'Dragon Dance 由不同專長的隊員組成。從專案管理、工程設計到品牌與贊助，每一個角色都在同一個節奏中協作，讓想法真正站上賽道。',
-        directionLabel:'方向',
-        oneTeam:'同一隊伍',
-        methodLabel:'方式',
-        sharedOwnership:'共同承擔',
-        energyLabel:'投入',
-        fullCommitment:'全力以赴',
-        partnersOverview:'每一份支持都讓 Dragon Dance 走得更遠。我們期待與重視創新、教育與青年發展的夥伴合作，把工程實踐與品牌故事一起帶到更大的舞台。',
-        partnershipLabel:'合作',
-        openLabel:'開放合作',
-        reachLabel:'地點',
-        contactLabel:'聯絡我們',
-        emailUs:'電郵聯絡',
-        machineLabel:'02 / 賽車',
-        machineCopy:'每一個翼面、每一段車身輪廓，都在追求更乾淨的氣流、更少的阻力，以及一個明確的終點。',
-        chassisLabel:'底盤',
-        precisionCrafted:'精密打造',
-        focusLabel:'重點',
-        aerodynamics:'空氣動力學',
-        raceMode:'比賽模式',
-        fullAttack:'全力出擊',
-        rolesLabel:'職責 / 分工',
-        rolesCopy:'每個角色負責不同環節，從時間管理到賽車與品牌，彼此交接、互相補位。',
-        crewMemberOne:'01 / 成員',
-        crewMemberTwo:'02 / 成員',
-        crewMemberThree:'03 / 成員',
-        projectManager:'專案經理',
-        projectManagerCopy:'協調進度、分工與比賽準備。',
-        designEngineering:'設計與工程',
-        designEngineeringCopy:'負責賽車設計、建模與測試。',
-        manufacturing:'製造',
-        manufacturingCopy:'把數位模型轉化為可上賽道的實體。',
-        sponsorshipMarketing:'贊助與推廣',
-        sponsorshipMarketingCopy:'建立合作關係與商業計劃。',
-        brandMedia:'品牌與媒體',
-        brandMediaCopy:'統一視覺、內容與對外溝通。',
-        sponsorCopy:'與 Dragon Dance 合作，讓品牌走進校園 STEM 賽事、設計過程與下一次起跑。',
-        sponsorshipLabel:'贊助 / 2026',
-        partnershipKicker:'合作聯絡',
-        partnershipModalCopy:'歡迎聯絡我們的隊伍，洽談贊助、品牌合作，以及支持 Dragon Dance 的不同方式。',
-        sponsorshipManagerLabel:'贊助及推廣經理',
-        proposalLabel:'2026 贊助提案',
-        proposalTitle:'一起打造下一場賽事。',
-        proposalCopy:'了解品牌曝光、校園活動、社交媒體故事與技術教育合作的可能性。',
-        openProposal:'開啟贊助提案 PDF ↗',
-        discussPartnership:'洽談合作',
-        downloadProposal:'下載贊助提案 PDF ↓',
-        visibilityIndex:'01 / 曝光',
-        brandVisibility:'品牌曝光',
-        brandVisibilityCopy:'在網站、提案與隊伍內容中呈現合作品牌。',
-        campusIndex:'02 / 校園',
-        campusActivation:'校園互動',
-        campusActivationCopy:'連結校園活動、學生社群與 STEM 學習故事。',
-        socialIndex:'03 / 社群',
-        socialStorytelling:'社群故事',
-        socialStorytellingCopy:'透過專案進度與 Instagram 分享品牌合作。',
-        technicalIndex:'04 / 技術',
-        teamDevelopment:'車隊發展',
-        teamDevelopmentCopy:'支持設計、製造、測試與下一代創意人才。',
-        racingCopy:'F1 Dragon Dance 是 Dragon Dance 在香港的 STEM Racing 身分。STEM Racing 是前稱 F1 in Schools 的學生賽車挑戰，我們在其中結合工程、設計、品牌與賽事策略。',
-        footerTitle:'與龍<br>共舞。',
-        emailLabel:'電郵',
-        projectManagerContact:'專案經理 · 91639154',
-        sponsorshipContact:'贊助及推廣經理 · 60116515',
-        schoolWebsite:'學校網站',
-        statYears:'年大坑舞火龍傳統',
-        statRoles:'個角色，同一支隊伍',
-        statDeadlines:'個關鍵日期',
-        statDays:'距離賽車交接（天）'
-      };
-      const chineseHtml = {
-        heritageTitle:'一方街巷。<br>一條活起來的龍。',
-        heritageBridgeTitle:'從街巷。<br>到起跑線。',
-        heritageHeroTitle:'大坑<br>舞火龍。',
-        deadlinesTitle:'兩個日期。<br>同一條終點線。',
-        updatesTitle:'持續<br>前進。',
-        heroTitle:'薪火<br><i>疾行。</i>',
-        crewTitle:'認識<br>隊員',
-        partnersTitle:'支持<br>驅動。',
-        machineTitle:'為起跑<br>而生。',
-        rolesTitle:'一隊夥伴。<br>多種<br>專長。',
-        sponsorTitle:'與我們<br>同行。',
-        partnershipModalTitle:'與我們<br>合作。',
-        racingTitle:'STEM Racing，<br><em>前稱 F1 in Schools。</em>',
-        footerTitle:'與龍<br>共舞。',
-        footerMeta:'博愛醫院歷屆總理聯誼會梁省德中學<br>香港'
-      };
+      const ui = (key, vars) => DragonI18n.ui(key, vars);
 
       function observeScrollReveal(element) {
         if (!element) return;
@@ -240,13 +73,13 @@
       function updateText(post, field) {
         const value = post[field];
         if (typeof value === 'string') return value;
-        return value?.[language] || value?.en || '';
+        return value?.[language.startsWith('zh') ? 'zh' : 'en'] || value?.en || '';
       }
 
       function updateDate(value) {
         const date = new Date(`${value}T12:00:00`);
         if (Number.isNaN(date.getTime())) return value || '';
-        return new Intl.DateTimeFormat(language === 'zh' ? 'zh-HK' : 'en-GB', {
+        return new Intl.DateTimeFormat(DragonI18n.locale, {
           day:'2-digit', month:'short', year:'numeric'
         }).format(date);
       }
@@ -259,19 +92,18 @@
           const deadline = new Date(year, month - 1, day);
           const days = Math.round((deadline - today) / 86400000);
           let label = '';
-          if (days > 0) label = language === 'zh' ? `還有 ${days} 天` : `${days} days to go`;
-          else if (days === 0) label = language === 'zh' ? '就是今天' : 'Today';
-          else label = language === 'zh' ? '已完成' : 'Complete';
+                    if (days > 0) label = ui('daysToGo', { n: days });
+          else if (days === 0) label = ui('today');
+          else label = ui('complete');
           element.textContent = label;
           element.setAttribute('aria-label', label);
         });
       }
 
       function syncCopyEmailControls() {
-        const messages = copyEmailMessages[language];
-        copyEmailButtons.forEach(button => {
+                copyEmailButtons.forEach(button => {
           const copied = button.classList.contains('is-copied');
-          const label = copied ? messages.copied : messages.copy;
+          const label = copied ? ui('emailCopied') : ui('copyEmail');
           button.setAttribute('aria-label', label);
           button.title = label;
         });
@@ -306,8 +138,7 @@
           copied = copyEmailFallback(value);
         }
 
-        const messages = copyEmailMessages[language];
-        const label = copied ? messages.copied : messages.failed;
+                const label = copied ? ui('emailCopied') : ui('emailCopyFailed');
         button.classList.toggle('is-copied', copied);
         button.setAttribute('aria-label', label);
         button.title = label;
@@ -315,8 +146,8 @@
         window.clearTimeout(Number(button.dataset.copyEmailTimer || 0));
         button.dataset.copyEmailTimer = String(window.setTimeout(() => {
           button.classList.remove('is-copied');
-          button.setAttribute('aria-label', copyEmailMessages[language].copy);
-          button.title = copyEmailMessages[language].copy;
+          button.setAttribute('aria-label', ui('copyEmail'));
+          button.title = ui('copyEmail');
           if (status) status.textContent = '';
         }, 1800));
       }
@@ -440,7 +271,7 @@
           card.style.setProperty('--scroll-reveal-delay', `${index * 80}ms`);
           card.href = `updates.html#${encodeURIComponent(post.id || '')}`;
           const title = updateText(post, 'title');
-          card.setAttribute('aria-label', `${language === 'zh' ? '查看動態：' : 'Read update: '}${title}`);
+          card.setAttribute('aria-label', `${ui('readUpdateLabel')}${title}`);
 
           if (post.cover) {
             const media = document.createElement('span');
@@ -470,7 +301,7 @@
           if (post.isPinned) {
             const pin = document.createElement('span');
             pin.className = 'update-preview-pin';
-            pin.textContent = language === 'zh' ? '置頂' : 'Pinned';
+            pin.textContent = ui('pinned');
             copy.append(pin);
           }
           const date = document.createElement('span');
@@ -483,7 +314,7 @@
           heading.append(headingText);
           const more = document.createElement('span');
           more.className = 'update-preview-more';
-          more.textContent = language === 'zh' ? '查看動態 ↗' : 'Read update ↗';
+          more.textContent = ui('readUpdate');
           copy.append(date, heading, more);
           card.append(copy);
           homeUpdates.append(card);
@@ -564,38 +395,37 @@
       }
 
       function applyLanguage(nextLanguage, animate = true) {
-        const next = nextLanguage === 'zh' ? 'zh' : 'en';
+        const next = DragonI18n.SUPPORTED.includes(nextLanguage) ? nextLanguage : 'en';
         const languageChanged = language !== next;
         language = next;
-        const text = language === 'zh' ? chineseText : englishText;
-        const html = language === 'zh' ? chineseHtml : englishHtml;
+        const table = DragonI18n.dict(next);
+        const text = table.text || {};
+        const html = table.html || {};
         textElements.forEach(element => {
-          const value = text[element.dataset.i18n];
+          const key = element.dataset.i18n;
+          const value = text[key] ?? englishText[key];
           if (value) element.textContent = value;
         });
         htmlElements.forEach(element => {
-          const value = html[element.dataset.i18nHtml];
+          const key = element.dataset.i18nHtml;
+          const value = html[key] ?? englishHtml[key];
           if (value) element.innerHTML = value;
         });
 
-        const chinese = language === 'zh';
-        document.documentElement.lang = chinese ? 'zh-Hant' : 'en';
-        hero.setAttribute('aria-label', chinese ? 'Dragon Dance 首頁' : 'Dragon Dance homepage');
-        heroSlides.forEach((slide, index) => slide.setAttribute('aria-label', chinese ? `第 ${index + 1} 頁` : `Page ${index + 1}`));
-        document.getElementById('dragonStage').setAttribute('aria-label', chinese ? '可互動的龍圖案' : 'Interactive Dragon Dance dragon symbol');
-        document.getElementById('dragon').alt = chinese ? 'Dragon Dance 龍圖案' : 'Dragon Dance dragon symbol';
-        document.querySelector('.car-photo').dataset.label = chinese ? '01 / 龍舞原型' : '01 / DRAGON PROTOTYPE';
-        document.querySelector('.footer-contact').setAttribute('aria-label', chinese ? '聯絡我們' : 'Contact');
-        partnershipClose.setAttribute('aria-label', chinese ? '關閉對話框' : 'Close dialog');
-        partnershipBackdrop.setAttribute('aria-label', chinese ? '關閉對話框' : 'Close dialog');
-        document.getElementById('heritageArtwork').alt = chinese ? '以香火光點勾勒火龍追隨龍珠的藝術演繹' : 'An artistic interpretation of an incense-lit dragon following a glowing pearl';
-        document.getElementById('heritageIchLink').href = `https://www.icho.hk/${chinese ? 'tc' : 'en'}/web/icho/representative_list_taihang.html`;
-        document.getElementById('heritageTourismLink').href = `https://www.discoverhongkong.com/${chinese ? 'tc' : 'eng'}/culture/what-to-expect-during-the-tai-hang-fire-dragon-dance.html`;
-        langEnglish.setAttribute('aria-pressed', String(!chinese));
-        langChinese.setAttribute('aria-pressed', String(chinese));
-        if (typeof positionLanguagePill === 'function') positionLanguagePill();
+        const chinese = next.startsWith('zh');
+        document.documentElement.lang = DragonI18n.META[next].htmlLang;
+        hero.setAttribute('aria-label', ui('homepageLabel'));
+        heroSlides.forEach((slide, index) => slide.setAttribute('aria-label', ui('pageLabel', { n: index + 1 })));
+        document.getElementById('dragonStage').setAttribute('aria-label', ui('dragonStageLabel'));
+        document.getElementById('dragon').alt = ui('dragonAlt');
+        document.querySelector('.car-photo').dataset.label = ui('carPhotoLabel');
+        document.querySelector('.footer-contact').setAttribute('aria-label', ui('contactLabel'));
+        partnershipClose.setAttribute('aria-label', ui('closeDialog'));
+        partnershipBackdrop.setAttribute('aria-label', ui('closeDialog'));
+        document.getElementById('heritageArtwork').alt = ui('artworkAlt');
+        document.getElementById('heritageIchLink').href = 'https://www.icho.hk/' + (chinese ? 'tc' : 'en') + '/web/icho/representative_list_taihang.html';
+        document.getElementById('heritageTourismLink').href = 'https://www.discoverhongkong.com/' + (chinese ? 'tc' : 'eng') + '/culture/what-to-expect-during-the-tai-hang-fire-dragon-dance.html';
         syncCopyEmailControls();
-        try { window.localStorage.setItem('dragon-dance-language', language); } catch (_) {}
         setPage(pageIndex);
         updateDeadlineCountdowns();
         renderHomeUpdates();
@@ -607,7 +437,6 @@
           languageAnimationTimer = window.setTimeout(() => document.body.classList.remove('is-language-switching'), 460);
         }
       }
-
       function renderTrack(offset = 0) {
         if (!offset) {
           heroPages.style.transform = `translate3d(-${pageIndex * 100}%,0,0)`;
@@ -637,9 +466,10 @@
         pagerNext.setAttribute('aria-hidden', String(nextHidden));
         pagerPrev.tabIndex = prevHidden ? -1 : 0;
         pagerNext.tabIndex = nextHidden ? -1 : 0;
-        const labels = pagerLabels[language][pageIndex];
-        const previousPage = language === 'zh' ? '上一頁' : 'Previous page';
-        const nextPage = language === 'zh' ? '下一頁' : 'Next page';
+                const keys = pagerLabelKeys[pageIndex] || pagerLabelKeys[0];
+        const labels = { prev: keys.prev ? ui(keys.prev) : '', next: keys.next ? ui(keys.next) : '' };
+        const previousPage = ui('previousPage');
+        const nextPage = ui('nextPage');
         pagerPrevLabel.textContent = labels.prev;
         pagerNextLabel.textContent = labels.next;
         pagerPrev.title = labels.prev ? `${previousPage} / ${labels.prev}` : previousPage;
@@ -748,10 +578,9 @@
         renderTrack();
       }
 
-      let savedLanguage = 'en';
-      try { savedLanguage = window.localStorage.getItem('dragon-dance-language') || 'en'; } catch (_) {}
-      initScrollReveals();
-      applyLanguage(savedLanguage === 'zh' ? 'zh' : 'en', false);
+            initScrollReveals();
+      DragonI18n.subscribe(next => applyLanguage(next));
+      DragonI18n.ready.then(() => applyLanguage(DragonI18n.current, false));
       loadUpdates();
       motionPreference.addEventListener('change', event => {
         reduceMotion = event.matches;
@@ -786,18 +615,6 @@
       }
       window.addEventListener('hashchange', followPageLink);
       followPageLink();
-      langEnglish.addEventListener('click', () => applyLanguage('en'));
-      langChinese.addEventListener('click', () => applyLanguage('zh'));
-
-      // Slide the highlight pill under the active language button.
-      function positionLanguagePill() {
-        if (!languagePill) return;
-        const active = language === 'zh' ? langChinese : langEnglish;
-        languagePill.style.width = `${active.offsetWidth}px`;
-        languagePill.style.transform = `translate3d(${active.offsetLeft}px,0,0)`;
-      }
-      window.addEventListener('resize', positionLanguagePill, { passive: true });
-      positionLanguagePill();
       partnershipTrigger.addEventListener('click', openPartnershipModal);
       partnershipBackdrop.addEventListener('click', closePartnershipModal);
       partnershipClose.addEventListener('click', closePartnershipModal);

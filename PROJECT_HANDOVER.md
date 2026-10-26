@@ -16,7 +16,7 @@ Last updated: 2026-10-24
 ## Public Website Optimization
 
 - The owner approved the audit/design in `docs/superpowers/specs/2026-09-30-website-audit-optimization-design.md`; implementation preserves the four-slide pager and Fire-Dragon theme.
-- `assets/updates-feed.js` is shared by Home and the archive. It loads the optional Supabase SDK asynchronously with an 8-second limit, times out/aborts data requests after 12 seconds, and provides separate bilingual loading/empty/error/retry states. Public reads disable auth persistence so blocked local storage does not break the feed. The admin script remains unchanged.
+- `assets/updates-feed.js` is shared by Home and the archive. It loads the optional Supabase SDK asynchronously with an 8-second limit, times out/aborts data requests after 12 seconds, and provides separate translated loading/empty/error/retry states. Public reads disable auth persistence so blocked local storage does not break the feed. The admin script remains unchanged.
 - Home requests only three published posts. Archive cards request only the cover; additional media load when the gallery opens. Videos are user-controlled, and media errors preserve the frame with a readable fallback. URL/JSON media parsing and crop metadata remain compatible.
 - All inactive hero/about/feature panels are inert; contact and gallery dialogs isolate the background, trap keyboard focus, support Escape, and return focus. Gallery overlays now sit above the navigation.
 - Fog pauses outside Home, below the hero, in hidden tabs and with reduced motion. Reduced motion keeps one static frame. Pointer sampling is scoped to the hero. Home-only content no longer animates height.
@@ -28,7 +28,7 @@ Last updated: 2026-10-24
 - The owner clarified that a separate page means another horizontal pager slide, exactly like Crew and Partners, not a separate document. Current order: Home (0), Fire Dragon (1), Crew (2), Partners (3).
 - Removed the homepage race car exploration button and the culture section's race car exploration link. The actual racing content remains on the homepage.
 - `index.html` holds the heritage title slide and full cultural detail panel, visible only when page index 1 is active. All translations and navigation run through `assets/home.js`. Existing about/feature panels use explicit `data-page-panel` indexes so Crew and Partners retain their content.
-- `heritage.html` is only a compatibility redirect to `index.html#heritage`; the separate language script has been removed. Hash links select the relevant slide. The static verifier checks four slides, panel mappings, bilingual coverage, and that the racing exploration entry remains absent.
+- `heritage.html` is only a compatibility redirect to `index.html#heritage`; the separate language script has been removed. Hash links select the relevant slide. The static verifier checks four slides, panel mappings, nine-language coverage, and that the racing exploration entry remains absent.
 
 ## September 2026 Heritage Refactor
 
@@ -37,7 +37,7 @@ Last updated: 2026-10-24
 - `assets/home.css` and `assets/home.js` were extracted from `index.html`. Future homepage behaviour changes belong in `assets/home.js`; preserve media compatibility functions there. `updates.html` and `admin/index.html` retain their existing implementations.
 - `assets/heritage.css` contains responsive culture/navigation styles. `assets/fire-dragon-procession.svg` is original geometric artwork, explicitly labelled as an interpretation. Do not relabel it as a photograph or evidence of an actual procession.
 - Official references: `https://www.icho.hk/en/web/icho/representative_list_taihang.html`, `https://firedragon1949.org.hk/en/inherit-the-fire-dragon-culture/`, and the Hong Kong Tourism Board's Tai Hang Fire Dragon Dance article. Designations are national (2011) and Hong Kong representative-list (2017), not UNESCO.
-- Run `node tools/verify-homepage.mjs` and `git diff --check` before publishing. The verifier checks bilingual coverage, anchors, asset existence, syntax and both Supabase media representations.
+- Run `node tools/verify-homepage.mjs`, `node tools/verify-updates.mjs`, `node tools/verify-effects.mjs`, `node tools/verify-analytics.mjs` and `git diff --check` before publishing. The homepage verifier checks nine-language coverage, anchors, asset existence, syntax and both Supabase media representations. `tools/verify-analytics-sql.mjs` additionally needs the `@electric-sql/pglite` package installed locally.
 - `DESIGN.md` records the extended visual language. Internal documentation remains excluded from Vercel through `.vercelignore`.
 
 This file is the durable project memory for a new computer or a new Codex session. Read it before changing the website.
@@ -83,7 +83,7 @@ Take over the Dragon Dance STEM Racing website. Read AGENTS.md and PROJECT_HANDO
 
 | File or service | Responsibility |
 | --- | --- |
-| `index.html` | Homepage, bilingual UI, dragon/fog hero, horizontal pages, deadlines, contact modal, and the three latest updates. |
+| `index.html` | Homepage, nine-language UI, dragon/smoke hero, horizontal pages, deadlines, contact modal, and the three latest updates. |
 | `updates.html` | Full public updates archive and media gallery. |
 | `admin/index.html` | Password-protected Supabase admin dashboard for creating, editing, pinning, and deleting updates. |
 | `supabase-config.js` | Public Supabase URL and publishable key used by the three pages. |
@@ -95,8 +95,8 @@ There is no package manager, build command, or server-side app. Vercel serves th
 
 ## Current Website Features
 
-- English by default with Traditional Chinese switching and transition animation.
-- Homepage hero with the Fire-Dragon dark theme, Dragon Dance logo, rising ember particles, fog interaction, gradient dragon mark, and left/right page navigation.
+- Nine languages selected automatically from the visitor's browser, with a dropdown that switches and remembers the choice; the swap keeps the existing transition animation.
+- Homepage hero with the Fire-Dragon dark theme, Dragon Dance logo, rising ember particles, incense smoke layer, gradient dragon mark, and left/right page navigation.
 - Team and sponsor pages in the horizontal homepage flow.
 - Contact footer for email, WhatsApp, Instagram, and the school website.
 - SEO metadata, sitemap, robots file, favicon, Open Graph image, and Google Search Console verification markup.
@@ -152,7 +152,7 @@ git status --short
 
 Then manually check:
 
-1. Homepage in English and Traditional Chinese.
+1. Homepage in nine languages, chosen from the visitor's browser language.
 2. Horizontal page navigation on desktop and mobile.
 3. Latest update cards and the full updates page.
 4. Admin login, media preview, crop editor, save, delete, and pin behaviour when changing the dashboard.

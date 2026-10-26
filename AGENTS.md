@@ -9,7 +9,8 @@ Read `PROJECT_HANDOVER.md` before making changes. It is the current project memo
 - The owner wants GitHub and Vercel updated after completed, verified website changes.
 - Use `apply_patch` for manual file edits. Do not discard user changes or use destructive Git commands.
 - Before publishing, run `git diff --check` and check the affected page in a browser where practical.
-- The public website is bilingual: English is the default and Traditional Chinese is the alternate language.
+- The public website is multilingual: nine languages (English, Traditional Chinese, Simplified Chinese, Japanese, Korean, Spanish, French, German, Portuguese). English is the default and stays inline in the markup; every other language is a separate dictionary in `assets/i18n/<code>.js` loaded on demand.
+- `assets/i18n.js` owns detection and switching. Resolution order is `?lang=`, then `localStorage['dragon-dance-language']`, then `navigator.languages`, then English. Only an explicit pick is persisted. Add a language by adding one `META` entry plus one dictionary file; never hand-wire per-page language buttons.
 
 ## Important compatibility rules
 

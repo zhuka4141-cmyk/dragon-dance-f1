@@ -128,7 +128,6 @@ a.contact-item:hover { border-color: var(--amber); }
 }
 .site-sections :is(a, button):hover::after, .site-sections [aria-pressed="true"]::after { transform: scaleX(1); transform-origin: left; }
 .site-sections :is(a, button):hover, .site-sections [aria-pressed="true"] { color: var(--text); }
-.language-switch button[aria-pressed="true"] { background: transparent; border-color: var(--hairline-2); }
 
 /* ---- Hairlines that draw themselves on reveal ---- */
 [data-line] { position: relative; border-top-color: transparent !important; }

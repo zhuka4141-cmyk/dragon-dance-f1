@@ -61,18 +61,17 @@
     }
   }
 
+  const ui = (key, vars) => window.DragonI18n.ui(key, vars);
+
   function renderStatus(container, state, language, retry) {
     container.dataset.state = state;
     container.setAttribute('aria-busy', String(state === 'loading'));
     if (state === 'ready') return false;
-    const chinese = language === 'zh';
-    const messages = chinese ? {
-      loading:'正在載入動態…', empty:'暫時未有動態，請稍後再回來看看。',
-      error:'暫時未能載入動態。請檢查網絡連線，再試一次。'
-    } : {
-      loading:'Loading updates…', empty:'No updates have been published yet. Check back soon.',
-      error:'Updates could not be loaded. Check your connection and try again.'
-    };
+    const messages = {
+        loading: ui('feedLoading'),
+        empty: ui('feedEmpty'),
+        error: ui('feedError')
+      };
     const status = document.createElement('div');
     status.className = 'updates-status updates-preview-status';
     const text = document.createElement('p');
@@ -82,7 +81,7 @@
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'updates-retry';
-      button.textContent = chinese ? '重新載入' : 'Try again';
+      button.textContent = ui('feedRetry');
       button.addEventListener('click', () => {
         container.tabIndex = -1;
         container.focus({preventScroll:true});
@@ -99,7 +98,7 @@
       media.hidden = true;
       const fallback = document.createElement('span');
       fallback.className = 'media-unavailable';
-      fallback.textContent = language === 'zh' ? '媒體暫時無法顯示' : 'Media unavailable';
+      fallback.textContent = ui('mediaUnavailable');
       media.parentElement?.append(fallback);
     }, {once:true});
   }

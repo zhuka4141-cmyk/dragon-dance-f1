@@ -94,10 +94,13 @@
       <button type="button" data-page-target="3" data-i18n="navPartners" aria-pressed="false">Partners</button>
     </div>
     <div class="nav-tools">
-      <div class="language-switch" role="group" aria-label="Language selector">
-        <span class="language-pill" aria-hidden="true"></span><button id="langEnglish" type="button" aria-pressed="true">EN</button><span class="language-divider" aria-hidden="true">/</span><button id="langChinese" type="button" aria-pressed="false">中文</button>
-      </div>
-      <div class="eyebrow">HK / 2026</div>
+      <div class="language-switch">
+          <button id="languageToggle" class="language-toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="languageMenu" aria-label="Choose language">
+            <span class="language-current">EN</span><span class="language-caret" aria-hidden="true"></span>
+          </button>
+          <ul id="languageMenu" class="language-menu" role="listbox" aria-label="Language"></ul>
+        </div>
+        <div class="eyebrow">HK / 2026</div>
     </div>
   </nav>
   <main id="top">
@@ -382,7 +385,8 @@
     </section>
   </div>
 
-  <script src="supabase-config.js"></script>
+  <script src="assets/i18n.js"></script>
+<script src="supabase-config.js"></script>
   <script src="assets/site-analytics.js" defer></script>
   <script src="assets/updates-feed.js"></script>
   <script src="assets/home.js"></script>
