@@ -47,32 +47,21 @@
 (() => {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
-  const lang = () => document.documentElement.dataset.lang || document.documentElement.lang || 'en';
+  const lang = () => (document.documentElement.lang === 'zh-Hant' ? 'zh' : 'en');
 
   /* Ticker */
   const ticker = document.getElementById('ticker');
   const words = {
     en: ['Culture', 'Craft', 'Collective spirit', 'Aerodynamics', 'Tai Hang', 'STEM Racing', 'Hong Kong', 'Carry the fire'],
-    'zh-Hant': ['文化', '匠心', '同心', '空氣動力學', '大坑', 'STEM Racing', '香港', '薪火疾行'],
-    'zh-Hans': ['文化', '匠心', '同心', '空气动力学', '大坑', 'STEM Racing', '香港', '薪火疾行'],
-    ja: ['文化', '匠の技', '心を一つに', '空気力学', '大坑', 'STEM Racing', '香港', '火を運ぶ'],
-    ko: ['문화', '장인정신', '한마음', '공기역학', '타이항', 'STEM Racing', '홍콩', '불을 나르다'],
-    es: ['Cultura', 'Artesanía', 'Espíritu colectivo', 'Aerodinámica', 'Tai Hang', 'STEM Racing', 'Hong Kong', 'Llevar el fuego'],
-    fr: ['Culture', 'Savoir-faire', 'Esprit collectif', 'Aérodynamique', 'Tai Hang', 'STEM Racing', 'Hong Kong', 'Porter le feu'],
-    de: ['Kultur', 'Handwerk', 'Gemeinschaftsgeist', 'Aerodynamik', 'Tai Hang', 'STEM Racing', 'Hongkong', 'Das Feuer tragen'],
-    pt: ['Cultura', 'Artesanato', 'Espírito coletivo', 'Aerodinâmica', 'Tai Hang', 'STEM Racing', 'Hong Kong', 'Levar o fogo']
+    zh: ['文化', '匠心', '同心', '空氣動力學', '大坑', 'STEM Racing', '香港', '薪火疾行']
   };
-  let tickerLang = '';
   function buildTicker() {
     if (!ticker) return;
-    const code = words[lang()] ? lang() : 'en';
-    if (code === tickerLang) return;
-    tickerLang = code;
-    const row = words[code].map(w => `<span>${w}</span><i></i>`).join('');
+    const row = words[lang()].map(w => `<span>${w}</span><i></i>`).join('');
     ticker.innerHTML = `<div class="ticker-track">${row}${row}</div>`;
   }
   buildTicker();
-  new MutationObserver(buildTicker).observe(document.documentElement, { attributes: true, attributeFilter: ['lang', 'data-lang'] });
+  new MutationObserver(buildTicker).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
 
   /* Counters */
   const stats = document.getElementById('stats');
@@ -194,4 +183,66 @@
       stage.style.setProperty('--py', `${(y * -18).toFixed(1)}px`);
     }, { passive: true });
   }
+})();
+/* Page-cover parallax and the hero logo that shrinks into the nav mark */
+(() => {
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const covers = Array.from(document.querySelectorAll('.page-cover img'));
+  const pages = document.getElementById('heroPages');
+  const dragon = document.getElementById('dragon');
+  const navMark = document.getElementById('navMark');
+  if (!covers.length && !navMark) return;
+
+  let fly = null;
+  let start = null;
+  const RANGE = 320;
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const ease = t => 1 - Math.pow(1 - t, 3);
+
+  const measure = () => {
+    if (!dragon) return;
+    const r = dragon.getBoundingClientRect();
+    if (!r.width) return;
+    const side = Math.min(r.width, r.height);
+    start = { x: r.left + scrollX + (r.width - side) / 2, y: r.top + scrollY + (r.height - side) / 2, s: side };
+  };
+
+  if (!still && dragon && navMark) {
+    fly = document.createElement('img');
+    fly.className = 'fly-mark';
+    fly.src = dragon.currentSrc || dragon.src;
+    fly.alt = '';
+    fly.width = 100; fly.height = 100;
+    document.body.appendChild(fly);
+    if (dragon.complete) measure(); else dragon.addEventListener('load', measure, { once: true });
+    window.addEventListener('resize', () => { if (scrollY < 4) measure(); });
+  }
+
+  let ticking = false;
+  const update = () => {
+    ticking = false;
+    const y = scrollY;
+    if (!still) covers.forEach(c => c.style.setProperty('--cy', `${(y * 0.22).toFixed(1)}px`));
+    if (!navMark) return;
+    const onIntro = !pages || pages.dataset.page === undefined || pages.dataset.page === '1';
+    if (!fly || !start) { navMark.style.opacity = 1; return; }
+    if (!onIntro) { fly.style.opacity = 0; dragon.classList.remove('is-flown'); navMark.style.opacity = 1; return; }
+    const t = Math.min(1, y / RANGE);
+    const e = ease(t);
+    const target = navMark.getBoundingClientRect();
+    const size = lerp(start.s, target.width || 34, e);
+    const x = lerp(start.x - scrollX, target.left, e);
+    const yy = lerp(start.y - y, target.top, e);
+    fly.style.width = fly.style.height = `${size}px`;
+    fly.style.transform = `translate3d(${x.toFixed(1)}px, ${yy.toFixed(1)}px, 0)`;
+    const active = t > 0.002 && t < 1;
+    fly.style.opacity = active ? 1 : 0;
+    dragon.classList.toggle('is-flown', active || t >= 1);
+    navMark.style.opacity = t >= 1 ? 1 : 0;
+  };
+  const queue = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+  addEventListener('scroll', queue, { passive: true });
+  addEventListener('resize', queue);
+  if (pages) new MutationObserver(queue).observe(pages, { attributes: true, attributeFilter: ['data-page'] });
+  update();
 })();
