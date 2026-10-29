@@ -209,7 +209,6 @@
   let start = null;
   const RANGE = 320;
   const lerp = (a, b, t) => a + (b - a) * t;
-  const ease = t => 1 - Math.pow(1 - t, 3);
 
   const measure = () => {
     if (!dragon) return;
@@ -240,7 +239,7 @@
     if (!fly || !start) { navMark.style.opacity = 1; return; }
     if (!onIntro) { fly.style.opacity = 0; dragon.classList.remove('is-flown'); navMark.style.opacity = 1; return; }
     const t = Math.min(1, y / RANGE);
-    const e = ease(t);
+    const e = t;
     const target = navMark.getBoundingClientRect();
     const size = lerp(start.s, target.width || 34, e);
     const x = lerp(start.x - scrollX, target.left, e);
@@ -253,6 +252,13 @@
     navMark.style.opacity = t >= 1 ? 1 : 0;
   };
   const queue = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+  let settle = 0;
+  const snap = () => {
+    const onIntro = !pages || pages.dataset.page === undefined || pages.dataset.page === '1';
+    if (!fly || !onIntro || scrollY < 6 || scrollY > RANGE - 6) return;
+    scrollTo({ top: scrollY < RANGE / 2 ? 0 : RANGE, behavior: 'smooth' });
+  };
+  addEventListener('scroll', () => { clearTimeout(settle); settle = setTimeout(snap, 160); }, { passive: true });
   addEventListener('scroll', queue, { passive: true });
   addEventListener('resize', queue);
   if (pages) new MutationObserver(queue).observe(pages, { attributes: true, attributeFilter: ['data-page'] });
