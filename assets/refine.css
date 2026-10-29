@@ -338,24 +338,12 @@ a.contact-item:hover { border-color: var(--amber); }
   transform: translate3d(0, var(--cy, 0px), 0) scale(1.14); will-change: transform;
 }
 .title-page-heritage .page-cover img { object-fit: contain; opacity: .5; filter: none; }
-.title-page-partners .page-cover img { object-position: 20% 60%; }
-.title-page-crew .page-cover img { object-position: 70% 40%; }
 .title-page > .page-cover::after {
   content: ""; position: absolute; inset: 0;
   background: radial-gradient(60% 70% at 85% 50%, rgba(228, 24, 35, .16), transparent 70%);
 }
 
-.wordmark { position: relative; }
-.wordmark:has(.nav-mark) { padding-left: 46px; }
-.nav-mark, .fly-mark {
-  filter: grayscale(1) contrast(1.15) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, .22));
-  object-fit: contain; user-select: none; -webkit-user-drag: none;
-}
-.nav-mark { position: absolute; left: 0; top: 50%; width: 34px; height: 34px; margin-top: -17px; transition: opacity .25s; }
-.fly-mark { position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none; transform-origin: 0 0; will-change: transform; opacity: 0; }
-.dragon.is-flown { opacity: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .page-cover img { transform: scale(1.1); will-change: auto; }
-  .fly-mark { display: none; }
 }

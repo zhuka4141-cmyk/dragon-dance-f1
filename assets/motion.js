@@ -196,71 +196,16 @@
   }
 })();
 
-/* Page-cover parallax and the hero logo that shrinks into the nav mark */
+/* Parallax for the page covers */
 (() => {
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const covers = Array.from(document.querySelectorAll('.page-cover img'));
-  const pages = document.getElementById('heroPages');
-  const dragon = document.getElementById('dragon');
-  const navMark = document.getElementById('navMark');
-  if (!covers.length && !navMark) return;
-
-  let fly = null;
-  let start = null;
-  const RANGE = 320;
-  const lerp = (a, b, t) => a + (b - a) * t;
-
-  const measure = () => {
-    if (!dragon) return;
-    const r = dragon.getBoundingClientRect();
-    if (!r.width) return;
-    const side = Math.min(r.width, r.height);
-    start = { x: r.left + scrollX + (r.width - side) / 2, y: r.top + scrollY + (r.height - side) / 2, s: side };
-  };
-
-  if (!still && dragon && navMark) {
-    fly = document.createElement('img');
-    fly.className = 'fly-mark';
-    fly.src = dragon.currentSrc || dragon.src;
-    fly.alt = '';
-    fly.width = 100; fly.height = 100;
-    document.body.appendChild(fly);
-    if (dragon.complete) measure(); else dragon.addEventListener('load', measure, { once: true });
-    window.addEventListener('resize', () => { if (scrollY < 4) measure(); });
-  }
-
+  if (!covers.length) return;
   let ticking = false;
   const update = () => {
     ticking = false;
-    const y = scrollY;
-    if (!still) covers.forEach(c => c.style.setProperty('--cy', `${(y * 0.22).toFixed(1)}px`));
-    if (!navMark) return;
-    const onIntro = !pages || pages.dataset.page === undefined || pages.dataset.page === '1';
-    if (!fly || !start) { navMark.style.opacity = 1; return; }
-    if (!onIntro) { fly.style.opacity = 0; dragon.classList.remove('is-flown'); navMark.style.opacity = 1; return; }
-    const t = Math.min(1, y / RANGE);
-    const e = t;
-    const target = navMark.getBoundingClientRect();
-    const size = lerp(start.s, target.width || 34, e);
-    const x = lerp(start.x - scrollX, target.left, e);
-    const yy = lerp(start.y - y, target.top, e);
-    fly.style.width = fly.style.height = `${size}px`;
-    fly.style.transform = `translate3d(${x.toFixed(1)}px, ${yy.toFixed(1)}px, 0)`;
-    const active = t > 0.002 && t < 1;
-    fly.style.opacity = active ? 1 : 0;
-    dragon.classList.toggle('is-flown', active || t >= 1);
-    navMark.style.opacity = t >= 1 ? 1 : 0;
+    covers.forEach(c => c.style.setProperty('--cy', `${(scrollY * 0.22).toFixed(1)}px`));
   };
-  const queue = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-  let settle = 0;
-  const snap = () => {
-    const onIntro = !pages || pages.dataset.page === undefined || pages.dataset.page === '1';
-    if (!fly || !onIntro || scrollY < 6 || scrollY > RANGE - 6) return;
-    scrollTo({ top: scrollY < RANGE / 2 ? 0 : RANGE, behavior: 'smooth' });
-  };
-  addEventListener('scroll', () => { clearTimeout(settle); settle = setTimeout(snap, 160); }, { passive: true });
-  addEventListener('scroll', queue, { passive: true });
-  addEventListener('resize', queue);
-  if (pages) new MutationObserver(queue).observe(pages, { attributes: true, attributeFilter: ['data-page'] });
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   update();
 })();
