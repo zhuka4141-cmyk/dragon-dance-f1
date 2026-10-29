@@ -94,10 +94,13 @@
       <button type="button" data-page-target="3" data-i18n="navPartners" aria-pressed="false">Partners</button>
     </div>
     <div class="nav-tools">
-      <div class="language-switch" role="group" aria-label="Language selector">
-        <button id="langEnglish" type="button" aria-pressed="true">EN</button><span class="language-divider" aria-hidden="true">/</span><button id="langChinese" type="button" aria-pressed="false">中文</button>
-      </div>
-      <div class="eyebrow">HK / 2026</div>
+      <div class="language-switch">
+          <button id="languageToggle" class="language-toggle" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="languageMenu" aria-label="Choose language">
+            <span class="language-current">EN</span><span class="language-caret" aria-hidden="true"></span>
+          </button>
+          <ul id="languageMenu" class="language-menu" role="listbox" aria-label="Language"></ul>
+        </div>
+        <div class="eyebrow">HK / 2026</div>
     </div>
   </nav>
   <main id="top">
@@ -154,7 +157,7 @@
         <article class="about-page is-active" aria-label="Page 1 overview" data-page-panel="0">
           <div>
             <div class="section-label" data-i18n="teamLabel">01 / The Team</div>
-            <div class="team-logo-stage"><img class="team-logo" src="assets/team-logo.png" width="698" height="544" alt="Dragon Dance logo" loading="lazy" decoding="async" /></div>
+            <div class="team-logo-stage"><img class="team-logo" src="assets/team-art.png" width="640" height="641" alt="Dragon Dance logo" loading="lazy" decoding="async" /></div>
           </div>
           <div>
             <h2>Dragon<br>Dance</h2>
@@ -331,7 +334,7 @@
     <p data-i18n="racingCopy">F1 Dragon Dance is Dragon Dance's STEM Racing identity in Hong Kong. STEM Racing is the student racing challenge formerly known as F1 in Schools, where we bring engineering, design, branding and race strategy together.</p>
   </section>
   <div class="rule" aria-hidden="true"></div>
-  <div class="mega-word" aria-hidden="true" data-scroll-reveal><span><i>D</i><i>r</i><i>a</i><i>g</i><i>o</i><i>n</i></span><span><i>D</i><i>a</i><i>n</i><i>c</i><i>e</i></span></div>
+  <div class="mega-word" aria-hidden="true" data-scroll-reveal><span>Dragon</span><span>Dance</span></div>
   <footer data-scroll-reveal>
     <div><strong data-i18n-html="footerTitle">Dance with<br>the dragon.</strong><p>DRAGON DANCE / STEM RACING</p></div>
     <section class="footer-contact" aria-label="Contact">
@@ -385,10 +388,12 @@
     </section>
   </div>
 
-  <script src="supabase-config.js"></script>
+  <script src="assets/i18n.js"></script>
+<script src="supabase-config.js"></script>
   <script src="assets/site-analytics.js" defer></script>
   <script src="assets/updates-feed.js"></script>
   <script src="assets/home.js"></script>
   <script src="assets/motion.js" defer></script>
+  <script src="assets/smoke.js" defer></script>
 </body>
 </html>
